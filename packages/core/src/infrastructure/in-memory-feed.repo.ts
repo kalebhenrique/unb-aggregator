@@ -1,0 +1,66 @@
+import type { FeedItem } from '../domain/entities/feed-item';
+import type { Course } from '../domain/entities/course';
+import type { IFeedRepository, FeedFilterOptions } from '../domain/interfaces/feed-repo.interface';
+
+export class InMemoryFeedRepository implements IFeedRepository {
+  private items: Map<string, FeedItem> = new Map();
+  private courses: Map<string, Course> = new Map();
+
+  async getItems(filters?: FeedFilterOptions): Promise<FeedItem[]> {
+    let result = Array.from(this.items.values());
+
+    if (filters) {
+      if (filters.platform && filters.platform !== 'all') {
+        result = result.filter((item) => item.platform === filters.platform);
+      }
+
+      if (filters.itemType && filters.itemType !== 'all') {
+        result = result.filter((item) => item.itemType === filters.itemType);
+      }
+
+      if (filters.courseCode) {
+        result = result.filter((item) => item.courseCode === filters.courseCode);
+      }
+
+      if (filters.searchQuery && filters.searchQuery.trim().length > 0) {
+        const query = filters.searchQuery.toLowerCase();
+        result = result.filter(
+          (item) =>
+            item.title.toLowerCase().includes(query) ||
+            item.content.toLowerCase().includes(query) ||
+            item.courseName.toLowerCase().includes(query)
+        );
+      }
+    }
+
+    return result;
+  }
+
+  async saveItems(newItems: FeedItem[]): Promise<void> {
+    for (const item of newItems) {
+      this.items.set(item.id, { ...item });
+    }
+  }
+
+  async markItemAsCompleted(id: string, isCompleted: boolean): Promise<void> {
+    const existing = this.items.get(id);
+    if (existing) {
+      this.items.set(id, { ...existing, isCompleted });
+    }
+  }
+
+  async getCourses(): Promise<Course[]> {
+    return Array.from(this.courses.values());
+  }
+
+  async saveCourses(newCourses: Course[]): Promise<void> {
+    for (const course of newCourses) {
+      this.courses.set(course.id, { ...course });
+    }
+  }
+
+  async clear(): Promise<void> {
+    this.items.clear();
+    this.courses.clear();
+  }
+}

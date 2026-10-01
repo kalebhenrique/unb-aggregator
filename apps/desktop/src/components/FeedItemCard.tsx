@@ -1,0 +1,198 @@
+import React from 'react';
+import { Card, Badge } from '@unb-aggregator/ui';
+import type { FeedItem } from '@unb-aggregator/core';
+import {
+  Calendar,
+  Clock,
+  ExternalLink,
+  CheckCircle,
+  Circle,
+  User,
+  AlertTriangle,
+} from 'lucide-react';
+
+export interface FeedItemCardProps {
+  item: FeedItem;
+  onToggleComplete?: (id: string, currentStatus?: boolean) => void;
+}
+
+export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComplete }) => {
+  const isAssignment = item.itemType === 'assignment';
+
+  const formatCreationDate = (dateStr: string) => {
+    try {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  const getDueDateStatus = (dueDateStr?: string) => {
+    if (!dueDateStr) return null;
+    const now = new Date().getTime();
+    const due = new Date(dueDateStr).getTime();
+    const diffHours = (due - now) / (1000 * 60 * 60);
+
+    const formattedDate = new Date(dueDateStr).toLocaleDateString('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    if (diffHours < 0) {
+      return {
+        label: `Prazo encerrado (${formattedDate})`,
+        variant: 'urgent' as const,
+        isUrgent: true,
+      };
+    } else if (diffHours <= 24) {
+      return {
+        label: `Entrega em menos de 24h (${formattedDate})`,
+        variant: 'urgent' as const,
+        isUrgent: true,
+      };
+    } else if (diffHours <= 48) {
+      return {
+        label: `Entrega em 2 dias (${formattedDate})`,
+        variant: 'assignment' as const,
+        isUrgent: false,
+      };
+    } else {
+      return {
+        label: `Entrega até ${formattedDate}`,
+        variant: 'assignment' as const,
+        isUrgent: false,
+      };
+    }
+  };
+
+  const dueStatus = isAssignment ? getDueDateStatus(item.dueDate) : null;
+
+  return (
+    <Card
+      className={`border-2 border-black rounded-lg transition-all ${
+        item.isCompleted ? 'bg-neutral-100 opacity-70' : 'bg-white'
+      }`}
+    >
+      {/* Header do Card */}
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Badge da Plataforma */}
+          <Badge variant={item.platform}>
+            {item.platform === 'sigaa'
+              ? 'Sigaa'
+              : item.platform === 'aprender3'
+              ? 'Aprender 3'
+              : item.platform === 'moodlemat'
+              ? 'MoodleMat'
+              : 'Teams'}
+          </Badge>
+
+          {/* Badge de Tipo */}
+          <Badge variant={isAssignment ? 'assignment' : 'post'}>
+            {isAssignment ? 'Trabalho / Tarefa' : 'Aviso / Postagem'}
+          </Badge>
+
+          {/* Código da Disciplina */}
+          {item.courseCode ? (
+            <span className="text-xs font-black text-neutral-600 bg-neutral-100 px-2 py-0.5 border border-black rounded">
+              {item.courseCode}
+            </span>
+          ) : null}
+        </div>
+
+        {/* Data de Publicação */}
+        <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-500">
+          <Calendar className="w-3.5 h-3.5 stroke-[2.5]" />
+          <span>{formatCreationDate(item.createdAt)}</span>
+        </div>
+      </div>
+
+      {/* Título e Disciplina */}
+      <div className="space-y-1 mb-2">
+        <h3
+          className={`text-base font-black text-black leading-snug ${
+            item.isCompleted ? 'line-through text-neutral-500' : ''
+          }`}
+        >
+          {item.title}
+        </h3>
+        <p className="text-xs font-bold text-[#006633] uppercase tracking-wide">
+          {item.courseName}
+        </p>
+      </div>
+
+      {/* Conteúdo textual */}
+      <p className="text-sm font-semibold text-neutral-800 leading-relaxed line-clamp-3 mb-4">
+        {item.content}
+      </p>
+
+      {/* Rodapé do Card com Prazo e Ações */}
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t-2 border-black/10">
+        {/* Status de Entrega (se for trabalho) */}
+        {dueStatus ? (
+          <div className="flex items-center gap-1.5">
+            {dueStatus.isUrgent ? (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FF4D4F] text-white text-xs font-black uppercase rounded border border-black shadow-[2px_2px_0px_0px_#000]">
+                <AlertTriangle className="w-3.5 h-3.5 stroke-[3]" />
+                {dueStatus.label}
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FFE600] text-black text-xs font-black uppercase rounded border border-black shadow-[2px_2px_0px_0px_#000]">
+                <Clock className="w-3.5 h-3.5 stroke-[3]" />
+                {dueStatus.label}
+              </span>
+            )}
+          </div>
+        ) : item.author ? (
+          <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-600">
+            <User className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>{item.author}</span>
+          </div>
+        ) : <div />}
+
+        {/* Botões de Ação */}
+        <div className="flex items-center gap-2">
+          {isAssignment && onToggleComplete ? (
+            <button
+              type="button"
+              onClick={() => onToggleComplete(item.id, item.isCompleted)}
+              className="cursor-pointer inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider px-2.5 py-1 bg-white hover:bg-neutral-100 border-2 border-black rounded shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px]"
+            >
+              {item.isCompleted ? (
+                <>
+                  <CheckCircle className="w-3.5 h-3.5 text-[#006633] stroke-[3]" />
+                  <span>Concluído</span>
+                </>
+              ) : (
+                <>
+                  <Circle className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>Marcar Pronto</span>
+                </>
+              )}
+            </button>
+          ) : null}
+
+          {item.externalUrl ? (
+            <a
+              href={item.externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider px-2.5 py-1 bg-black text-white hover:bg-neutral-800 border-2 border-black rounded shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px]"
+            >
+              <span>Abrir</span>
+              <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
+            </a>
+          ) : null}
+        </div>
+      </div>
+    </Card>
+  );
+};

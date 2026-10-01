@@ -1,0 +1,402 @@
+import React, { useState } from 'react';
+import {
+  Button,
+  Input,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@unb-aggregator/ui';
+import { useCredentials } from '../hooks/useCredentials';
+import {
+  Lock,
+  ArrowRight,
+  ChevronLeft,
+  CheckCircle2,
+  AlertCircle,
+  ExternalLink,
+} from 'lucide-react';
+import type { PlatformType } from '@unb-aggregator/core';
+
+export interface CredentialsScreenProps {
+  onSuccess: () => void;
+  onBack: () => void;
+  onExplore?: () => void;
+}
+
+export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
+  onSuccess,
+  onBack,
+  onExplore,
+}) => {
+  const { saveSigaa, saveAprender3, saveMoodleMat, saveTeams, isLoading, error } = useCredentials();
+
+  // Plataforma ativa no formulário
+  const [activeTab, setActiveTab] = useState<PlatformType>('sigaa');
+
+  // Campos SIGAA
+  const [sigaaMatricula, setSigaaMatricula] = useState('');
+  const [sigaaSenha, setSigaaSenha] = useState('');
+  const [sigaaSaved, setSigaaSaved] = useState(false);
+
+  // Campos Aprender 3
+  const [aprenderCpf, setAprenderCpf] = useState('');
+  const [aprenderSenha, setAprenderSenha] = useState('');
+  const [aprenderSaved, setAprenderSaved] = useState(false);
+
+  // Campos MoodleMat
+  const [moodleMatMatricula, setMoodleMatMatricula] = useState('');
+  const [moodleMatSenha, setMoodleMatSenha] = useState('');
+  const [moodleMatSaved, setMoodleMatSaved] = useState(false);
+
+  // Teams
+  const [teamsConnected, setTeamsConnected] = useState(false);
+  const [teamsEmail, setTeamsEmail] = useState('');
+
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const handleSaveCurrentPlatform = async () => {
+    setFormError(null);
+
+    if (activeTab === 'sigaa') {
+      if (!sigaaMatricula.trim()) {
+        setFormError('Informe sua matrícula do SIGAA.');
+        return;
+      }
+      if (!sigaaSenha) {
+        setFormError('Informe sua senha do SIGAA.');
+        return;
+      }
+      const ok = await saveSigaa({ matricula: sigaaMatricula.trim(), senha: sigaaSenha });
+      if (ok) setSigaaSaved(true);
+    } else if (activeTab === 'aprender3') {
+      if (!aprenderCpf.trim()) {
+        setFormError('Informe seu CPF do Aprender 3.');
+        return;
+      }
+      if (!aprenderSenha) {
+        setFormError('Informe sua senha do Aprender 3.');
+        return;
+      }
+      const ok = await saveAprender3({ cpf: aprenderCpf.trim(), senha: aprenderSenha });
+      if (ok) setAprenderSaved(true);
+    } else if (activeTab === 'moodlemat') {
+      if (!moodleMatMatricula.trim()) {
+        setFormError('Informe sua matrícula do MoodleMat.');
+        return;
+      }
+      if (!moodleMatSenha) {
+        setFormError('Informe sua senha do MoodleMat.');
+        return;
+      }
+      const ok = await saveMoodleMat({ matricula: moodleMatMatricula.trim(), senha: moodleMatSenha });
+      if (ok) setMoodleMatSaved(true);
+    } else if (activeTab === 'teams') {
+      const email = teamsEmail.trim() || 'aluno@aluno.unb.br';
+      const ok = await saveTeams({ isConnected: true, email });
+      if (ok) setTeamsConnected(true);
+    }
+  };
+
+  const handleToggleTeams = async () => {
+    setFormError(null);
+    if (teamsConnected) {
+      setTeamsConnected(false);
+    } else {
+      const email = teamsEmail.trim() || 'aluno@aluno.unb.br';
+      const ok = await saveTeams({ isConnected: true, email });
+      if (ok) setTeamsConnected(true);
+    }
+  };
+
+  const handleFinish = async () => {
+    setFormError(null);
+
+    // Salva o que estiver preenchido no formulário da aba ativa antes de concluir
+    if (activeTab === 'sigaa' && (sigaaMatricula || sigaaSenha)) {
+      if (!sigaaMatricula.trim()) {
+        setFormError('Informe sua matrícula do SIGAA.');
+        return;
+      }
+      if (!sigaaSenha) {
+        setFormError('Informe sua senha do SIGAA.');
+        return;
+      }
+      const ok = await saveSigaa({ matricula: sigaaMatricula.trim(), senha: sigaaSenha });
+      if (!ok) return;
+    } else if (activeTab === 'aprender3' && (aprenderCpf || aprenderSenha)) {
+      if (!aprenderCpf.trim()) {
+        setFormError('Informe seu CPF do Aprender 3.');
+        return;
+      }
+      if (!aprenderSenha) {
+        setFormError('Informe sua senha do Aprender 3.');
+        return;
+      }
+      const ok = await saveAprender3({ cpf: aprenderCpf.trim(), senha: aprenderSenha });
+      if (!ok) return;
+    } else if (activeTab === 'moodlemat' && (moodleMatMatricula || moodleMatSenha)) {
+      if (!moodleMatMatricula.trim()) {
+        setFormError('Informe sua matrícula do MoodleMat.');
+        return;
+      }
+      if (!moodleMatSenha) {
+        setFormError('Informe sua senha do MoodleMat.');
+        return;
+      }
+      const ok = await saveMoodleMat({ matricula: moodleMatMatricula.trim(), senha: moodleMatSenha });
+      if (!ok) return;
+    } else if (activeTab === 'teams' && teamsConnected) {
+      await saveTeams({ isConnected: true, email: teamsEmail.trim() || 'aluno@aluno.unb.br' });
+    }
+
+    onSuccess();
+  };
+
+  const platforms = [
+    { id: 'sigaa' as PlatformType, name: 'SIGAA', isSaved: sigaaSaved, hint: 'Matrícula e Senha' },
+    { id: 'aprender3' as PlatformType, name: 'Aprender 3', isSaved: aprenderSaved, hint: 'CPF e Senha' },
+    { id: 'moodlemat' as PlatformType, name: 'MoodleMat', isSaved: moodleMatSaved, hint: 'Matrícula e Senha' },
+    { id: 'teams' as PlatformType, name: 'Teams', isSaved: teamsConnected, hint: 'Login Manual' },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#FAF7EE] flex flex-col justify-center items-center p-6 md:p-12">
+      <div className="w-full max-w-2xl space-y-6">
+        {/* Topo com Voltar e Explorar */}
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={onBack}
+            className="cursor-pointer inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-neutral-700 hover:text-black transition-colors"
+          >
+            <ChevronLeft className="w-4 h-4 stroke-[3]" />
+            Voltar para o Início
+          </button>
+
+          {onExplore ? (
+            <button
+              type="button"
+              onClick={onExplore}
+              className="cursor-pointer text-xs font-black uppercase tracking-wider text-[#003366] hover:underline"
+            >
+              Explorar sem Conectar &rarr;
+            </button>
+          ) : null}
+        </div>
+
+        {/* Card Principal */}
+        <Card className="border-3 border-black bg-white shadow-[3px_3px_0px_0px_#000] rounded-2xl p-6 md:p-8">
+          <CardHeader className="p-0 mb-6">
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="p-2 bg-[#006633] text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000]">
+                <Lock className="w-5 h-5 stroke-[2.5]" />
+              </div>
+              <CardTitle className="text-2xl uppercase text-[#003366]">
+                Acesso às Plataformas
+              </CardTitle>
+            </div>
+            <CardDescription className="text-sm font-semibold text-neutral-700 leading-relaxed">
+              Cada plataforma da UnB possui seu próprio formato de login. Configure as plataformas que deseja sincronizar.
+            </CardDescription>
+          </CardHeader>
+
+          {/* Abas das plataformas */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+            {platforms.map((p) => {
+              const isSelected = activeTab === p.id;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => {
+                    setActiveTab(p.id);
+                    setFormError(null);
+                  }}
+                  className={`cursor-pointer p-3 border-2 border-black rounded-xl text-left transition-all duration-150 ease-out translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none ${
+                    isSelected
+                      ? 'bg-[#003366] text-white font-black'
+                      : 'bg-white text-neutral-800 hover:bg-neutral-100 font-bold'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs uppercase">{p.name}</span>
+                    {p.isSaved ? (
+                      <CheckCircle2
+                        className={`w-3.5 h-3.5 stroke-[3] ${isSelected ? 'text-white' : 'text-[#006633]'}`}
+                      />
+                    ) : null}
+                  </div>
+                  <span
+                    className={`text-[10px] font-medium block truncate ${
+                      isSelected ? 'text-white/80' : 'text-neutral-600'
+                    }`}
+                  >
+                    {p.hint}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Formulário específico por plataforma */}
+          <div className="space-y-4 min-h-[170px]">
+            {activeTab === 'sigaa' && (
+              <div className="space-y-3">
+                <div className="text-xs font-black uppercase tracking-wider text-[#003366]">
+                  Credenciais do SIGAA (Matrícula e Senha)
+                </div>
+                <Input
+                  label="Matrícula SIGAA"
+                  placeholder="Ex: 202012345"
+                  value={sigaaMatricula}
+                  onChange={(e) => setSigaaMatricula(e.target.value)}
+                  disabled={isLoading}
+                />
+                <Input
+                  type="password"
+                  label="Senha SIGAA"
+                  placeholder="Senha do SIGAA"
+                  value={sigaaSenha}
+                  onChange={(e) => setSigaaSenha(e.target.value)}
+                  disabled={isLoading}
+                />
+              </div>
+            )}
+
+            {activeTab === 'aprender3' && (
+              <div className="space-y-3">
+                <div className="text-xs font-black uppercase tracking-wider text-[#003366]">
+                  Credenciais do Aprender 3 (CPF e Senha)
+                </div>
+                <Input
+                  label="CPF (somente números ou formatado)"
+                  placeholder="Ex: 000.000.000-00"
+                  value={aprenderCpf}
+                  onChange={(e) => setAprenderCpf(e.target.value)}
+                  disabled={isLoading}
+                />
+                <Input
+                  type="password"
+                  label="Senha do Aprender 3"
+                  placeholder="Senha do Aprender 3"
+                  value={aprenderSenha}
+                  onChange={(e) => setAprenderSenha(e.target.value)}
+                  disabled={isLoading}
+                />
+              </div>
+            )}
+
+            {activeTab === 'moodlemat' && (
+              <div className="space-y-3">
+                <div className="text-xs font-black uppercase tracking-wider text-[#003366]">
+                  Credenciais do MoodleMat (Matrícula e Senha)
+                </div>
+                <Input
+                  label="Matrícula MoodleMat"
+                  placeholder="Ex: 202012345"
+                  value={moodleMatMatricula}
+                  onChange={(e) => setMoodleMatMatricula(e.target.value)}
+                  disabled={isLoading}
+                />
+                <Input
+                  type="password"
+                  label="Senha do MoodleMat"
+                  placeholder="Senha do MoodleMat"
+                  value={moodleMatSenha}
+                  onChange={(e) => setMoodleMatSenha(e.target.value)}
+                  disabled={isLoading}
+                />
+              </div>
+            )}
+
+            {activeTab === 'teams' && (
+              <div className="p-4 bg-[#FAF7EE] border-2 border-black rounded-xl space-y-3 shadow-[2px_2px_0px_0px_#000]">
+                <div className="text-xs font-black uppercase tracking-wider text-[#003366]">
+                  Microsoft Teams Institucional (Login Manual)
+                </div>
+                <p className="text-xs font-semibold text-neutral-700 leading-relaxed">
+                  O Teams utiliza autenticação corporativa Microsoft 365 e requer validação interativa.
+                </p>
+                <Input
+                  label="E-mail Institucional UnB (opcional)"
+                  placeholder="Ex: aluno@aluno.unb.br"
+                  value={teamsEmail}
+                  onChange={(e) => setTeamsEmail(e.target.value)}
+                  disabled={isLoading}
+                />
+                <div className="pt-1">
+                  <button
+                    type="button"
+                    onClick={handleToggleTeams}
+                    className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 border-2 border-black rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-150 ease-out translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none ${
+                      teamsConnected
+                        ? 'bg-[#006633] text-white hover:bg-[#007A3D]'
+                        : 'bg-[#003366] text-white hover:bg-[#004080]'
+                    }`}
+                  >
+                    <ExternalLink className="w-4 h-4 stroke-[2.5]" />
+                    <span>
+                      {teamsConnected
+                        ? 'Conta Conectada (Clique para Desconectar)'
+                        : 'Conectar Conta Microsoft Teams'}
+                    </span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Botão para salvar a plataforma ativa */}
+            {activeTab !== 'teams' ? (
+              <div className="pt-2 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleSaveCurrentPlatform}
+                  className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#006633] hover:bg-[#007A3D] text-white font-black text-xs uppercase border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
+                  <span>Salvar {platforms.find((p) => p.id === activeTab)?.name}</span>
+                </button>
+              </div>
+            ) : null}
+          </div>
+
+          {/* Erros */}
+          {formError || error ? (
+            <div className="mt-4 p-3 bg-[#FF4D4F] text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] text-xs font-bold flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 stroke-[3] shrink-0" />
+              <span>{formError || error}</span>
+            </div>
+          ) : null}
+
+          {/* Botões de Conclusão */}
+          <div className="pt-6 border-t-2 border-black/10 mt-6 space-y-3">
+            <Button
+              type="button"
+              variant="default"
+              size="lg"
+              isLoading={isLoading}
+              onClick={handleFinish}
+              className="w-full text-base bg-[#003366] hover:bg-[#004080]"
+            >
+              <span>Acessar Painel e Sincronizar</span>
+              <ArrowRight className="w-5 h-5 stroke-[2.5]" />
+            </Button>
+
+            {onExplore ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                onClick={onExplore}
+                className="w-full text-xs"
+              >
+                <span>Explorar sem Conectar Contas Agora</span>
+              </Button>
+            ) : null}
+          </div>
+        </Card>
+      </div>
+    </div>
+  );
+};

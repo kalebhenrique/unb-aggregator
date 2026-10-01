@@ -1,0 +1,197 @@
+import { useState, useEffect, useCallback } from 'react';
+import { useContainer } from '../context/ContainerContext';
+import type {
+  AllPlatformCredentials,
+  SigaaCredentials,
+  Aprender3Credentials,
+  MoodleMatCredentials,
+  TeamsCredentials,
+  PlatformType,
+} from '@unb-aggregator/core';
+
+// Cache e notificador global entre instâncias do hook useCredentials
+let cachedAllCredentials: AllPlatformCredentials = {};
+let cachedHasCredentials: boolean | null = null;
+const listeners = new Set<() => void>();
+
+function notifyListeners() {
+  listeners.forEach((fn) => fn());
+}
+
+export function useCredentials() {
+  const { useCases } = useContainer();
+  const [allCredentials, setAllCredentials] = useState<AllPlatformCredentials>(cachedAllCredentials);
+  const [hasCredentials, setHasCredentials] = useState<boolean | null>(cachedHasCredentials);
+  const [isLoading, setIsLoading] = useState<boolean>(cachedHasCredentials === null);
+  const [error, setError] = useState<string | null>(null);
+
+  const loadAll = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const exists = await useCases.getCredentials.hasSavedCredentials();
+      const creds = await useCases.getCredentials.getAllCredentials();
+      cachedHasCredentials = exists;
+      cachedAllCredentials = creds;
+      setHasCredentials(exists);
+      setAllCredentials(creds);
+    } catch (err: unknown) {
+      console.error('Erro ao verificar credenciais:', err);
+      setHasCredentials(false);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [useCases]);
+
+  useEffect(() => {
+    loadAll();
+
+    const listener = () => {
+      loadAll();
+    };
+    listeners.add(listener);
+
+    return () => {
+      listeners.delete(listener);
+    };
+  }, [loadAll]);
+
+  const saveSigaa = async (creds: SigaaCredentials) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await useCases.saveCredentials.saveSigaa(creds);
+      if (res.success) {
+        cachedAllCredentials = { ...cachedAllCredentials, sigaa: creds };
+        cachedHasCredentials = true;
+        setAllCredentials(cachedAllCredentials);
+        setHasCredentials(true);
+        await loadAll();
+        notifyListeners();
+        return true;
+      }
+      setError(res.error || 'Erro ao salvar credenciais do SIGAA');
+      return false;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erro inesperado');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const saveAprender3 = async (creds: Aprender3Credentials) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await useCases.saveCredentials.saveAprender3(creds);
+      if (res.success) {
+        cachedAllCredentials = { ...cachedAllCredentials, aprender3: creds };
+        cachedHasCredentials = true;
+        setAllCredentials(cachedAllCredentials);
+        setHasCredentials(true);
+        await loadAll();
+        notifyListeners();
+        return true;
+      }
+      setError(res.error || 'Erro ao salvar credenciais do Aprender 3');
+      return false;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erro inesperado');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const saveMoodleMat = async (creds: MoodleMatCredentials) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await useCases.saveCredentials.saveMoodleMat(creds);
+      if (res.success) {
+        cachedAllCredentials = { ...cachedAllCredentials, moodlemat: creds };
+        cachedHasCredentials = true;
+        setAllCredentials(cachedAllCredentials);
+        setHasCredentials(true);
+        await loadAll();
+        notifyListeners();
+        return true;
+      }
+      setError(res.error || 'Erro ao salvar credenciais do MoodleMat');
+      return false;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erro inesperado');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const saveTeams = async (creds: TeamsCredentials) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await useCases.saveCredentials.saveTeams(creds);
+      if (res.success) {
+        cachedAllCredentials = { ...cachedAllCredentials, teams: creds };
+        cachedHasCredentials = true;
+        setAllCredentials(cachedAllCredentials);
+        setHasCredentials(true);
+        await loadAll();
+        notifyListeners();
+        return true;
+      }
+      setError(res.error || 'Erro ao conectar conta do Teams');
+      return false;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erro inesperado');
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const clearPlatform = async (platform: PlatformType) => {
+    setIsLoading(true);
+    try {
+      await useCases.getCredentials.clearPlatform(platform);
+      const updated = { ...cachedAllCredentials };
+      delete updated[platform];
+      cachedAllCredentials = updated;
+      setAllCredentials(cachedAllCredentials);
+      await loadAll();
+      notifyListeners();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const clearAll = async () => {
+    setIsLoading(true);
+    try {
+      await useCases.getCredentials.clearCredentials();
+      cachedAllCredentials = {};
+      cachedHasCredentials = false;
+      setAllCredentials({});
+      setHasCredentials(false);
+      await loadAll();
+      notifyListeners();
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return {
+    allCredentials,
+    hasCredentials,
+    isLoading,
+    error,
+    saveSigaa,
+    saveAprender3,
+    saveMoodleMat,
+    saveTeams,
+    clearPlatform,
+    clearAll,
+    refresh: loadAll,
+  };
+}

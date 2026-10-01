@@ -1,0 +1,15 @@
+{
+  "name": "unb-aggregator-monorepo",
+  "private": true,
+  "packageManager": "pnpm@10.14.0",
+  "scripts": {
+    "build": "pnpm -r run build",
+    "dev": "pnpm --filter @unb-aggregator/desktop dev",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test",
+    "tauri": "pnpm --filter @unb-aggregator/desktop tauri"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}
