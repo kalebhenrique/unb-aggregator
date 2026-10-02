@@ -1,0 +1,531 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-02T00:00:00Z",
+  "title": "Design System: UnB Aggregator",
+  "extensions": {
+    "colorMeta": {
+      "pen-blue": {
+        "role": "primary",
+        "displayName": "Azul Caneta",
+        "canonical": "#468AFB",
+        "tonalRamp": [
+          "#021d4b",
+          "#03317d",
+          "#0448b9",
+          "#0561fa",
+          "#4187fb",
+          "#82b0fc",
+          "#b4d0fd",
+          "#e6effe"
+        ]
+      },
+      "pen-blue-deep": {
+        "role": "primary",
+        "displayName": "Azul Caneta Pressionado",
+        "canonical": "#3574DC",
+        "tonalRamp": [
+          "#0b2041",
+          "#13356d",
+          "#1c4ea1",
+          "#2669d9",
+          "#5a8de2",
+          "#92b4ec",
+          "#bed2f4",
+          "#e9f0fb"
+        ]
+      },
+      "highlighter-yellow": {
+        "role": "secondary",
+        "displayName": "Amarelo Marca-Texto",
+        "canonical": "#FFE600",
+        "tonalRamp": [
+          "#4d4500",
+          "#807300",
+          "#bdaa00",
+          "#ffe600",
+          "#ffec3d",
+          "#fff380",
+          "#fff8b3",
+          "#fffde5"
+        ]
+      },
+      "chalk-green": {
+        "role": "secondary",
+        "displayName": "Verde Giz",
+        "canonical": "#46E297",
+        "tonalRamp": [
+          "#0a4227",
+          "#116e42",
+          "#1aa361",
+          "#23dc83",
+          "#57e5a1",
+          "#91eec1",
+          "#bdf5da",
+          "#e9fcf3"
+        ]
+      },
+      "correction-red": {
+        "role": "secondary",
+        "displayName": "Vermelho Correção",
+        "canonical": "#FF6B6B",
+        "tonalRamp": [
+          "#4d0000",
+          "#800000",
+          "#bd0000",
+          "#ff0000",
+          "#ff3d3d",
+          "#ff8080",
+          "#ffb3b3",
+          "#ffe5e5"
+        ]
+      },
+      "notebook-purple": {
+        "role": "tertiary",
+        "displayName": "Lilás Caderno",
+        "canonical": "#C084FC",
+        "tonalRamp": [
+          "#26024b",
+          "#40037c",
+          "#5e04b8",
+          "#8006f9",
+          "#9e42fa",
+          "#bf83fc",
+          "#d9b4fd",
+          "#f2e6fe"
+        ]
+      },
+      "pencil-orange": {
+        "role": "tertiary",
+        "displayName": "Lápis Laranja",
+        "canonical": "#FB923C",
+        "tonalRamp": [
+          "#4b2302",
+          "#7d3a03",
+          "#b95504",
+          "#fa7305",
+          "#fb9541",
+          "#fcb982",
+          "#fdd5b4",
+          "#fef1e6"
+        ]
+      },
+      "sky-blue": {
+        "role": "tertiary",
+        "displayName": "Azul Céu",
+        "canonical": "#60A5FA",
+        "tonalRamp": [
+          "#02234a",
+          "#043a7c",
+          "#0655b7",
+          "#0873f7",
+          "#4395f9",
+          "#83b9fb",
+          "#b5d5fd",
+          "#e6f1fe"
+        ]
+      },
+      "institutional-green": {
+        "role": "tertiary",
+        "displayName": "Verde Institucional",
+        "canonical": "#006633",
+        "tonalRamp": [
+          "#004d26",
+          "#008040",
+          "#00bd5e",
+          "#00ff80",
+          "#3dff9e",
+          "#80ffbf",
+          "#b3ffd9",
+          "#e5fff2"
+        ]
+      },
+      "grid-paper": {
+        "role": "neutral",
+        "displayName": "Papel Quadriculado",
+        "canonical": "#E8EFF8",
+        "tonalRamp": [
+          "#12243b",
+          "#1e3c62",
+          "#2c5891",
+          "#3b77c4",
+          "#6a98d2",
+          "#9dbbe1",
+          "#c4d6ed",
+          "#ebf1f9"
+        ]
+      },
+      "paper-cream": {
+        "role": "neutral",
+        "displayName": "Creme Papel",
+        "canonical": "#FAF7EE",
+        "tonalRamp": [
+          "#3b3111",
+          "#63511d",
+          "#92782b",
+          "#c5a23a",
+          "#d3b969",
+          "#e2d19c",
+          "#eee3c4",
+          "#f9f6eb"
+        ]
+      },
+      "pastel-blue": {
+        "role": "neutral",
+        "displayName": "Azul Pastel",
+        "canonical": "#EBF3FF",
+        "tonalRamp": [
+          "#001f4d",
+          "#003380",
+          "#004bbd",
+          "#0066ff",
+          "#3d8bff",
+          "#80b3ff",
+          "#b3d1ff",
+          "#e5f0ff"
+        ]
+      },
+      "pastel-green": {
+        "role": "neutral",
+        "displayName": "Verde Pastel",
+        "canonical": "#E6F8EE",
+        "tonalRamp": [
+          "#113c24",
+          "#1c643c",
+          "#299358",
+          "#38c778",
+          "#68d598",
+          "#9be3bb",
+          "#c3eed6",
+          "#ebf9f1"
+        ]
+      },
+      "pastel-yellow": {
+        "role": "neutral",
+        "displayName": "Amarelo Pastel",
+        "canonical": "#FFF9D2",
+        "tonalRamp": [
+          "#4d4200",
+          "#806e00",
+          "#bda400",
+          "#ffdd00",
+          "#ffe53d",
+          "#ffee80",
+          "#fff5b3",
+          "#fffce5"
+        ]
+      },
+      "pastel-purple": {
+        "role": "neutral",
+        "displayName": "Lilás Pastel",
+        "canonical": "#F3E8FF",
+        "tonalRamp": [
+          "#25004d",
+          "#3d0080",
+          "#5a00bd",
+          "#7a00ff",
+          "#9a3dff",
+          "#bc80ff",
+          "#d7b3ff",
+          "#f2e5ff"
+        ]
+      },
+      "pastel-red": {
+        "role": "neutral",
+        "displayName": "Vermelho Pastel",
+        "canonical": "#FFEBEB",
+        "tonalRamp": [
+          "#4d0000",
+          "#800000",
+          "#bd0000",
+          "#ff0000",
+          "#ff3d3d",
+          "#ff8080",
+          "#ffb3b3",
+          "#ffe5e5"
+        ]
+      },
+      "success-ink": {
+        "role": "neutral",
+        "displayName": "Verde OK",
+        "canonical": "#16A34A",
+        "tonalRamp": [
+          "#09431f",
+          "#0f7033",
+          "#16a64b",
+          "#1ee166",
+          "#54e88b",
+          "#8ff0b3",
+          "#bcf6d1",
+          "#e9fcf0"
+        ]
+      },
+      "error-ink": {
+        "role": "neutral",
+        "displayName": "Vermelho Erro",
+        "canonical": "#DC2626",
+        "tonalRamp": [
+          "#420b0b",
+          "#6e1212",
+          "#a21a1a",
+          "#dc2323",
+          "#e45858",
+          "#ed9191",
+          "#f4bdbd",
+          "#fbe9e9"
+        ]
+      },
+      "ink-black": {
+        "role": "neutral",
+        "displayName": "Tinta Preta",
+        "canonical": "#000000",
+        "tonalRamp": [
+          "#272525",
+          "#413e3e",
+          "#605c5c",
+          "#827d7d",
+          "#a09c9c",
+          "#c1bebe",
+          "#dad8d8",
+          "#f3f2f2"
+        ]
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Tinta Suave",
+        "canonical": "#525252",
+        "tonalRamp": [
+          "#272525",
+          "#413e3e",
+          "#605c5c",
+          "#827d7d",
+          "#a09c9c",
+          "#c1bebe",
+          "#dad8d8",
+          "#f3f2f2"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Único momento hero: título do onboarding. Weight 900."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Cabeçalho de página (PageHeader) com ícone de 24px."
+      },
+      "heading": {
+        "displayName": "Heading",
+        "purpose": "Título de card (CardTitle)."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Conteúdo e descrições; secundário em neutral-600 mantendo peso 500+."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Botões, badges, labels de input; versão uppercase 0.05em para rótulos de grupo."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sticker-hairline",
+        "value": "1.5px 1.5px 0 0 #000",
+        "purpose": "Badges, ícones em bloco, mini-adesivos de cabeçalho da grade."
+      },
+      {
+        "name": "sticker-micro",
+        "value": "2px 2px 0 0 #000",
+        "purpose": "Chips, logo-bloco, botões pequenos, tabs."
+      },
+      {
+        "name": "sticker-button",
+        "value": "3px 3px 0 0 #000",
+        "purpose": "Botões em repouso, select popup, alerts."
+      },
+      {
+        "name": "sticker-card",
+        "value": "4px 4px 0 0 #000",
+        "purpose": "Cards e botões em hover."
+      },
+      {
+        "name": "sticker-max",
+        "value": "6px 6px 0 0 #000",
+        "purpose": "Reservado para ênfase máxima; ainda sem uso."
+      },
+      {
+        "name": "pressed",
+        "value": "none",
+        "purpose": "Estado active: elemento afunda (translate 2px) até a sombra sumir."
+      }
+    ],
+    "motion": [
+      {
+        "name": "press",
+        "value": "150ms ease-out",
+        "purpose": "Todas as transições de estado: hover levanta, active afunda."
+      },
+      {
+        "name": "collapse",
+        "value": "200ms ease",
+        "purpose": "Expansão/recolhimento da sidebar (264px ↔ 80px)."
+      },
+      {
+        "name": "spinner",
+        "value": "animate-spin 1s linear infinite",
+        "purpose": "Loading em botões e verificação de cofre."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão Primário",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal da tela. Azul Caneta com física de adesivo: levanta no hover, afunde no click.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Sincronizar agora</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-primary{background:#468AFB;color:#fff}.ds-btn-primary:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-primary:hover{background:#3574DC}.ds-btn-primary:active{transform:translate(2px,2px);box-shadow:none;}.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0 0 #000,0 0 0 2px #468AFB}.ds-btn:disabled{opacity:.5;cursor:not-allowed}"
+    },
+    {
+      "name": "Botão Accent",
+      "kind": "button",
+      "refersTo": "button-accent",
+      "description": "Ação positiva de destaque em Verde Giz, texto preto.",
+      "html": "<button class=\"ds-btn ds-btn-accent\">Concluir tarefa</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-accent{background:#46E297;color:#000}.ds-btn-accent:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-accent:hover{background:#39D68A}.ds-btn-accent:active{transform:translate(2px,2px);box-shadow:none;}"
+    },
+    {
+      "name": "Botão Outline",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Ação secundária sobre papel branco; mesma física dos demais.",
+      "html": "<button class=\"ds-btn ds-btn-outline\">Cancelar</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-outline{background:#fff;color:#000}.ds-btn-outline:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-outline:hover{background:#F5F5F5}.ds-btn-outline:active{transform:translate(2px,2px);box-shadow:none;}"
+    },
+    {
+      "name": "Campo de Texto",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "Input padrão com label bold acima e ring Azul Caneta no foco.",
+      "html": "<div class=\"ds-input-wrap\"><label class=\"ds-input-label\" for=\"ds-usuario\">Usuário SIGAA</label><input id=\"ds-usuario\" class=\"ds-input-field\" placeholder=\"seu.login@unb.br\" /></div>",
+      "css": ".ds-input-wrap{display:flex;flex-direction:column;gap:6px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-input-label{font-size:0.75rem;font-weight:700;color:#262626}.ds-input-field{width:100%;background:#fff;padding:10px 16px;font-size:0.875rem;font-weight:500;color:#000;border:2px solid #000;border-radius:12px;outline:none;transition:all 150ms ease-out}.ds-input-field::placeholder{color:#A3A3A3}.ds-input-field:focus-visible{box-shadow:0 0 0 2px #468AFB}.ds-input-field.ds-input-error{border-color:#DC2626;box-shadow:0 0 0 2px #DC2626}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card-default",
+      "description": "Superfície adesivo padrão: branco, borda 2px, sombra 4px, padding 24px.",
+      "html": "<div class=\"ds-card\"><h3 class=\"ds-card-title\">Estátistica Cálculo 2</h3><p class=\"ds-card-desc\">Entrega da lista 3 disponível até sexta-feira.</p></div>",
+      "css": ".ds-card{background:#fff;color:#000;border:2px solid #000;border-radius:16px;box-shadow:4px 4px 0 0 #000;padding:24px;max-width:360px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-card-title{font-size:1.125rem;font-weight:700;letter-spacing:-0.01em;margin:0 0 4px}.ds-card-desc{font-size:0.875rem;font-weight:500;color:#525252;margin:0;line-height:1.5}"
+    },
+    {
+      "name": "Badge de Plataforma",
+      "kind": "chip",
+      "refersTo": "badge-sticker",
+      "description": "Sticker pill de identidade: Sigaa em Verde Giz com ícone de verificação.",
+      "html": "<span class=\"ds-badge\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"14\" height=\"14\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg>Sigaa</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;gap:6px;padding:2px 12px;background:#46E297;color:#000;border:2px solid #000;border-radius:9999px;box-shadow:1.5px 1.5px 0 0 #000;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;user-select:none}"
+    },
+    {
+      "name": "Chips de Filtro",
+      "kind": "chip",
+      "refersTo": "card-default",
+      "description": "Tabs/filtros: inativa branca, ativa Azul Caneta com contador invertido; física de pressionar.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip ds-chip-active\">Todas<span class=\"ds-chip-count ds-chip-count-active\">7</span></button><button class=\"ds-chip\">Aprender 3<span class=\"ds-chip-count\">2</span></button></div>",
+      "css": ".ds-chips{display:flex;gap:10px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:#fff;color:#404040;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:2px 2px 0 0 #000;transition:all 150ms ease-out}.ds-chip:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 0 #000}.ds-chip:active{transform:translate(2px,2px);box-shadow:none}.ds-chip-active{background:#468AFB;color:#fff}.ds-chip-count{padding:2px 8px;background:#468AFB;color:#fff;border-radius:9999px;font-size:10px;font-weight:700}.ds-chip-count-active{background:#fff;color:#468AFB}"
+    },
+    {
+      "name": "Alert Pastel",
+      "kind": "custom",
+      "refersTo": "card-pastel-blue",
+      "description": "Aviso em papel pastel com ícone em bloco branco pressionado.",
+      "html": "<div class=\"ds-alert\"><span class=\"ds-alert-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"16\" height=\"16\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg></span><div><h4 class=\"ds-alert-title\">Credenciais salvas</h4><p class=\"ds-alert-desc\">Seus dados ficam no cofre local do dispositivo.</p></div></div>",
+      "css": ".ds-alert{display:flex;align-items:flex-start;gap:14px;padding:16px;background:#E6F8EE;border:2px solid #000;border-radius:16px;box-shadow:3px 3px 0 0 #000;max-width:420px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-alert-icon{display:flex;align-items:center;justify-content:center;padding:8px;background:#fff;color:#16A34A;border:2px solid #000;border-radius:12px;box-shadow:1.5px 1.5px 0 0 #000;flex-shrink:0}.ds-alert-title{margin:0;font-size:0.875rem;font-weight:700;letter-spacing:-0.01em;color:#000}.ds-alert-desc{margin:4px 0 0;font-size:0.75rem;font-weight:600;color:#262626;line-height:1.5}"
+    },
+    {
+      "name": "Item de Navegação (Ledger)",
+      "kind": "nav",
+      "refersTo": "card-default",
+      "description": "Faixa inteira do fichário: ativa em Azul Caneta font-black, inativa branca, separada por borda 2px. Sem sombra — a encadernação não é adesivo.",
+      "html": "<nav class=\"ds-nav\"><button class=\"ds-nav-item ds-nav-active\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"18\" height=\"18\" aria-hidden=\"true\"><path d=\"m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/><path d=\"M9 22V12h6v10\"/></svg>Home</button><button class=\"ds-nav-item\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"18\" height=\"18\" aria-hidden=\"true\"><path d=\"M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20\"/></svg>Turmas</button></nav>",
+      "css": ".ds-nav{display:flex;flex-direction:column;width:240px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;background:#fff;color:#404040;font-size:0.875rem;font-weight:700;border:none;border-bottom:2px solid #000;border-top:none;border-left:none;border-right:none;text-align:left;cursor:pointer;transition:background 150ms ease-out,color 150ms ease-out}.ds-nav-item:hover{background:#F5F5F5}.ds-nav-active,.ds-nav-active:hover{background:#468AFB;color:#fff;font-weight:900}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Mural de Adesivos",
+    "overview": "Todo o sistema se comporta como uma muralha de papel quadriculado onde adesivos grossos foram pressionados à mão: cards, badges, botões e campos são adesivos com borda preta declarada (2px sólida) e sombra dura deslocada, sem um pixel de blur. Nada flutua no ar — tudo está colado na superfície. Quando o usuário clica, o adesivo afunda fisicamente: a sombra desaparece e o elemento se desloca na direção dela. A interface responde ao toque como objeto, não como holograma.\n\nA personalidade é de app de estudante, não de empresa: cores de material escolar (caneta azul, marca-texto amarelo, giz verde, caneta corretora vermelha) sobre papel quadriculado sutil, com hierarquia construída por peso tipográfico (black/extrabold/bold) em vez de tons de cinza apagados. Por baixo da brincadeira existe um produto de trabalho sério: densidade organizada, grid discreto, ritmo consistente de 150ms em todas as transições.\n\nO mundo é opaco e de alto contraste. Sombras suaves difusas, vidro fosco, gradiente e translucidez são a anti-referência declarada — nunca entram.",
+    "keyCharacteristics": [
+      "Borda preta de 2px em toda superfície e elemento interativo",
+      "Sombra dura deslocada, cor preta sólida, blur zero",
+      "Física de pressionar: hover levanta, active afunda até a sombra sumir",
+      "Cores candy de material escolar sobre papel quadriculado (#E8EFF8, grid de 32px)",
+      "Hierarquia por peso de fonte, não por cinza",
+      "Raio generoso (12–16px) suavizando a agressividade das bordas",
+      "Tudo em 150ms ease-out"
+    ],
+    "rules": [
+      {
+        "name": "A Regra do Risco Preto",
+        "body": "Nenhuma superfície ou elemento interativo existe sem borda preta de 2px. A borda é o contorno do adesivo; sem ela o elemento cai fora do mundo.",
+        "section": "colors"
+      },
+      {
+        "name": "A Regra do Pastel como Papel",
+        "body": "Cores de ação (caneta, giz, correção) marcam interação e identidade; as versões pastel servem de papel de fundo. Uma nunca faz o trabalho da outra: pastel nunca é botão, cor cheia nunca é fundo de seção inteira.",
+        "section": "colors"
+      },
+      {
+        "name": "A Regra do Marcador Grosso",
+        "body": "Hierarquia vem de peso (900 → 800 → 700 → 500), não de esmaecer cinza. Nunca enfraqueça texto baixando o peso para abaixo de 500 — baixe o tom (neutral-600) mantendo o peso.",
+        "section": "typography"
+      },
+      {
+        "name": "A Regra do Rótulo Gritado",
+        "body": "Rótulos estruturais (grupos, cabeçalhos de tabela, micro-cabeçalhos) são uppercase, font-black ou font-bold, 10–12px. Dá o tom de etiqueta de fichário.",
+        "section": "typography"
+      },
+      {
+        "name": "A Regra da Sombra Dura",
+        "body": "Sombra é deslocamento sólido preto, nunca blur, nunca rgba difusa, nunca cor. Se precisar de menos profundidade, diminua o deslocamento — não amacie.",
+        "section": "elevation"
+      },
+      {
+        "name": "A Regra do Afundar",
+        "body": "Todo elemento interativo em repouso com sombra deve afundar no active (sombra some, elemento desloca 2px na direção da sombra). Elemento que levanta no hover e não afunda no click é bug físico.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do dar borda preta de 2px a toda superfície e elemento interativo (A Regra do Risco Preto).",
+      "Do usar sombra dura deslocada preta (Xpx Xpx 0 0 #000) e física completa: hover levanta, active afunda, disabled congela.",
+      "Do construir hierarquia com peso de fonte (900/800/700/500) e usar pastéis como fundo, nunca como cor de ação.",
+      "Do usar Plus Jakarta Sans e ícones Lucide com stroke 2.5; rótulos estruturais em uppercase bold 10–12px.",
+      "Do usar as cores de plataforma como identidade fixa (Sigaa verde, Aprender 3 laranja) em badges e filtros."
+    ],
+    "donts": [
+      "Don't usar sombra com blur, box-shadow difusa, rgba ambiente ou elevação estilo Material — sombra dura ou nenhuma.",
+      "Don't usar glassmorphism, backdrop-blur, gradientes ou superfícies translúcidas — o mundo é opaco.",
+      "Don't criar elemento interativo com sombra que não afunde no active (A Regra do Afundar).",
+      "Don't enfraquecer texto reduzindo peso abaixo de font-medium; baixe o tom, mantenha o peso (A Regra do Marcador Grosso).",
+      "Don't usar cor de ação cheia como fundo de seção, ou pastel como cor de botão (A Regra do Pastel como Papel)."
+    ]
+  }
+}
