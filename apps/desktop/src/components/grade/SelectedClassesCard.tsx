@@ -36,10 +36,10 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
   onApplyOption,
 }) => {
   return (
-    <Card className="p-4 space-y-4">
+    <Card className="rounded-xl p-4 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-[#003366] stroke-[2.5]" />
+          <BookOpen className="w-4 h-4 text-[#468AFB] stroke-[2.5]" />
           <h3 className="text-xs font-black uppercase text-black">
             Minhas Disciplinas ({selectedClasses.length})
           </h3>
@@ -50,7 +50,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
             variant="ghost"
             size="sm"
             onClick={onClearGrade}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50 text-[10px] h-7 px-2"
+            className="text-red-600 hover:text-red-700 hover:bg-red-50 text-[10px] h-7 px-2 rounded-lg"
           >
             <Trash2 className="w-3 h-3 stroke-[2.5]" />
             Limpar
@@ -59,7 +59,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
       </div>
 
       {selectedClasses.length === 0 ? (
-        <p className="text-xs font-semibold text-neutral-500 text-center py-3 bg-[#FAF7EE] border border-dashed border-black/30 rounded-xl">
+        <p className="text-xs font-semibold text-neutral-500 text-center py-4 bg-[#F8FAFC] border-2 border-dashed border-black/25 rounded-xl">
           Nenhuma disciplina adicionada. Escolha turmas no catálogo abaixo.
         </p>
       ) : (
@@ -149,7 +149,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
 
         {/* Navegação entre combinações geradas */}
         {scheduleOptionsCount > 1 ? (
-          <div className="flex items-center justify-between p-2 bg-[#FAF7EE] border-2 border-black rounded-xl text-xs font-bold shadow-[2px_2px_0px_0px_#000]">
+          <div className="flex items-center justify-between p-2 bg-[#F8FAFC] border-2 border-black rounded-xl text-xs font-bold shadow-[2px_2px_0px_0px_#000]">
             <Button
               type="button"
               variant="outline"
@@ -161,7 +161,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
               <ChevronLeft className="w-3.5 h-3.5 stroke-[2.5]" />
             </Button>
 
-            <span className="font-black text-[#003366]">
+            <span className="font-black text-[#468AFB]">
               Opção {currentOptionIndex + 1} de {scheduleOptionsCount}
             </span>
 

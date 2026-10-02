@@ -28,22 +28,22 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   const variantStyles: Record<BadgeTypeVariant, string> = {
-    sigaa: 'bg-[#22C55E] text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
-    aprender3: 'bg-[#FB923C] text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
-    moodlemat: 'bg-[#C084FC] text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
-    teams: 'bg-[#60A5FA] text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
-    assignment: 'bg-[#FFE600] text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
-    post: 'bg-[#E2E8F0] text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
-    urgent: 'bg-[#FF4D4F] text-white border-2 border-black shadow-[2px_2px_0px_0px_#000]',
-    neutral: 'bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
-    success: 'bg-[#006633] text-white border-2 border-black shadow-[2px_2px_0px_0px_#000]',
-    primary: 'bg-[#003366] text-white border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    sigaa: 'bg-[#46E297] text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+    aprender3: 'bg-[#FB923C] text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+    moodlemat: 'bg-[#C084FC] text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+    teams: 'bg-[#60A5FA] text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+    assignment: 'bg-[#FFE600] text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+    post: 'bg-[#E2E8F0] text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+    urgent: 'bg-[#FF6B6B] text-white border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+    neutral: 'bg-white text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+    success: 'bg-[#46E297] text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+    primary: 'bg-[#468AFB] text-white border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
     outline: 'bg-white text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
   };
 
   const sizeStyles = {
-    sm: 'px-1.5 py-0.5 text-[10px] rounded',
-    md: 'px-2.5 py-0.5 text-xs rounded-md',
+    sm: 'px-2 py-0.5 text-[10px] rounded-full',
+    md: 'px-3 py-0.5 text-xs rounded-full',
   };
 
   const renderIcon = () => {
@@ -73,7 +73,7 @@ export const Badge: React.FC<BadgeProps> = ({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 font-black uppercase tracking-wider select-none',
+        'inline-flex items-center gap-1.5 font-bold select-none tracking-normal',
         variantStyles[variant],
         sizeStyles[size],
         className

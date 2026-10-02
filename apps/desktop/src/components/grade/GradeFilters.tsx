@@ -68,11 +68,11 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
   );
 
   return (
-    <Card className="p-4 space-y-4">
+    <Card className="rounded-xl p-4 space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
         {/* Seletor de Departamento */}
         <div className="md:col-span-6 lg:col-span-6 flex flex-col gap-1.5">
-          <label className="text-xs font-black uppercase tracking-wider text-black">
+          <label className="text-xs font-bold text-neutral-800">
             Departamento da UnB
           </label>
           <Select
@@ -82,12 +82,12 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
               if (val) onSelectDeptId(val);
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger className="rounded-lg">
               <SelectValue placeholder="Selecione o departamento">
                 {selectedDeptName}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-lg">
               {departments.map((dept) => (
                 <SelectItem key={dept.id} value={dept.id}>
                   {dept.name}
@@ -99,7 +99,7 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
 
         {/* Ano */}
         <div className="md:col-span-2 lg:col-span-2 flex flex-col gap-1.5">
-          <label className="text-xs font-black uppercase tracking-wider text-black">
+          <label className="text-xs font-bold text-neutral-800">
             Ano
           </label>
           <Select
@@ -109,10 +109,10 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
               if (val) onSelectYear(val);
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger className="rounded-lg">
               <SelectValue placeholder="Ano">{year}</SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-lg">
               <SelectItem value="2026">2026</SelectItem>
               <SelectItem value="2025">2025</SelectItem>
               <SelectItem value="2024">2024</SelectItem>
@@ -122,7 +122,7 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
 
         {/* Período */}
         <div className="md:col-span-2 lg:col-span-2 flex flex-col gap-1.5">
-          <label className="text-xs font-black uppercase tracking-wider text-black">
+          <label className="text-xs font-bold text-neutral-800">
             Período
           </label>
           <Select
@@ -132,10 +132,10 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
               if (val) onSelectPeriod(val);
             }}
           >
-            <SelectTrigger>
+            <SelectTrigger className="rounded-lg">
               <SelectValue placeholder="Período">{period}</SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="rounded-lg">
               <SelectItem value="1">1</SelectItem>
               <SelectItem value="2">2</SelectItem>
             </SelectContent>
@@ -148,7 +148,7 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
             type="button"
             variant="primary"
             size="md"
-            className="w-full"
+            className="w-full rounded-lg"
             isLoading={isScraping}
             onClick={onFetchClasses}
           >
@@ -167,12 +167,12 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Filtrar por código ou nome (ex: APC)..."
-            className="w-full bg-white pl-9 pr-3 py-2 text-xs font-bold text-black border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] focus:outline-none focus:ring-2 focus:ring-[#003366] placeholder:text-neutral-500 transition-all"
+            className="w-full bg-white pl-9 pr-3 py-2 text-xs font-semibold text-black border-2 border-black rounded-lg shadow-none focus:outline-none focus:ring-2 focus:ring-[#468AFB] placeholder:text-neutral-400 transition-all"
           />
         </div>
 
         {feedbackMessage ? (
-          <span className="text-xs font-bold text-[#006633] truncate">
+          <span className="text-xs font-bold text-[#16A34A] truncate">
             {feedbackMessage}
           </span>
         ) : null}

@@ -21,8 +21,8 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       {...props}
     >
       <div>
-        <h2 className="text-2xl font-black uppercase text-[#003366] tracking-tight flex items-center gap-2.5">
-          {Icon ? <Icon className="w-6 h-6 stroke-[2.5] shrink-0" /> : null}
+        <h2 className="text-2xl font-extrabold text-black tracking-tight flex items-center gap-2.5">
+          {Icon ? <Icon className="w-6 h-6 stroke-[2.5] shrink-0 text-[#468AFB]" /> : null}
           <span>{title}</span>
         </h2>
       </div>

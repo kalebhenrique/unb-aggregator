@@ -8,15 +8,65 @@ import type {
   SavedGrade,
 } from '@unb-aggregator/core';
 
+// Cache em memória de disciplinas por depto-ano-período
+const disciplinesCache = new Map<string, ScrapedDiscipline[]>();
+
 export function useGrade() {
   const container = useContainer();
 
   const [departments, setDepartments] = useState<Department[]>([]);
-  const [selectedDeptId, setSelectedDeptId] = useState<string>('508');
-  const [year, setYear] = useState<string>('2026');
-  const [period, setPeriod] = useState<string>('2');
 
-  const [disciplines, setDisciplines] = useState<ScrapedDiscipline[]>([]);
+  // Carrega seleção prévia do localStorage para manter filtros entre abas
+  const [selectedDeptId, setSelectedDeptIdState] = useState<string>(() => {
+    try {
+      return localStorage.getItem('unb_grade_deptId') || '508';
+    } catch {
+      return '508';
+    }
+  });
+
+  const [year, setYearState] = useState<string>(() => {
+    try {
+      return localStorage.getItem('unb_grade_year') || '2026';
+    } catch {
+      return '2026';
+    }
+  });
+
+  const [period, setPeriodState] = useState<string>(() => {
+    try {
+      return localStorage.getItem('unb_grade_period') || '2';
+    } catch {
+      return '2';
+    }
+  });
+
+  const setSelectedDeptId = useCallback((id: string) => {
+    setSelectedDeptIdState(id);
+    try {
+      localStorage.setItem('unb_grade_deptId', id);
+    } catch {}
+  }, []);
+
+  const setYear = useCallback((y: string) => {
+    setYearState(y);
+    try {
+      localStorage.setItem('unb_grade_year', y);
+    } catch {}
+  }, []);
+
+  const setPeriod = useCallback((p: string) => {
+    setPeriodState(p);
+    try {
+      localStorage.setItem('unb_grade_period', p);
+    } catch {}
+  }, []);
+
+  // Inicializa disciplinas a partir do cache se já disponíveis
+  const [disciplines, setDisciplines] = useState<ScrapedDiscipline[]>(() => {
+    const initialKey = `${selectedDeptId}-${year}-${period}`;
+    return disciplinesCache.get(initialKey) || [];
+  });
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const [selectedClasses, setSelectedClasses] = useState<ScrapedClass[]>([]);
@@ -61,15 +111,26 @@ export function useGrade() {
     };
   }, [container]);
 
-  // Coleta turmas do departamento selecionado
+  // Coleta turmas do departamento selecionado com suporte a cache
   const fetchClasses = useCallback(
-    async (deptId = selectedDeptId, y = year, p = period) => {
+    async (deptId = selectedDeptId, y = year, p = period, force = false) => {
+      const key = `${deptId}-${y}-${p}`;
+
+      // Se temos em cache e não foi forçado recarregamento, usa cache imediatamente
+      if (!force && disciplinesCache.has(key)) {
+        const cached = disciplinesCache.get(key)!;
+        setDisciplines(cached);
+        setFeedbackMessage(`Exibindo ${cached.length} disciplinas carregadas.`);
+        return;
+      }
+
       console.log(`[useGrade] fetchClasses: iniciando coleta para depto=${deptId}, ano=${y}, período=${p}`);
       setIsScraping(true);
       setFeedbackMessage(null);
       try {
         const result = await container.useCases.scrapeClasses.execute(deptId, y, p);
         console.log(`[useGrade] fetchClasses: sucesso com ${result.length} disciplinas recebidas`);
+        disciplinesCache.set(key, result);
         setDisciplines(result);
         setFeedbackMessage(`Coleta realizada: ${result.length} disciplinas disponíveis.`);
       } catch (err: any) {
@@ -82,10 +143,22 @@ export function useGrade() {
     [container, selectedDeptId, year, period]
   );
 
-  // Carrega turmas do CIC por padrão ao iniciar com o período mais recente (2026.2)
+  // Restaura disciplinas do cache se já disponíveis ao alterar os seletores
   useEffect(() => {
-    fetchClasses('508', '2026', '2');
-  }, [fetchClasses]);
+    const key = `${selectedDeptId}-${year}-${period}`;
+    if (disciplinesCache.has(key)) {
+      setDisciplines(disciplinesCache.get(key)!);
+      setFeedbackMessage(null);
+    }
+  }, [selectedDeptId, year, period]);
+
+  // Carrega turmas apenas na primeira visita se o cache ainda estiver vazio
+  useEffect(() => {
+    const key = `${selectedDeptId}-${year}-${period}`;
+    if (!disciplinesCache.has(key) && disciplines.length === 0) {
+      fetchClasses(selectedDeptId, year, period, false);
+    }
+  }, [selectedDeptId, year, period, disciplines.length, fetchClasses]);
 
   // Recalcula conflitos sempre que as turmas selecionadas mudarem
   useEffect(() => {

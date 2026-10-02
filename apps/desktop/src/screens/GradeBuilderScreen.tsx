@@ -123,7 +123,7 @@ export const GradeBuilderScreen: React.FC = () => {
         period={period}
         onSelectPeriod={setPeriod}
         isScraping={isScraping}
-        onFetchClasses={() => fetchClasses(selectedDeptId, year, period)}
+        onFetchClasses={() => fetchClasses(selectedDeptId, year, period, true)}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         feedbackMessage={feedbackMessage}

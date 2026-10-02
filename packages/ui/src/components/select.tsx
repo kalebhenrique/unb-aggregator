@@ -36,7 +36,7 @@ function SelectTrigger({
     <SelectPrimitive.Trigger
       data-slot="select-trigger"
       className={cn(
-        'flex h-10 w-full items-center justify-between rounded-xl border-2 border-black bg-white gap-2 px-3 py-2 text-xs font-bold text-black shadow-[2px_2px_0px_0px_#000] focus:outline-none focus:ring-2 focus:ring-[#003366] focus:shadow-[3px_3px_0px_0px_#000] transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 select-none',
+        'flex h-10 w-full items-center justify-between rounded-xl border-2 border-black bg-white gap-2 px-3 py-2 text-xs font-bold text-black focus:outline-none focus:ring-2 focus:ring-[#468AFB] transition-all cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 select-none',
         className
       )}
       {...props}
@@ -151,7 +151,7 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        'relative flex w-full cursor-pointer select-none items-center gap-2 rounded-lg py-1.5 pr-8 pl-2.5 text-xs font-bold border-2 border-transparent outline-none hover:bg-[#003366] hover:text-white hover:border-black focus:bg-[#003366] focus:text-white focus:border-black data-highlighted:bg-[#003366] data-highlighted:text-white data-highlighted:border-black data-disabled:pointer-events-none data-disabled:opacity-50 transition-colors',
+        'relative flex w-full cursor-pointer select-none items-center gap-2 rounded-lg py-1.5 pr-8 pl-2.5 text-xs font-bold border-2 border-transparent outline-none hover:bg-[#468AFB] hover:text-white hover:border-black focus:bg-[#468AFB] focus:text-white focus:border-black data-highlighted:bg-[#468AFB] data-highlighted:text-white data-highlighted:border-black data-disabled:pointer-events-none data-disabled:opacity-50 transition-colors',
         className
       )}
       {...props}

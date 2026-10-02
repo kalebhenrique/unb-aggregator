@@ -77,8 +77,8 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
 
   return (
     <Card
-      className={`border-2 border-black rounded-lg transition-all ${
-        item.isCompleted ? 'bg-neutral-100 opacity-70' : 'bg-white'
+      className={`border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000] transition-all ${
+        item.isCompleted ? 'bg-neutral-100/90 opacity-75' : 'bg-white'
       }`}
     >
       {/* Header do Card */}
@@ -97,19 +97,19 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
 
           {/* Badge de Tipo */}
           <Badge variant={isAssignment ? 'assignment' : 'post'}>
-            {isAssignment ? 'Trabalho / Tarefa' : 'Aviso / Postagem'}
+            {isAssignment ? 'Trabalho' : 'Aviso'}
           </Badge>
 
           {/* Código da Disciplina */}
           {item.courseCode ? (
-            <span className="text-xs font-black text-neutral-600 bg-neutral-100 px-2 py-0.5 border border-black rounded">
+            <span className="text-xs font-bold text-neutral-700 bg-neutral-100 px-2.5 py-0.5 border-2 border-black rounded-full shadow-[1px_1px_0px_0px_#000]">
               {item.courseCode}
             </span>
           ) : null}
         </div>
 
         {/* Data de Publicação */}
-        <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-500">
+        <div className="flex items-center gap-1.5 text-xs font-medium text-neutral-500">
           <Calendar className="w-3.5 h-3.5 stroke-[2.5]" />
           <span>{formatCreationDate(item.createdAt)}</span>
         </div>
@@ -118,19 +118,19 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
       {/* Título e Disciplina */}
       <div className="space-y-1 mb-2">
         <h3
-          className={`text-base font-black text-black leading-snug ${
+          className={`text-base font-bold text-black leading-snug ${
             item.isCompleted ? 'line-through text-neutral-500' : ''
           }`}
         >
           {item.title}
         </h3>
-        <p className="text-xs font-bold text-[#006633] uppercase tracking-wide">
+        <p className="text-xs font-bold text-[#16A34A]">
           {item.courseName}
         </p>
       </div>
 
       {/* Conteúdo textual */}
-      <p className="text-sm font-semibold text-neutral-800 leading-relaxed line-clamp-3 mb-4">
+      <p className="text-sm font-normal text-neutral-700 leading-relaxed line-clamp-3 mb-4">
         {item.content}
       </p>
 
@@ -140,19 +140,19 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
         {dueStatus ? (
           <div className="flex items-center gap-1.5">
             {dueStatus.isUrgent ? (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FF4D4F] text-white text-xs font-black uppercase rounded border border-black shadow-[2px_2px_0px_0px_#000]">
-                <AlertTriangle className="w-3.5 h-3.5 stroke-[3]" />
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#FF6B6B] text-white text-xs font-bold rounded-full border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]">
+                <AlertTriangle className="w-3.5 h-3.5 stroke-[2.5]" />
                 {dueStatus.label}
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[#FFE600] text-black text-xs font-black uppercase rounded border border-black shadow-[2px_2px_0px_0px_#000]">
-                <Clock className="w-3.5 h-3.5 stroke-[3]" />
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#FFE600] text-black text-xs font-bold rounded-full border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]">
+                <Clock className="w-3.5 h-3.5 stroke-[2.5]" />
                 {dueStatus.label}
               </span>
             )}
           </div>
         ) : item.author ? (
-          <div className="flex items-center gap-1.5 text-xs font-bold text-neutral-600">
+          <div className="flex items-center gap-1.5 text-xs font-medium text-neutral-600">
             <User className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>{item.author}</span>
           </div>
@@ -164,17 +164,17 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
             <button
               type="button"
               onClick={() => onToggleComplete(item.id, item.isCompleted)}
-              className="cursor-pointer inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider px-2.5 py-1 bg-white hover:bg-neutral-100 border-2 border-black rounded shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px]"
+              className="cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 bg-white hover:bg-neutral-100 border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
             >
               {item.isCompleted ? (
                 <>
-                  <CheckCircle className="w-3.5 h-3.5 text-[#006633] stroke-[3]" />
+                  <CheckCircle className="w-3.5 h-3.5 text-[#16A34A] stroke-[2.5]" />
                   <span>Concluído</span>
                 </>
               ) : (
                 <>
                   <Circle className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>Marcar Pronto</span>
+                  <span>Concluir</span>
                 </>
               )}
             </button>
@@ -185,7 +185,7 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
               href={item.externalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-xs font-black uppercase tracking-wider px-2.5 py-1 bg-black text-white hover:bg-neutral-800 border-2 border-black rounded shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px]"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 bg-[#468AFB] hover:bg-[#3574DC] text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
             >
               <span>Abrir</span>
               <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />

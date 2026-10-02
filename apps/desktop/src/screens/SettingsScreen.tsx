@@ -165,14 +165,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
       {/* Grid de Configuração por Plataforma */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Card SIGAA */}
-        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[3px_3px_0px_0px_#000] flex flex-col justify-between">
+        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[4px_4px_0px_0px_#000] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-[#22C55E] text-black border border-black rounded">
+                <div className="p-1.5 bg-[#46E297] text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
                   <School className="w-4 h-4 stroke-[2.5]" />
                 </div>
-                <h3 className="font-black text-base text-black uppercase">
+                <h3 className="font-bold text-base text-black">
                   SIGAA
                 </h3>
               </div>
@@ -183,7 +183,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               </Badge>
             </div>
 
-            <p className="text-xs font-semibold text-neutral-600 mb-3">
+            <p className="text-xs font-medium text-neutral-600 mb-3">
               Requer matrícula institucional e senha do portal do discente.
             </p>
 
@@ -204,7 +204,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             </div>
 
             {sigaaFeedback ? (
-              <div className="mt-2 text-xs font-bold text-[#006633] flex items-center gap-1">
+              <div className="mt-2 text-xs font-bold text-[#16A34A] flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>{sigaaFeedback}</span>
               </div>
@@ -215,7 +215,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <button
               type="button"
               onClick={handleSaveSigaa}
-              className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#006633] hover:bg-[#007A3D] text-white font-black text-xs uppercase border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
+              className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#468AFB] hover:bg-[#3574DC] text-white font-bold text-xs border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
             >
               <Save className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Salvar SIGAA</span>
@@ -224,14 +224,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </Card>
 
         {/* Card Aprender 3 */}
-        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[3px_3px_0px_0px_#000] flex flex-col justify-between">
+        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[4px_4px_0px_0px_#000] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-[#FB923C] text-black border border-black rounded-lg">
+                <div className="p-1.5 bg-[#FB923C] text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
                   <BookOpen className="w-4 h-4 stroke-[2.5]" />
                 </div>
-                <h3 className="font-black text-base text-black uppercase">
+                <h3 className="font-bold text-base text-black">
                   Aprender 3
                 </h3>
               </div>
@@ -244,7 +244,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               </Badge>
             </div>
 
-            <p className="text-xs font-semibold text-neutral-600 mb-3">
+            <p className="text-xs font-medium text-neutral-600 mb-3">
               Requer CPF (11 dígitos) e senha cadastrada no ambiente Moodle
               institucional.
             </p>
@@ -266,7 +266,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             </div>
 
             {aprenderFeedback ? (
-              <div className="mt-2 text-xs font-bold text-[#006633] flex items-center gap-1">
+              <div className="mt-2 text-xs font-bold text-[#16A34A] flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>{aprenderFeedback}</span>
               </div>
@@ -277,7 +277,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <button
               type="button"
               onClick={handleSaveAprender3}
-              className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#006633] hover:bg-[#007A3D] text-white font-black text-xs uppercase border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
+              className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#468AFB] hover:bg-[#3574DC] text-white font-bold text-xs border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
             >
               <Save className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Salvar Aprender 3</span>
@@ -286,14 +286,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </Card>
 
         {/* Card MoodleMat */}
-        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[3px_3px_0px_0px_#000] flex flex-col justify-between">
+        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[4px_4px_0px_0px_#000] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-[#C084FC] text-black border border-black rounded-lg">
+                <div className="p-1.5 bg-[#C084FC] text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
                   <Globe className="w-4 h-4 stroke-[2.5]" />
                 </div>
-                <h3 className="font-black text-base text-black uppercase">
+                <h3 className="font-bold text-base text-black">
                   MoodleMat
                 </h3>
               </div>
@@ -308,7 +308,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               </Badge>
             </div>
 
-            <p className="text-xs font-semibold text-neutral-600 mb-3">
+            <p className="text-xs font-medium text-neutral-600 mb-3">
               Moodle do Departamento de Matemática (autenticação com Matrícula e
               Senha).
             </p>
@@ -330,7 +330,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             </div>
 
             {moodleMatFeedback ? (
-              <div className="mt-2 text-xs font-bold text-[#006633] flex items-center gap-1">
+              <div className="mt-2 text-xs font-bold text-[#16A34A] flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>{moodleMatFeedback}</span>
               </div>
@@ -341,7 +341,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <button
               type="button"
               onClick={handleSaveMoodleMat}
-              className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#006633] hover:bg-[#007A3D] text-white font-black text-xs uppercase border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
+              className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#468AFB] hover:bg-[#3574DC] text-white font-bold text-xs border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
             >
               <Save className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Salvar MoodleMat</span>
@@ -350,14 +350,14 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </Card>
 
         {/* Card Microsoft Teams */}
-        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[3px_3px_0px_0px_#000] flex flex-col justify-between">
+        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[4px_4px_0px_0px_#000] flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-[#60A5FA] text-black border border-black rounded-lg">
+                <div className="p-1.5 bg-[#60A5FA] text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
                   <MessageSquare className="w-4 h-4 stroke-[2.5]" />
                 </div>
-                <h3 className="font-black text-base text-black uppercase">
+                <h3 className="font-bold text-base text-black">
                   Teams
                 </h3>
               </div>
@@ -372,7 +372,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               </Badge>
             </div>
 
-            <p className="text-xs font-semibold text-neutral-600 mb-3">
+            <p className="text-xs font-medium text-neutral-600 mb-3">
               Autenticação interativa manual requerida devido ao SSO Microsoft
               365 da UnB.
             </p>
@@ -387,7 +387,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             </div>
 
             {teamsFeedback ? (
-              <div className="mt-2 text-xs font-bold text-[#006633] flex items-center gap-1">
+              <div className="mt-2 text-xs font-bold text-[#16A34A] flex items-center gap-1">
                 <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
                 <span>{teamsFeedback}</span>
               </div>
@@ -398,10 +398,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <button
               type="button"
               onClick={handleToggleTeams}
-              className={`cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 text-white font-black text-xs uppercase border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out ${
+              className={`cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 text-white font-bold text-xs border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out ${
                 allCredentials.teams?.isConnected
-                  ? "bg-[#FF4D4F] hover:bg-[#FF7875]"
-                  : "bg-[#003366] hover:bg-[#004080]"
+                  ? "bg-[#FF6B6B] hover:bg-[#EE5A5A]"
+                  : "bg-[#468AFB] hover:bg-[#3574DC]"
               }`}
             >
               <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -417,27 +417,27 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
 
       {/* Licença e Código Aberto */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t-2 border-black/10">
-        <Card className="border-2 border-black bg-white rounded-2xl p-4 shadow-[3px_3px_0px_0px_#000]">
+        <Card className="border-2 border-black bg-white rounded-2xl p-4 shadow-[4px_4px_0px_0px_#000]">
           <div className="flex items-center gap-2 mb-1.5">
-            <Scale className="w-4 h-4 stroke-[2.5]" />
-            <h4 className="text-xs font-black uppercase text-black">
+            <Scale className="w-4 h-4 stroke-[2.5] text-[#468AFB]" />
+            <h4 className="text-xs font-bold text-black">
               Licença Apache 2.0
             </h4>
           </div>
-          <p className="text-xs text-neutral-600 font-semibold leading-relaxed">
+          <p className="text-xs text-neutral-600 font-medium leading-relaxed">
             Software livre e transparente para a comunidade acadêmica da
             Universidade de Brasília.
           </p>
         </Card>
 
-        <Card className="border-2 border-black bg-white rounded-2xl p-4 shadow-[3px_3px_0px_0px_#000]">
+        <Card className="border-2 border-black bg-white rounded-2xl p-4 shadow-[4px_4px_0px_0px_#000]">
           <div className="flex items-center gap-2 mb-1.5">
-            <GitBranch className="w-4 h-4 stroke-[2.5]" />
-            <h4 className="text-xs font-black uppercase text-black">
+            <GitBranch className="w-4 h-4 stroke-[2.5] text-[#468AFB]" />
+            <h4 className="text-xs font-bold text-black">
               Auditoria Pública no GitHub
             </h4>
           </div>
-          <p className="text-xs text-neutral-600 font-semibold leading-relaxed">
+          <p className="text-xs text-neutral-600 font-medium leading-relaxed">
             Código-fonte disponível publicamente para colaboração e inspeção de
             segurança.
           </p>

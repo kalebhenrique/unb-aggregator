@@ -20,20 +20,19 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    // Efeito de botão macio: repouso (3px 3px), hover desce metade (1.5px 1.5px), active desce até o fim (3px 3px, shadow-none)
+    // Efeito de botão neobrutalista pop: repouso (3px 3px), hover levanta levemente (4px 4px), active afunda (shadow-none)
     const baseStyles =
-      'cursor-pointer inline-flex items-center justify-center gap-2 font-bold tracking-wide select-none border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[1.5px] hover:translate-y-[1.5px] hover:shadow-[1.5px_1.5px_0px_0px_#000] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none transition-all duration-150 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_0px_#000] disabled:active:translate-x-0 disabled:active:translate-y-0';
+      'cursor-pointer inline-flex items-center justify-center gap-2 font-bold tracking-normal select-none border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_0px_#000] disabled:active:translate-x-0 disabled:active:translate-y-0';
 
     const variantStyles = {
-      // Cor predominante oficial da UnB: Azul #003366
-      default: 'bg-[#003366] text-white hover:bg-[#004080]',
-      primary: 'bg-[#006633] text-white hover:bg-[#007A3D]',
-      accent: 'bg-[#003366] text-white hover:bg-[#004080]',
-      yellow: 'bg-[#FFE600] text-black hover:bg-[#FFF066]',
-      destructive: 'bg-[#FF4D4F] text-white hover:bg-[#FF7875]',
+      default: 'bg-[#468AFB] text-white hover:bg-[#3574DC]',
+      primary: 'bg-[#468AFB] text-white hover:bg-[#3574DC]',
+      accent: 'bg-[#46E297] text-black hover:bg-[#39D68A]',
+      yellow: 'bg-[#FFE600] text-black hover:bg-[#F2DA00]',
+      destructive: 'bg-[#FF6B6B] text-white hover:bg-[#EE5A5A]',
       outline: 'bg-white text-black hover:bg-neutral-100',
       ghost:
-        'bg-transparent text-black border-transparent shadow-none hover:bg-neutral-200 hover:shadow-none hover:translate-x-0 hover:translate-y-0 active:translate-x-[1px] active:translate-y-[1px]',
+        'bg-transparent text-black border-transparent shadow-none hover:bg-black/5 hover:shadow-none hover:translate-x-0 hover:translate-y-0 active:translate-x-[1px] active:translate-y-[1px]',
     };
 
     const sizeStyles = {

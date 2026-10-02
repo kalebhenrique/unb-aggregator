@@ -34,8 +34,8 @@ export const DashboardScreen: React.FC = () => {
 
   return (
     <PageContainer>
-      {/* Barra de Filtros e Busca (Sem título conforme solicitado) */}
-      <div className="bg-white border-2 border-black rounded-2xl p-5 shadow-[3px_3px_0px_0px_#000] space-y-4">
+      {/* Barra de Filtros e Busca */}
+      <div className="bg-white border-2 border-black rounded-2xl p-5 shadow-[4px_4px_0px_0px_#000] space-y-4">
         {/* Campo de Busca Textual */}
         <div className="relative">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 stroke-[2.5]" />
@@ -44,7 +44,7 @@ export const DashboardScreen: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por disciplina, título da tarefa, aviso ou professor..."
-            className="w-full bg-[#FAF7EE] pl-10 pr-4 py-2.5 text-sm font-bold text-black border-2 border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#003366] focus:bg-white transition-all placeholder:text-neutral-500 shadow-[2px_2px_0px_0px_#000]"
+            className="w-full bg-white pl-10 pr-4 py-2.5 text-sm font-medium text-black border-2 border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#468AFB] transition-all placeholder:text-neutral-400 shadow-none"
           />
         </div>
 
@@ -52,7 +52,7 @@ export const DashboardScreen: React.FC = () => {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pt-1">
           {/* Filtro por Plataforma */}
           <div className="space-y-1.5">
-            <span className="text-[11px] font-black uppercase tracking-wider text-neutral-600 block">
+            <span className="text-xs font-bold text-neutral-700 block">
               Plataformas:
             </span>
             <Tabs
@@ -64,7 +64,7 @@ export const DashboardScreen: React.FC = () => {
 
           {/* Filtro por Tipo */}
           <div className="space-y-1.5">
-            <span className="text-[11px] font-black uppercase tracking-wider text-neutral-600 block">
+            <span className="text-xs font-bold text-neutral-700 block">
               Categoria:
             </span>
             <Tabs
@@ -78,27 +78,27 @@ export const DashboardScreen: React.FC = () => {
 
       {/* Lista do Feed Cronológico */}
       {isLoading ? (
-        <div className="p-12 text-center bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_0px_#000]">
-          <div className="inline-block animate-spin border-3 border-[#003366] border-t-transparent rounded-full h-8 w-8 mb-3" />
-          <p className="text-sm font-black uppercase tracking-wider text-black">
+        <div className="p-12 text-center bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000]">
+          <div className="inline-block animate-spin border-2 border-black border-t-transparent rounded-full h-8 w-8 mb-3" />
+          <p className="text-sm font-bold text-black">
             Atualizando Feed Acadêmico...
           </p>
         </div>
       ) : items.length === 0 ? (
-        <div className="p-12 text-center bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_0px_#000] space-y-3">
-          <div className="w-12 h-12 bg-[#FAF7EE] border-2 border-black rounded-xl flex items-center justify-center mx-auto shadow-[2px_2px_0px_0px_#000]">
-            <Inbox className="w-6 h-6 stroke-[2.5]" />
+        <div className="p-12 text-center bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000] space-y-3">
+          <div className="w-12 h-12 bg-[#E8EFF8] border-2 border-black rounded-2xl flex items-center justify-center mx-auto shadow-[2px_2px_0px_0px_#000]">
+            <Inbox className="w-6 h-6 stroke-[2.5] text-[#468AFB]" />
           </div>
-          <h4 className="text-lg font-black uppercase text-black">Nenhum item encontrado</h4>
-          <p className="text-xs font-semibold text-neutral-600 max-w-sm mx-auto">
+          <h4 className="text-lg font-bold text-black">Nenhum item encontrado</h4>
+          <p className="text-xs font-medium text-neutral-600 max-w-sm mx-auto">
             Não há avisos ou tarefas correspondentes aos filtros selecionados. Clique em "Sincronizar" na barra lateral para atualizar os portais.
           </p>
         </div>
       ) : (
         <div className="space-y-4">
-          <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-neutral-600 px-1">
+          <div className="flex items-center justify-between text-xs font-bold text-neutral-600 px-1">
             <span>Feed Unificado ({items.length} itens encontrados)</span>
-            <span>Ordenado Cronologicamente</span>
+            <span>Ordenado cronologicamente</span>
           </div>
 
           <div className="space-y-3">

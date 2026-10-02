@@ -28,16 +28,16 @@ export const Alert: React.FC<AlertProps> = ({
 
   const iconStyles = {
     yellow: 'bg-white text-black',
-    green: 'bg-white text-[#006633]',
-    blue: 'bg-white text-[#003366]',
+    green: 'bg-white text-[#16A34A]',
+    blue: 'bg-white text-[#468AFB]',
     neutral: 'bg-white text-black',
-    destructive: 'bg-[#FF4D4F] text-white',
+    destructive: 'bg-[#FF6B6B] text-white',
   };
 
   return (
     <div
       className={cn(
-        'flex items-start gap-3.5 p-4 border-2 border-black rounded-xl shadow-[3px_3px_0px_0px_#000]',
+        'flex items-start gap-3.5 p-4 border-2 border-black rounded-2xl shadow-[3px_3px_0px_0px_#000]',
         variantStyles[variant],
         className
       )}
@@ -46,7 +46,7 @@ export const Alert: React.FC<AlertProps> = ({
       {Icon ? (
         <div
           className={cn(
-            'p-2 border-2 border-black rounded-lg shadow-[1.5px_1.5px_0px_0px_#000] shrink-0',
+            'p-2 border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000] shrink-0',
             iconStyles[variant]
           )}
         >
@@ -54,7 +54,7 @@ export const Alert: React.FC<AlertProps> = ({
         </div>
       ) : null}
       <div className="flex flex-col flex-1 min-w-0">
-        <h4 className="text-xs font-black uppercase tracking-tight text-black">{title}</h4>
+        <h4 className="text-sm font-bold tracking-tight text-black">{title}</h4>
         {description ? (
           typeof description === 'string' ? (
             <p className="text-xs font-semibold text-neutral-800 mt-1 leading-relaxed">{description}</p>

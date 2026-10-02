@@ -28,12 +28,12 @@ export const App: React.FC = () => {
 
   if (isCheckingAuth) {
     return (
-      <div className="min-h-screen bg-[#FAF7EE] flex flex-col items-center justify-center space-y-4">
-        <div className="w-12 h-12 bg-[#006633] text-white border-2 border-black rounded-xl flex items-center justify-center font-black text-xl shadow-[3px_3px_0px_0px_#000]">
+      <div className="min-h-screen bg-[#E8EFF8] bg-grid flex flex-col items-center justify-center space-y-4">
+        <div className="w-12 h-12 bg-[#468AFB] text-white border-2 border-black rounded-2xl flex items-center justify-center font-black text-lg shadow-[4px_4px_0px_0px_#000]">
           UnB
         </div>
-        <div className="inline-block animate-spin border-3 border-[#003366] border-t-transparent rounded-full h-6 w-6" />
-        <p className="text-xs font-black uppercase tracking-wider text-black">
+        <div className="inline-block animate-spin border-2 border-black border-t-transparent rounded-full h-6 w-6" />
+        <p className="text-xs font-bold text-neutral-700">
           Verificando Cofre Seguro...
         </p>
       </div>
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
 
   // Fluxo 3: Aplicação Principal (Dashboard com Sidebar Colapsável)
   return (
-    <div className="flex h-screen bg-[#FAF7EE] overflow-hidden">
+    <div className="flex h-screen bg-[#E8EFF8] bg-grid overflow-hidden">
       {/* Sidebar Colapsável com Botão de Sincronização no Canto Inferior */}
       <Sidebar
         currentTab={currentTab}
