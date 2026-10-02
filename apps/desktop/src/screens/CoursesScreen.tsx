@@ -93,14 +93,14 @@ export const CoursesScreen: React.FC = () => {
 
               <div className="flex items-center gap-3">
                 {course.pendingAssignmentsCount !== undefined ? (
-                  <div className="flex items-center gap-1 text-[#16A34A]">
+                  <div className="flex items-center gap-1 text-ink-success">
                     <CheckSquare className="w-3.5 h-3.5 stroke-[2.5]" />
                     <span>{course.pendingAssignmentsCount} entregas</span>
                   </div>
                 ) : null}
 
                 {course.unreadCount !== undefined ? (
-                  <div className="flex items-center gap-1 text-[#468AFB]">
+                  <div className="flex items-center gap-1 text-neo-blue">
                     <MessageSquare className="w-3.5 h-3.5 stroke-[2.5]" />
                     <span>{course.unreadCount} novos</span>
                   </div>

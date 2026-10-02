@@ -8,12 +8,12 @@ export interface DisciplineColor {
 }
 
 export const DISCIPLINE_COLORS: DisciplineColor[] = [
-  { bg: 'bg-[#EBF3FF]', border: 'border-[#468AFB]', text: 'text-[#2563EB]', hex: '#468AFB' },
-  { bg: 'bg-[#E6F8EE]', border: 'border-[#16A34A]', text: 'text-[#15803D]', hex: '#16A34A' },
-  { bg: 'bg-[#FFF9D2]', border: 'border-[#EAB308]', text: 'text-[#A16207]', hex: '#EAB308' },
-  { bg: 'bg-[#F3E8FF]', border: 'border-[#A855F7]', text: 'text-[#7E22CE]', hex: '#A855F7' },
-  { bg: 'bg-[#FFEDD5]', border: 'border-[#F97316]', text: 'text-[#C2410C]', hex: '#F97316' },
-  { bg: 'bg-[#E0F2FE]', border: 'border-[#0EA5E9]', text: 'text-[#0369A1]', hex: '#0EA5E9' },
+  { bg: 'bg-pastel-blue', border: 'border-[#468AFB]', text: 'text-[#2563EB]', hex: '#468AFB' },
+  { bg: 'bg-pastel-green', border: 'border-[#16A34A]', text: 'text-[#15803D]', hex: '#16A34A' },
+  { bg: 'bg-pastel-yellow', border: 'border-[#EAB308]', text: 'text-[#A16207]', hex: '#EAB308' },
+  { bg: 'bg-pastel-purple', border: 'border-[#A855F7]', text: 'text-[#7E22CE]', hex: '#A855F7' },
+  { bg: 'bg-pastel-orange', border: 'border-[#F97316]', text: 'text-[#C2410C]', hex: '#F97316' },
+  { bg: 'bg-pastel-sky', border: 'border-[#0EA5E9]', text: 'text-[#0369A1]', hex: '#0EA5E9' },
 ];
 
 export const DAYS_HEADER = [

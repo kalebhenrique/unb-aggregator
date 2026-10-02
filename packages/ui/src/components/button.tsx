@@ -22,14 +22,14 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     // Efeito de botão neobrutalista pop: repouso (3px 3px), hover levanta levemente (4px 4px), active afunda (shadow-none)
     const baseStyles =
-      'cursor-pointer inline-flex items-center justify-center gap-2 font-bold tracking-normal select-none border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_0px_#000] disabled:active:translate-x-0 disabled:active:translate-y-0';
+      'cursor-pointer inline-flex items-center justify-center gap-2 font-bold tracking-normal select-none border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_0px_#000] disabled:active:translate-x-0 disabled:active:translate-y-0';
 
     const variantStyles = {
-      default: 'bg-[#468AFB] text-white hover:bg-[#3574DC]',
-      primary: 'bg-[#468AFB] text-white hover:bg-[#3574DC]',
-      accent: 'bg-[#46E297] text-black hover:bg-[#39D68A]',
-      yellow: 'bg-[#FFE600] text-black hover:bg-[#F2DA00]',
-      destructive: 'bg-[#FF6B6B] text-white hover:bg-[#EE5A5A]',
+      default: 'bg-neo-blue text-white hover:bg-neo-blueHover',
+      primary: 'bg-neo-blue text-white hover:bg-neo-blueHover',
+      accent: 'bg-neo-green text-black hover:bg-neo-greenHover',
+      yellow: 'bg-neo-yellow text-black hover:bg-neo-yellowHover',
+      destructive: 'bg-neo-danger text-white hover:bg-neo-dangerHover',
       outline: 'bg-white text-black hover:bg-neutral-100',
       ghost:
         'bg-transparent text-black border-transparent shadow-none hover:bg-black/5 hover:shadow-none hover:translate-x-0 hover:translate-y-0 active:translate-x-[1px] active:translate-y-[1px]',

@@ -19,19 +19,19 @@ export const Alert: React.FC<AlertProps> = ({
   ...props
 }) => {
   const variantStyles = {
-    yellow: 'bg-[#FFF9D2] border-black text-black',
-    green: 'bg-[#E6F8EE] border-black text-black',
-    blue: 'bg-[#EBF3FF] border-black text-black',
+    yellow: 'bg-pastel-yellow border-black text-black',
+    green: 'bg-pastel-green border-black text-black',
+    blue: 'bg-pastel-blue border-black text-black',
     neutral: 'bg-white border-black text-black',
-    destructive: 'bg-[#FFEBEB] border-black text-black',
+    destructive: 'bg-pastel-red border-black text-black',
   };
 
   const iconStyles = {
     yellow: 'bg-white text-black',
-    green: 'bg-white text-[#16A34A]',
-    blue: 'bg-white text-[#468AFB]',
+    green: 'bg-white text-ink-success',
+    blue: 'bg-white text-neo-blue',
     neutral: 'bg-white text-black',
-    destructive: 'bg-[#FF6B6B] text-white',
+    destructive: 'bg-neo-danger text-white',
   };
 
   return (

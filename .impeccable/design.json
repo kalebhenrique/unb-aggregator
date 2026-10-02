@@ -6,6 +6,21 @@
     "colorMeta": {
       "pen-blue": {
         "role": "primary",
+        "displayName": "Azul Caneta Ação",
+        "canonical": "#2563EB",
+        "tonalRamp": [
+          "#061a46",
+          "#0b2c75",
+          "#1041ad",
+          "#1558ea",
+          "#4d80ef",
+          "#8aabf4",
+          "#b9cdf9",
+          "#e8eefd"
+        ]
+      },
+      "pen-blue-brand": {
+        "role": "primary",
         "displayName": "Azul Caneta",
         "canonical": "#468AFB",
         "tonalRamp": [
@@ -22,16 +37,16 @@
       "pen-blue-deep": {
         "role": "primary",
         "displayName": "Azul Caneta Pressionado",
-        "canonical": "#3574DC",
+        "canonical": "#1D4ED8",
         "tonalRamp": [
-          "#0b2041",
-          "#13356d",
-          "#1c4ea1",
-          "#2669d9",
-          "#5a8de2",
-          "#92b4ec",
-          "#bed2f4",
-          "#e9f0fb"
+          "#091843",
+          "#0f2970",
+          "#163ca6",
+          "#1e51e1",
+          "#547be8",
+          "#8fa8f0",
+          "#bccbf6",
+          "#e9eefc"
         ]
       },
       "highlighter-yellow": {
@@ -47,7 +62,8 @@
           "#fff380",
           "#fff8b3",
           "#fffde5"
-        ]
+        ],
+        "tailwindToken": "neo.yellow / neo.yellowHover (#F2DA00)"
       },
       "chalk-green": {
         "role": "secondary",
@@ -62,7 +78,8 @@
           "#91eec1",
           "#bdf5da",
           "#e9fcf3"
-        ]
+        ],
+        "tailwindToken": "neo.green / neo.greenHover (#39D68A)"
       },
       "correction-red": {
         "role": "secondary",
@@ -77,6 +94,21 @@
           "#ff8080",
           "#ffb3b3",
           "#ffe5e5"
+        ]
+      },
+      "correction-red-strong": {
+        "role": "secondary",
+        "displayName": "Vermelho Correção Forte",
+        "canonical": "#DC2626",
+        "tonalRamp": [
+          "#420b0b",
+          "#6e1212",
+          "#a21a1a",
+          "#dc2323",
+          "#e45858",
+          "#ed9191",
+          "#f4bdbd",
+          "#fbe9e9"
         ]
       },
       "notebook-purple": {
@@ -247,31 +279,31 @@
       "success-ink": {
         "role": "neutral",
         "displayName": "Verde OK",
-        "canonical": "#16A34A",
+        "canonical": "#15803D",
         "tonalRamp": [
-          "#09431f",
-          "#0f7033",
-          "#16a64b",
-          "#1ee166",
-          "#54e88b",
-          "#8ff0b3",
-          "#bcf6d1",
-          "#e9fcf0"
+          "#0b421f",
+          "#126e34",
+          "#1ba24d",
+          "#24db68",
+          "#59e48d",
+          "#91edb4",
+          "#bdf4d2",
+          "#e9fbf0"
         ]
       },
       "error-ink": {
         "role": "neutral",
         "displayName": "Vermelho Erro",
-        "canonical": "#DC2626",
+        "canonical": "#B91C1C",
         "tonalRamp": [
-          "#420b0b",
-          "#6e1212",
-          "#a21a1a",
-          "#dc2323",
-          "#e45858",
-          "#ed9191",
-          "#f4bdbd",
-          "#fbe9e9"
+          "#420a0a",
+          "#6f1111",
+          "#a41919",
+          "#dd2222",
+          "#e65757",
+          "#ee9090",
+          "#f5bdbd",
+          "#fce9e9"
         ]
       },
       "ink-black": {
@@ -308,7 +340,7 @@
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "Único momento hero: título do onboarding. Weight 900."
+        "purpose": "Único momento hero: título do onboarding. Weight 800 (teto da família)."
       },
       "title": {
         "displayName": "Title",
@@ -325,6 +357,10 @@
       "label": {
         "displayName": "Label",
         "purpose": "Botões, badges, labels de input; versão uppercase 0.05em para rótulos de grupo."
+      },
+      "micro": {
+        "displayName": "Micro",
+        "purpose": "Rótulos mínimos (contadores, badges sm, micro-etiquetas); 11px, 10px banido do sistema."
       }
     },
     "shadows": [
@@ -374,6 +410,11 @@
         "name": "spinner",
         "value": "animate-spin 1s linear infinite",
         "purpose": "Loading em botões e verificação de cofre."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "transições 1ms; animate-pulse desligado; animate-spin mantido",
+        "purpose": "prefers-reduced-motion: estados trocam instantâneo, conflito de grade para de pulsar (ênfase decorativa), spinner permanece por ser feedback essencial."
       }
     ],
     "breakpoints": [
@@ -400,9 +441,9 @@
       "name": "Botão Primário",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Ação principal da tela. Azul Caneta com física de adesivo: levanta no hover, afunde no click.",
+      "description": "Ação principal da tela. Azul Caneta Ação com física de adesivo: levanta no hover, afunde no click.",
       "html": "<button class=\"ds-btn ds-btn-primary\">Sincronizar agora</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-primary{background:#468AFB;color:#fff}.ds-btn-primary:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-primary:hover{background:#3574DC}.ds-btn-primary:active{transform:translate(2px,2px);box-shadow:none;}.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0 0 #000,0 0 0 2px #468AFB}.ds-btn:disabled{opacity:.5;cursor:not-allowed}"
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-primary{background:#2563EB;color:#fff}.ds-btn-primary:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-primary:hover{background:#1D4ED8}.ds-btn-primary:active{transform:translate(2px,2px);box-shadow:none;}.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0 0 #000,0 0 0 2px #2563EB}.ds-btn:disabled{opacity:.5;cursor:not-allowed}"
     },
     {
       "name": "Botão Accent",
@@ -410,7 +451,7 @@
       "refersTo": "button-accent",
       "description": "Ação positiva de destaque em Verde Giz, texto preto.",
       "html": "<button class=\"ds-btn ds-btn-accent\">Concluir tarefa</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-accent{background:#46E297;color:#000}.ds-btn-accent:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-accent:hover{background:#39D68A}.ds-btn-accent:active{transform:translate(2px,2px);box-shadow:none;}"
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-accent{background:#46E297;color:#000}.ds-btn-accent:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-accent:hover{background:#39D68A}.ds-btn-accent:active{transform:translate(2px,2px);box-shadow:none;}\n.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0px 0px #000,0 0 0 2px #ffffff,0 0 0 4px #2563EB}"
     },
     {
       "name": "Botão Outline",
@@ -418,15 +459,15 @@
       "refersTo": "button-outline",
       "description": "Ação secundária sobre papel branco; mesma física dos demais.",
       "html": "<button class=\"ds-btn ds-btn-outline\">Cancelar</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-outline{background:#fff;color:#000}.ds-btn-outline:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-outline:hover{background:#F5F5F5}.ds-btn-outline:active{transform:translate(2px,2px);box-shadow:none;}"
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-outline{background:#fff;color:#000}.ds-btn-outline:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-outline:hover{background:#F5F5F5}.ds-btn-outline:active{transform:translate(2px,2px);box-shadow:none;}\n.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0px 0px #000,0 0 0 2px #ffffff,0 0 0 4px #2563EB}"
     },
     {
       "name": "Campo de Texto",
       "kind": "input",
       "refersTo": "input-default",
-      "description": "Input padrão com label bold acima e ring Azul Caneta no foco.",
+      "description": "Input padrão com label bold acima e ring Azul Caneta Ação no foco.",
       "html": "<div class=\"ds-input-wrap\"><label class=\"ds-input-label\" for=\"ds-usuario\">Usuário SIGAA</label><input id=\"ds-usuario\" class=\"ds-input-field\" placeholder=\"seu.login@unb.br\" /></div>",
-      "css": ".ds-input-wrap{display:flex;flex-direction:column;gap:6px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-input-label{font-size:0.75rem;font-weight:700;color:#262626}.ds-input-field{width:100%;background:#fff;padding:10px 16px;font-size:0.875rem;font-weight:500;color:#000;border:2px solid #000;border-radius:12px;outline:none;transition:all 150ms ease-out}.ds-input-field::placeholder{color:#A3A3A3}.ds-input-field:focus-visible{box-shadow:0 0 0 2px #468AFB}.ds-input-field.ds-input-error{border-color:#DC2626;box-shadow:0 0 0 2px #DC2626}"
+      "css": ".ds-input-wrap{display:flex;flex-direction:column;gap:6px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-input-label{font-size:0.75rem;font-weight:700;color:#262626}.ds-input-field{width:100%;background:#fff;padding:10px 16px;font-size:0.875rem;font-weight:500;color:#000;border:2px solid #000;border-radius:12px;outline:none;transition:all 150ms ease-out}.ds-input-field::placeholder{color:#A3A3A3}.ds-input-field:focus-visible{box-shadow:0 0 0 2px #2563EB}.ds-input-field.ds-input-error{border-color:#DC2626;box-shadow:0 0 0 2px #DC2626}"
     },
     {
       "name": "Card",
@@ -448,9 +489,9 @@
       "name": "Chips de Filtro",
       "kind": "chip",
       "refersTo": "card-default",
-      "description": "Tabs/filtros: inativa branca, ativa Azul Caneta com contador invertido; física de pressionar.",
+      "description": "Tabs/filtros: inativa branca, ativa Azul Caneta Ação com contador invertido; física de pressionar.",
       "html": "<div class=\"ds-chips\"><button class=\"ds-chip ds-chip-active\">Todas<span class=\"ds-chip-count ds-chip-count-active\">7</span></button><button class=\"ds-chip\">Aprender 3<span class=\"ds-chip-count\">2</span></button></div>",
-      "css": ".ds-chips{display:flex;gap:10px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:#fff;color:#404040;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:2px 2px 0 0 #000;transition:all 150ms ease-out}.ds-chip:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 0 #000}.ds-chip:active{transform:translate(2px,2px);box-shadow:none}.ds-chip-active{background:#468AFB;color:#fff}.ds-chip-count{padding:2px 8px;background:#468AFB;color:#fff;border-radius:9999px;font-size:10px;font-weight:700}.ds-chip-count-active{background:#fff;color:#468AFB}"
+      "css": ".ds-chips{display:flex;gap:10px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:#fff;color:#404040;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:2px 2px 0 0 #000;transition:all 150ms ease-out}.ds-chip:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 0 #000}.ds-chip:active{transform:translate(2px,2px);box-shadow:none}.ds-chip-active{background:#2563EB;color:#fff}.ds-chip-count{padding:2px 8px;background:#2563EB;color:#fff;border-radius:9999px;font-size:11px;font-weight:700}.ds-chip-count-active{background:#fff;color:#2563EB}"
     },
     {
       "name": "Alert Pastel",
@@ -458,20 +499,20 @@
       "refersTo": "card-pastel-blue",
       "description": "Aviso em papel pastel com ícone em bloco branco pressionado.",
       "html": "<div class=\"ds-alert\"><span class=\"ds-alert-icon\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"16\" height=\"16\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg></span><div><h4 class=\"ds-alert-title\">Credenciais salvas</h4><p class=\"ds-alert-desc\">Seus dados ficam no cofre local do dispositivo.</p></div></div>",
-      "css": ".ds-alert{display:flex;align-items:flex-start;gap:14px;padding:16px;background:#E6F8EE;border:2px solid #000;border-radius:16px;box-shadow:3px 3px 0 0 #000;max-width:420px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-alert-icon{display:flex;align-items:center;justify-content:center;padding:8px;background:#fff;color:#16A34A;border:2px solid #000;border-radius:12px;box-shadow:1.5px 1.5px 0 0 #000;flex-shrink:0}.ds-alert-title{margin:0;font-size:0.875rem;font-weight:700;letter-spacing:-0.01em;color:#000}.ds-alert-desc{margin:4px 0 0;font-size:0.75rem;font-weight:600;color:#262626;line-height:1.5}"
+      "css": ".ds-alert{display:flex;align-items:flex-start;gap:14px;padding:16px;background:#E6F8EE;border:2px solid #000;border-radius:16px;box-shadow:3px 3px 0 0 #000;max-width:420px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-alert-icon{display:flex;align-items:center;justify-content:center;padding:8px;background:#fff;color:#15803D;border:2px solid #000;border-radius:12px;box-shadow:1.5px 1.5px 0 0 #000;flex-shrink:0}.ds-alert-title{margin:0;font-size:0.875rem;font-weight:700;letter-spacing:-0.01em;color:#000}.ds-alert-desc{margin:4px 0 0;font-size:0.75rem;font-weight:600;color:#262626;line-height:1.5}"
     },
     {
       "name": "Item de Navegação (Ledger)",
       "kind": "nav",
       "refersTo": "card-default",
-      "description": "Faixa inteira do fichário: ativa em Azul Caneta font-black, inativa branca, separada por borda 2px. Sem sombra — a encadernação não é adesivo.",
+      "description": "Faixa inteira do fichário: ativa em Azul Caneta Ação font-black, inativa branca, separada por borda 2px. Sem sombra — a encadernação não é adesivo.",
       "html": "<nav class=\"ds-nav\"><button class=\"ds-nav-item ds-nav-active\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"18\" height=\"18\" aria-hidden=\"true\"><path d=\"m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\"/><path d=\"M9 22V12h6v10\"/></svg>Home</button><button class=\"ds-nav-item\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\" width=\"18\" height=\"18\" aria-hidden=\"true\"><path d=\"M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20\"/></svg>Turmas</button></nav>",
-      "css": ".ds-nav{display:flex;flex-direction:column;width:240px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;background:#fff;color:#404040;font-size:0.875rem;font-weight:700;border:none;border-bottom:2px solid #000;border-top:none;border-left:none;border-right:none;text-align:left;cursor:pointer;transition:background 150ms ease-out,color 150ms ease-out}.ds-nav-item:hover{background:#F5F5F5}.ds-nav-active,.ds-nav-active:hover{background:#468AFB;color:#fff;font-weight:900}"
+      "css": ".ds-nav{display:flex;flex-direction:column;width:240px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;background:#fff;color:#404040;font-size:0.875rem;font-weight:700;border:none;border-bottom:2px solid #000;border-top:none;border-left:none;border-right:none;text-align:left;cursor:pointer;transition:background 150ms ease-out,color 150ms ease-out}.ds-nav-item:hover{background:#F5F5F5}.ds-nav-active,.ds-nav-active:hover{background:#2563EB;color:#fff;font-weight:800}"
     }
   ],
   "narrative": {
     "northStar": "Mural de Adesivos",
-    "overview": "Todo o sistema se comporta como uma muralha de papel quadriculado onde adesivos grossos foram pressionados à mão: cards, badges, botões e campos são adesivos com borda preta declarada (2px sólida) e sombra dura deslocada, sem um pixel de blur. Nada flutua no ar — tudo está colado na superfície. Quando o usuário clica, o adesivo afunda fisicamente: a sombra desaparece e o elemento se desloca na direção dela. A interface responde ao toque como objeto, não como holograma.\n\nA personalidade é de app de estudante, não de empresa: cores de material escolar (caneta azul, marca-texto amarelo, giz verde, caneta corretora vermelha) sobre papel quadriculado sutil, com hierarquia construída por peso tipográfico (black/extrabold/bold) em vez de tons de cinza apagados. Por baixo da brincadeira existe um produto de trabalho sério: densidade organizada, grid discreto, ritmo consistente de 150ms em todas as transições.\n\nO mundo é opaco e de alto contraste. Sombras suaves difusas, vidro fosco, gradiente e translucidez são a anti-referência declarada — nunca entram.",
+    "overview": "Todo o sistema se comporta como uma muralha de papel quadriculado onde adesivos grossos foram pressionados à mão: cards, badges, botões e campos são adesivos com borda preta declarada (2px sólida) e sombra dura deslocada, sem um pixel de blur. Nada flutua no ar — tudo está colado na superfície. Quando o usuário clica, o adesivo afunda fisicamente: a sombra desaparece e o elemento se desloca na direção dela. A interface responde ao toque como objeto, não como holograma.\n\nA personalidade é de app de estudante, não de empresa: cores de material escolar (caneta azul, marca-texto amarelo, giz verde, caneta corretora vermelha) sobre papel quadriculado sutil, com hierarquia construída por peso tipográfico (extrabold/bold) em vez de tons de cinza apagados. Por baixo da brincadeira existe um produto de trabalho sério: densidade organizada, grid discreto, ritmo consistente de 150ms em todas as transições.\n\nO mundo é opaco e de alto contraste. Sombras suaves difusas, vidro fosco, gradiente e translucidez são a anti-referência declarada — nunca entram.",
     "keyCharacteristics": [
       "Borda preta de 2px em toda superfície e elemento interativo",
       "Sombra dura deslocada, cor preta sólida, blur zero",
@@ -494,7 +535,7 @@
       },
       {
         "name": "A Regra do Marcador Grosso",
-        "body": "Hierarquia vem de peso (900 → 800 → 700 → 500), não de esmaecer cinza. Nunca enfraqueça texto baixando o peso para abaixo de 500 — baixe o tom (neutral-600) mantendo o peso.",
+        "body": "Hierarquia vem de peso (800 → 700 → 600 → 500), não de esmaecer cinza. Nunca enfraqueça texto baixando o peso para abaixo de 500 — baixe o tom (neutral-600) mantendo o peso.",
         "section": "typography"
       },
       {
@@ -516,9 +557,10 @@
     "dos": [
       "Do dar borda preta de 2px a toda superfície e elemento interativo (A Regra do Risco Preto).",
       "Do usar sombra dura deslocada preta (Xpx Xpx 0 0 #000) e física completa: hover levanta, active afunda, disabled congela.",
-      "Do construir hierarquia com peso de fonte (900/800/700/500) e usar pastéis como fundo, nunca como cor de ação.",
-      "Do usar Plus Jakarta Sans e ícones Lucide com stroke 2.5; rótulos estruturais em uppercase bold 10–12px.",
-      "Do usar as cores de plataforma como identidade fixa (Sigaa verde, Aprender 3 laranja) em badges e filtros."
+      "Do construir hierarquia com peso de fonte (800/700/600/500) e usar pastéis como fundo, nunca como cor de ação.",
+      "Do usar Plus Jakarta Sans e ícones Lucide com stroke 2.5; rótulos estruturais em uppercase bold 11–12px (Micro, 11px, para rótulos mínimos).",
+      "Do usar as cores de plataforma como identidade fixa (Sigaa verde, Aprender 3 laranja) em badges e filtros.",
+      "Do usar #2563EB/#DC2626 como fundo sob texto branco; #468AFB/#FF6B6B ficam para marca/bordas."
     ],
     "donts": [
       "Don't usar sombra com blur, box-shadow difusa, rgba ambiente ou elevação estilo Material — sombra dura ou nenhuma.",

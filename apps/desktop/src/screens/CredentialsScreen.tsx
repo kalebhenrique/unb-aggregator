@@ -4,7 +4,6 @@ import {
   Input,
   Card,
   CardHeader,
-  CardTitle,
   CardDescription,
 } from '@unb-aggregator/ui';
 import { useCredentials } from '../hooks/useCredentials';
@@ -161,7 +160,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
   ];
 
   return (
-    <div className="min-h-screen bg-[#E8EFF8] bg-grid flex flex-col justify-center items-center p-6 md:p-12">
+    <div className="min-h-screen bg-canvas bg-grid flex flex-col justify-center items-center p-6 md:p-12">
       <div className="w-full max-w-2xl space-y-6">
         {/* Topo com Voltar e Explorar */}
         <div className="flex items-center justify-between">
@@ -178,7 +177,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
             <button
               type="button"
               onClick={onExplore}
-              className="cursor-pointer text-xs font-bold text-[#468AFB] hover:underline"
+              className="cursor-pointer text-xs font-bold text-neo-blue hover:underline"
             >
               Explorar sem Conectar &rarr;
             </button>
@@ -189,12 +188,12 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
         <Card className="border-2 border-black bg-white shadow-[4px_4px_0px_0px_#000] rounded-2xl p-6 md:p-8">
           <CardHeader className="p-0 mb-6">
             <div className="flex items-center gap-2.5 mb-2">
-              <div className="p-2 bg-[#468AFB] text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000]">
+              <div className="p-2 bg-unb-blue text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000]">
                 <Lock className="w-5 h-5 stroke-[2.5]" />
               </div>
-              <CardTitle className="text-2xl font-extrabold text-black tracking-tight">
+              <h1 className="text-2xl font-extrabold text-black tracking-tight">
                 Acesso às Plataformas
-              </CardTitle>
+              </h1>
             </div>
             <CardDescription className="text-sm font-medium text-neutral-600 leading-relaxed">
               Cada plataforma da UnB possui seu próprio formato de login. Configure as plataformas que deseja sincronizar.
@@ -209,13 +208,14 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
                 <button
                   key={p.id}
                   type="button"
+                  aria-pressed={isSelected}
                   onClick={() => {
                     setActiveTab(p.id);
                     setFormError(null);
                   }}
-                  className={`cursor-pointer p-3 border-2 border-black rounded-xl text-left transition-all duration-150 ease-out translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none ${
+                  className={`cursor-pointer p-3 border-2 border-black rounded-xl text-left transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none ${
                     isSelected
-                      ? 'bg-[#468AFB] text-white font-bold'
+                      ? 'bg-neo-blue text-white font-bold'
                       : 'bg-white text-neutral-800 hover:bg-neutral-50 font-semibold'
                   }`}
                 >
@@ -223,13 +223,13 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
                     <span className="text-xs font-bold">{p.name}</span>
                     {p.isSaved ? (
                       <CheckCircle2
-                        className={`w-3.5 h-3.5 stroke-[3] ${isSelected ? 'text-white' : 'text-[#16A34A]'}`}
+                        className={`w-3.5 h-3.5 stroke-[3] ${isSelected ? 'text-white' : 'text-ink-success'}`}
                       />
                     ) : null}
                   </div>
                   <span
-                    className={`text-[10px] font-medium block truncate ${
-                      isSelected ? 'text-white/90' : 'text-neutral-500'
+                    className={`text-[11px] font-medium block truncate ${
+                      isSelected ? 'text-white' : 'text-neutral-500'
                     }`}
                   >
                     {p.hint}
@@ -243,9 +243,9 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
           <div className="space-y-4 min-h-[170px]">
             {activeTab === 'sigaa' && (
               <div className="space-y-3">
-                <div className="text-xs font-bold text-[#468AFB]">
+                <h2 className="text-xs font-bold text-neo-blue">
                   Credenciais do SIGAA (Matrícula e Senha)
-                </div>
+                </h2>
                 <Input
                   label="Matrícula SIGAA"
                   placeholder="Ex: 202012345"
@@ -266,9 +266,9 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
 
             {activeTab === 'aprender3' && (
               <div className="space-y-3">
-                <div className="text-xs font-bold text-[#468AFB]">
+                <h2 className="text-xs font-bold text-neo-blue">
                   Credenciais do Aprender 3 (CPF e Senha)
-                </div>
+                </h2>
                 <Input
                   label="CPF (somente números ou formatado)"
                   placeholder="Ex: 000.000.000-00"
@@ -289,9 +289,9 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
 
             {activeTab === 'moodlemat' && (
               <div className="space-y-3">
-                <div className="text-xs font-bold text-[#468AFB]">
+                <h2 className="text-xs font-bold text-neo-blue">
                   Credenciais do MoodleMat (Matrícula e Senha)
-                </div>
+                </h2>
                 <Input
                   label="Matrícula MoodleMat"
                   placeholder="Ex: 202012345"
@@ -311,10 +311,10 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
             )}
 
             {activeTab === 'teams' && (
-              <div className="p-4 bg-[#E8EFF8] border-2 border-black rounded-2xl space-y-3 shadow-[2px_2px_0px_0px_#000]">
-                <div className="text-xs font-bold text-[#468AFB]">
+              <div className="p-4 bg-canvas border-2 border-black rounded-2xl space-y-3 shadow-[2px_2px_0px_0px_#000]">
+                <h2 className="text-xs font-bold text-neo-blue">
                   Microsoft Teams Institucional (Login Manual)
-                </div>
+                </h2>
                 <p className="text-xs font-medium text-neutral-600 leading-relaxed">
                   O Teams utiliza autenticação corporativa Microsoft 365 e requer validação interativa.
                 </p>
@@ -326,14 +326,11 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
                   disabled={isLoading}
                 />
                 <div className="pt-1">
-                  <button
+                  <Button
                     type="button"
+                    variant={teamsConnected ? 'destructive' : 'primary'}
+                    size="md"
                     onClick={handleToggleTeams}
-                    className={`cursor-pointer inline-flex items-center gap-2 px-4 py-2 border-2 border-black rounded-xl text-xs font-bold transition-all duration-150 ease-out translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none text-white ${
-                      teamsConnected
-                        ? 'bg-[#FF6B6B] hover:bg-[#EE5A5A]'
-                        : 'bg-[#468AFB] hover:bg-[#3574DC]'
-                    }`}
                   >
                     <ExternalLink className="w-4 h-4 stroke-[2.5]" />
                     <span>
@@ -341,7 +338,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
                         ? 'Conta Conectada (Clique para Desconectar)'
                         : 'Conectar Conta Microsoft Teams'}
                     </span>
-                  </button>
+                  </Button>
                 </div>
               </div>
             )}
@@ -349,21 +346,25 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
             {/* Botão para salvar a plataforma ativa */}
             {activeTab !== 'teams' ? (
               <div className="pt-2 flex justify-end">
-                <button
+                <Button
                   type="button"
+                  variant="primary"
+                  size="md"
                   onClick={handleSaveCurrentPlatform}
-                  className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#468AFB] hover:bg-[#3574DC] text-white font-bold text-xs border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
                 >
                   <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span>Salvar {platforms.find((p) => p.id === activeTab)?.name}</span>
-                </button>
+                </Button>
               </div>
             ) : null}
           </div>
 
           {/* Erros */}
           {formError || error ? (
-            <div className="mt-4 p-3 bg-[#FF6B6B] text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] text-xs font-bold flex items-center gap-2">
+            <div
+              role="alert"
+              className="mt-4 p-3 bg-neo-danger text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] text-xs font-bold flex items-center gap-2"
+            >
               <AlertCircle className="w-4 h-4 stroke-[3] shrink-0" />
               <span>{formError || error}</span>
             </div>

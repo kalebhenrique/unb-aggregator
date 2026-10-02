@@ -1,8 +1,8 @@
 import React from 'react';
 import { FeedItemCard } from '../components/FeedItemCard';
 import { useFeed } from '../hooks/useFeed';
-import { Tabs, PageContainer } from '@unb-aggregator/ui';
-import { Search, Inbox } from 'lucide-react';
+import { Tabs, PageContainer, PageHeader } from '@unb-aggregator/ui';
+import { Search, Inbox, Home } from 'lucide-react';
 import type { PlatformType, FeedItemType } from '@unb-aggregator/core';
 
 export const DashboardScreen: React.FC = () => {
@@ -34,6 +34,9 @@ export const DashboardScreen: React.FC = () => {
 
   return (
     <PageContainer>
+      {/* Título Padronizado da Página com Ícone da Sidebar */}
+      <PageHeader icon={Home} title="Início" />
+
       {/* Barra de Filtros e Busca */}
       <div className="bg-white border-2 border-black rounded-2xl p-5 shadow-[4px_4px_0px_0px_#000] space-y-4">
         {/* Campo de Busca Textual */}
@@ -44,7 +47,8 @@ export const DashboardScreen: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por disciplina, título da tarefa, aviso ou professor..."
-            className="w-full bg-white pl-10 pr-4 py-2.5 text-sm font-medium text-black border-2 border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#468AFB] transition-all placeholder:text-neutral-400 shadow-none"
+            aria-label="Buscar no feed"
+            className="w-full bg-white pl-10 pr-4 py-2.5 text-sm font-medium text-black border-2 border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-neo-blue transition-[transform,box-shadow,background-color,border-color] placeholder:text-neutral-400 shadow-none"
           />
         </div>
 
@@ -86,10 +90,10 @@ export const DashboardScreen: React.FC = () => {
         </div>
       ) : items.length === 0 ? (
         <div className="p-12 text-center bg-white border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000] space-y-3">
-          <div className="w-12 h-12 bg-[#E8EFF8] border-2 border-black rounded-2xl flex items-center justify-center mx-auto shadow-[2px_2px_0px_0px_#000]">
-            <Inbox className="w-6 h-6 stroke-[2.5] text-[#468AFB]" />
+          <div className="w-12 h-12 bg-canvas border-2 border-black rounded-2xl flex items-center justify-center mx-auto shadow-[2px_2px_0px_0px_#000]">
+            <Inbox className="w-6 h-6 stroke-[2.5] text-neo-blue" />
           </div>
-          <h4 className="text-lg font-bold text-black">Nenhum item encontrado</h4>
+          <h3 className="text-lg font-bold text-black">Nenhum item encontrado</h3>
           <p className="text-xs font-medium text-neutral-600 max-w-sm mx-auto">
             Não há avisos ou tarefas correspondentes aos filtros selecionados. Clique em "Sincronizar" na barra lateral para atualizar os portais.
           </p>

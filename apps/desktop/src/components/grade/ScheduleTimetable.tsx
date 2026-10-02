@@ -33,7 +33,7 @@ export const ScheduleTimetable = forwardRef<HTMLDivElement, ScheduleTimetablePro
           {/* Cabeçalho do Card da Grade com Ação de Download */}
           <div className="flex items-center justify-between pb-2 border-b-2 border-black/15">
             <div>
-              <h3 className="text-sm font-black uppercase text-[#468AFB] tracking-tight">
+              <h3 className="text-sm font-black uppercase text-neo-blue tracking-tight">
                 Universidade de Brasília &bull; Grade Semanal {year}/{period}
               </h3>
               <p className="text-[11px] font-semibold text-neutral-600">
@@ -82,12 +82,12 @@ export const ScheduleTimetable = forwardRef<HTMLDivElement, ScheduleTimetablePro
                   className="grid grid-cols-7 gap-1.5 py-1 items-stretch"
                 >
                   {/* Faixa horária na esquerda */}
-                  <div className="flex flex-col justify-center items-center text-[10px] font-mono font-bold text-neutral-600 bg-neutral-50 rounded border border-black/15 px-1 py-1">
+                  <div className="flex flex-col justify-center items-center text-[11px] font-mono font-bold text-neutral-600 bg-neutral-50 rounded border border-black/15 px-1 py-1">
                     <span className="font-black text-black">
                       {timeRow.shift}
                       {timeRow.period}
                     </span>
-                    <span className="text-[9px] tracking-tight">{timeRow.range}</span>
+                    <span className="text-[11px] tracking-tight">{timeRow.range}</span>
                   </div>
 
                   {/* 6 Células dos dias (Segunda a Sábado) */}
@@ -113,8 +113,8 @@ export const ScheduleTimetable = forwardRef<HTMLDivElement, ScheduleTimetablePro
                           className="h-11 p-1 rounded-lg border-2 border-red-600 bg-red-100 text-red-700 shadow-[1px_1px_0px_0px_#000] flex flex-col justify-center items-center text-center animate-pulse"
                           title={`Conflito: ${classesInSlot.map((c) => c.disciplineCode).join(' vs ')}`}
                         >
-                          <span className="text-[9px] font-black uppercase">Conflito!</span>
-                          <span className="text-[8px] font-bold truncate">
+                          <span className="text-[11px] font-black uppercase">Conflito!</span>
+                          <span className="text-[11px] font-bold truncate">
                             {classesInSlot.map((c) => c.disciplineCode).join('/')}
                           </span>
                         </div>
@@ -131,13 +131,13 @@ export const ScheduleTimetable = forwardRef<HTMLDivElement, ScheduleTimetablePro
                         className={`h-11 p-1 rounded-lg border-2 ${color.border} ${color.bg} shadow-[1.5px_1.5px_0px_0px_#000] flex flex-col justify-between overflow-hidden`}
                         title={`${c.disciplineCode} - ${c.disciplineName} (Turma ${c.classCode}) - Sala: ${c.classroom}`}
                       >
-                        <div className="flex items-center justify-between text-[9px] font-black leading-none">
+                        <div className="flex items-center justify-between text-[11px] font-black leading-none">
                           <span className={color.text}>{c.disciplineCode}</span>
-                          <span className="text-black bg-white/80 px-1 rounded text-[8px]">
+                          <span className="text-black bg-white/80 px-1 rounded text-[11px]">
                             T{c.classCode}
                           </span>
                         </div>
-                        <span className="text-[8px] font-semibold text-neutral-800 truncate">
+                        <span className="text-[11px] font-semibold text-neutral-800 truncate">
                           {c.classroom}
                         </span>
                       </div>
@@ -151,7 +151,7 @@ export const ScheduleTimetable = forwardRef<HTMLDivElement, ScheduleTimetablePro
           {/* Legenda Resumida das Disciplinas (incluída no PNG exportado) */}
           {selectedClasses.length > 0 ? (
             <div className="pt-3 mt-2 border-t-2 border-black/15">
-              <span className="text-[10px] font-black uppercase text-black block mb-1.5">
+              <span className="text-[11px] font-black uppercase text-black block mb-1.5">
                 Legenda das Disciplinas:
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -160,7 +160,7 @@ export const ScheduleTimetable = forwardRef<HTMLDivElement, ScheduleTimetablePro
                   return (
                     <div
                       key={cls.id}
-                      className="flex items-center gap-2 p-1.5 bg-neutral-50 border border-black/20 rounded-lg text-[10px]"
+                      className="flex items-center gap-2 p-1.5 bg-neutral-50 border border-black/20 rounded-lg text-[11px]"
                     >
                       <span
                         className="w-3 h-3 rounded-full border border-black shrink-0"

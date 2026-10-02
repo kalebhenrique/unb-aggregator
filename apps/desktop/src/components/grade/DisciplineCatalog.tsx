@@ -23,7 +23,7 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
       {/* Header unificado do Catálogo */}
       <div className="px-4 py-3 border-b-2 border-black flex items-center justify-between bg-white">
         <div className="flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-[#468AFB] stroke-[2.5]" />
+          <BookOpen className="w-4 h-4 text-neo-blue stroke-[2.5]" />
           <h3 className="text-xs font-black uppercase text-black tracking-tight">
             Catálogo de Disciplinas
           </h3>
@@ -54,6 +54,7 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
                 <button
                   type="button"
                   onClick={() => onToggleExpand(discipline.code)}
+                  aria-expanded={isExpanded}
                   className="cursor-pointer w-full text-left p-3.5 flex items-start justify-between gap-3 hover:bg-neutral-50 transition-colors"
                 >
                   <div className="min-w-0 flex-1">
@@ -61,7 +62,7 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
                       <Badge variant="outline" size="sm">
                         {discipline.code}
                       </Badge>
-                      <span className="text-[10px] font-bold text-neutral-600">
+                      <span className="text-[11px] font-bold text-neutral-600">
                         {discipline.classes.length} {discipline.classes.length === 1 ? 'turma' : 'turmas'}
                       </span>
                       {isDisciplineSelected ? (
@@ -86,16 +87,16 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
 
                 {/* Turmas Ofertadas (quando expandido) */}
                 {isExpanded ? (
-                  <div className="p-3 bg-[#F8FAFC] border-t-2 border-black/10 space-y-2.5">
+                  <div className="p-3 bg-slate-50 border-t-2 border-black/10 space-y-2.5">
                     {discipline.classes.map((cls) => {
                       const isClassSelected = selectedClasses.some((c) => c.id === cls.id);
 
                       return (
                         <div
                           key={cls.id}
-                          className={`p-3 rounded-lg border-2 transition-all ${
+                          className={`p-3 rounded-lg border-2 transition-[transform,box-shadow,background-color,border-color] ${
                             isClassSelected
-                              ? 'border-black bg-[#E6F8EE] shadow-[2px_2px_0px_0px_#000]'
+                              ? 'border-black bg-pastel-green shadow-[2px_2px_0px_0px_#000]'
                               : 'border-black/25 bg-white hover:border-black'
                           }`}
                         >
@@ -105,7 +106,7 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
                                 Turma {cls.classCode}
                               </span>
                               {cls.dateRange ? (
-                                <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded-md border border-black/20">
+                                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded-md border border-black/20">
                                   <Calendar className="w-2.5 h-2.5 text-neutral-500 shrink-0" />
                                   {cls.dateRange}
                                 </span>
@@ -128,13 +129,13 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
                             {cls.scheduleDescription ? (
                               <div className="flex items-center gap-1.5 text-neutral-700 font-normal">
                                 <Clock className="w-3 h-3 text-neutral-500 shrink-0" />
-                                <span className="truncate text-[10px]">{cls.scheduleDescription}</span>
+                                <span className="truncate text-[11px]">{cls.scheduleDescription}</span>
                               </div>
                             ) : null}
                           </div>
 
                           <div className="pt-2 mt-2 border-t border-black/10 flex items-center justify-between">
-                            <span className="text-[10px] font-bold text-neutral-600">
+                            <span className="text-[11px] font-bold text-neutral-600">
                               Vagas: {cls.occupied ?? 0}/{cls.vacancies ?? 0}
                             </span>
 
@@ -143,6 +144,7 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
                               variant={isClassSelected ? 'destructive' : 'primary'}
                               size="sm"
                               onClick={() => onToggleClass(cls)}
+                              aria-pressed={isClassSelected}
                               className="h-7 px-3 text-[11px] rounded-lg"
                             >
                               {isClassSelected ? 'Remover' : '+ Adicionar'}

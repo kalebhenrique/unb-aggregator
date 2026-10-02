@@ -166,13 +166,14 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
+            aria-label="Buscar disciplina"
             placeholder="Filtrar por código ou nome (ex: APC)..."
-            className="w-full bg-white pl-9 pr-3 py-2 text-xs font-semibold text-black border-2 border-black rounded-lg shadow-none focus:outline-none focus:ring-2 focus:ring-[#468AFB] placeholder:text-neutral-400 transition-all"
+            className="w-full bg-white pl-9 pr-3 py-2 text-xs font-semibold text-black border-2 border-black rounded-lg shadow-none focus:outline-none focus:ring-2 focus:ring-neo-blue placeholder:text-neutral-400 transition-[transform,box-shadow,background-color,border-color]"
           />
         </div>
 
         {feedbackMessage ? (
-          <span className="text-xs font-bold text-[#16A34A] truncate">
+          <span className="text-xs font-bold text-ink-success truncate">
             {feedbackMessage}
           </span>
         ) : null}

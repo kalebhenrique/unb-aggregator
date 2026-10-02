@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Badge } from '@unb-aggregator/ui';
+import { Card, Badge, Button } from '@unb-aggregator/ui';
 import type { FeedItem } from '@unb-aggregator/core';
 import {
   Calendar,
@@ -77,7 +77,7 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
 
   return (
     <Card
-      className={`border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000] transition-all ${
+      className={`border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000] transition-[transform,box-shadow,background-color,border-color] ${
         item.isCompleted ? 'bg-neutral-100/90 opacity-75' : 'bg-white'
       }`}
     >
@@ -124,7 +124,7 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
         >
           {item.title}
         </h3>
-        <p className="text-xs font-bold text-[#16A34A]">
+        <p className="text-xs font-bold text-ink-success">
           {item.courseName}
         </p>
       </div>
@@ -140,12 +140,12 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
         {dueStatus ? (
           <div className="flex items-center gap-1.5">
             {dueStatus.isUrgent ? (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#FF6B6B] text-white text-xs font-bold rounded-full border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-neo-danger text-white text-xs font-bold rounded-full border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]">
                 <AlertTriangle className="w-3.5 h-3.5 stroke-[2.5]" />
                 {dueStatus.label}
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-[#FFE600] text-black text-xs font-bold rounded-full border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-neo-yellow text-black text-xs font-bold rounded-full border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]">
                 <Clock className="w-3.5 h-3.5 stroke-[2.5]" />
                 {dueStatus.label}
               </span>
@@ -161,14 +161,15 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
         {/* Botões de Ação */}
         <div className="flex items-center gap-2">
           {isAssignment && onToggleComplete ? (
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="sm"
               onClick={() => onToggleComplete(item.id, item.isCompleted)}
-              className="cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 bg-white hover:bg-neutral-100 border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
             >
               {item.isCompleted ? (
                 <>
-                  <CheckCircle className="w-3.5 h-3.5 text-[#16A34A] stroke-[2.5]" />
+                  <CheckCircle className="w-3.5 h-3.5 text-ink-success stroke-[2.5]" />
                   <span>Concluído</span>
                 </>
               ) : (
@@ -177,7 +178,7 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
                   <span>Concluir</span>
                 </>
               )}
-            </button>
+            </Button>
           ) : null}
 
           {item.externalUrl ? (
@@ -185,7 +186,7 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
               href={item.externalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 bg-[#468AFB] hover:bg-[#3574DC] text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 bg-neo-blue hover:bg-neo-blueHover text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-[transform,box-shadow,background-color,border-color]"
             >
               <span>Abrir</span>
               <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />

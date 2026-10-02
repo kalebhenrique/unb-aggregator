@@ -26,11 +26,22 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: #A3A3A3;
   border: 2px solid #000000;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #737373;
+}
+
+/* Reduced motion: estados continuam (troca instantânea), spinner de loading permanece — é feedback essencial.
+   animate-pulse (conflito de grade) é ênfase decorativa: para sob reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 1ms !important;
+  }
+  .animate-pulse {
+    animation: none !important;
+  }
 }

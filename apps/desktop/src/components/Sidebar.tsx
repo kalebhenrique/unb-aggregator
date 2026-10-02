@@ -43,7 +43,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside
-      className={`group h-screen bg-white border-r-2 border-black flex flex-col justify-between transition-all duration-200 select-none z-20 shrink-0 ${
+      className={`group h-screen bg-white border-r-2 border-black flex flex-col justify-between transition-[width] duration-200 select-none z-20 shrink-0 ${
         isCollapsed ? 'w-20' : 'w-64'
       }`}
     >
@@ -55,7 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <>
               {/* Quando expandido: Logo e nome */}
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-9 h-9 bg-[#468AFB] text-white border-2 border-black rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-[2px_2px_0px_0px_#000]">
+                <div className="w-9 h-9 bg-unb-blue text-white border-2 border-black rounded-xl flex items-center justify-center font-black text-xs shrink-0 shadow-[2px_2px_0px_0px_#000]">
                   UnB
                 </div>
                 <span className="font-extrabold text-sm tracking-tight truncate text-black">
@@ -68,7 +68,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 type="button"
                 onClick={onToggleCollapse}
                 title="Recolher barra lateral"
-                className="cursor-pointer p-1.5 border-2 border-black rounded-lg bg-white hover:bg-neutral-100 text-black shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all opacity-0 group-hover:opacity-100"
+                className="cursor-pointer p-1.5 border-2 border-black rounded-lg bg-white hover:bg-neutral-100 text-black shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-[transform,box-shadow,background-color,border-color] opacity-0 group-hover:opacity-100"
               >
                 <PanelLeftClose className="w-4 h-4 stroke-[2.5]" />
               </button>
@@ -78,7 +78,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="w-full flex justify-center">
               {/* Ícone da plataforma (visível por padrão, oculto no hover-group) */}
               <div className="flex group-hover:hidden items-center justify-center">
-                <div className="w-9 h-9 bg-[#468AFB] text-white border-2 border-black rounded-xl flex items-center justify-center font-black text-xs shadow-[2px_2px_0px_0px_#000]">
+                <div className="w-9 h-9 bg-unb-blue text-white border-2 border-black rounded-xl flex items-center justify-center font-black text-xs shadow-[2px_2px_0px_0px_#000]">
                   UnB
                 </div>
               </div>
@@ -88,7 +88,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 type="button"
                 onClick={onToggleCollapse}
                 title="Expandir barra lateral"
-                className="cursor-pointer hidden group-hover:flex w-9 h-9 items-center justify-center border-2 border-black rounded-lg bg-[#468AFB] text-white shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all"
+                className="cursor-pointer hidden group-hover:flex w-9 h-9 items-center justify-center border-2 border-black rounded-lg bg-neo-blue hover:bg-neo-blueHover text-white shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-[transform,box-shadow,background-color,border-color]"
               >
                 <PanelLeftOpen className="w-5 h-5 stroke-[2.5]" />
               </button>
@@ -109,13 +109,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     type="button"
                     onClick={() => onSelectTab(item.id)}
                     title={item.label}
+                    aria-current={isActive ? 'page' : undefined}
                     className={`cursor-pointer w-full flex items-center select-none transition-colors duration-150 ${
                       isCollapsed
                         ? 'justify-center py-3.5 px-2'
                         : 'gap-3 px-4 py-3.5 text-left'
                     } ${
                       isActive
-                        ? 'bg-[#468AFB] text-white font-black'
+                        ? 'bg-neo-blue text-white font-black'
                         : 'bg-white text-neutral-800 hover:bg-neutral-100 font-bold'
                     }`}
                   >
@@ -144,21 +145,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   ? 'Conecte ao menos uma plataforma nas configurações para sincronizar'
                   : 'Sincronizar todas as plataformas'
               }
-              className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 font-bold text-xs rounded-xl border-2 transition-all duration-150 ease-out select-none ${
+              className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 font-bold text-xs rounded-xl border-2 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out select-none ${
                 !hasConnectedAccounts || isSyncing
                   ? 'bg-neutral-200 text-neutral-400 border-neutral-300 cursor-not-allowed shadow-none'
-                  : 'cursor-pointer bg-[#468AFB] hover:bg-[#3574DC] text-white border-black shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
+                  : 'cursor-pointer bg-neo-blue hover:bg-neo-blueHover text-white border-black shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
               }`}
             >
               <RefreshCw className={`w-4 h-4 stroke-[2.5] ${isSyncing ? 'animate-spin' : ''}`} />
               <span>{isSyncing ? 'Sincronizando...' : 'Sincronizar'}</span>
             </button>
             {!hasConnectedAccounts ? (
-              <p className="text-[10px] text-neutral-500 font-semibold text-center leading-tight">
+              <p className="text-[11px] text-neutral-500 font-semibold text-center leading-tight">
                 Nenhuma conta conectada
               </p>
             ) : (
-              <p className="text-[10px] text-neutral-500 font-semibold text-center truncate">
+              <p className="text-[11px] text-neutral-500 font-semibold text-center truncate">
                 {formatLastSync(lastSyncedAt)}
               </p>
             )}
@@ -174,10 +175,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   ? 'Conecte ao menos uma conta nas configurações'
                   : 'Sincronizar todas as plataformas'
               }
-              className={`w-10 h-10 flex items-center justify-center rounded-xl border-2 transition-all duration-150 ease-out select-none ${
+              className={`w-10 h-10 flex items-center justify-center rounded-xl border-2 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out select-none ${
                 !hasConnectedAccounts || isSyncing
                   ? 'bg-neutral-200 text-neutral-400 border-neutral-300 cursor-not-allowed shadow-none'
-                  : 'cursor-pointer bg-[#468AFB] hover:bg-[#3574DC] text-white border-black shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
+                  : 'cursor-pointer bg-neo-blue hover:bg-neo-blueHover text-white border-black shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none'
               }`}
             >
               <RefreshCw className={`w-4 h-4 stroke-[2.5] ${isSyncing ? 'animate-spin' : ''}`} />

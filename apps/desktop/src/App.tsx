@@ -28,8 +28,8 @@ export const App: React.FC = () => {
 
   if (isCheckingAuth) {
     return (
-      <div className="min-h-screen bg-[#E8EFF8] bg-grid flex flex-col items-center justify-center space-y-4">
-        <div className="w-12 h-12 bg-[#468AFB] text-white border-2 border-black rounded-2xl flex items-center justify-center font-black text-lg shadow-[4px_4px_0px_0px_#000]">
+      <div className="min-h-screen bg-canvas bg-grid flex flex-col items-center justify-center space-y-4">
+        <div className="w-12 h-12 bg-unb-blue text-white border-2 border-black rounded-2xl flex items-center justify-center font-black text-lg shadow-[4px_4px_0px_0px_#000]">
           UnB
         </div>
         <div className="inline-block animate-spin border-2 border-black border-t-transparent rounded-full h-6 w-6" />
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
 
   // Fluxo 3: Aplicação Principal (Dashboard com Sidebar Colapsável)
   return (
-    <div className="flex h-screen bg-[#E8EFF8] bg-grid overflow-hidden">
+    <div className="flex h-screen bg-canvas bg-grid overflow-hidden">
       {/* Sidebar Colapsável com Botão de Sincronização no Canto Inferior */}
       <Sidebar
         currentTab={currentTab}

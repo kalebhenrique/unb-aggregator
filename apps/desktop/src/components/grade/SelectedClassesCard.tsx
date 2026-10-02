@@ -39,7 +39,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
     <Card className="rounded-xl p-4 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-[#468AFB] stroke-[2.5]" />
+          <BookOpen className="w-4 h-4 text-neo-blue stroke-[2.5]" />
           <h3 className="text-xs font-black uppercase text-black">
             Minhas Disciplinas ({selectedClasses.length})
           </h3>
@@ -50,7 +50,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
             variant="ghost"
             size="sm"
             onClick={onClearGrade}
-            className="text-red-600 hover:text-red-700 hover:bg-red-50 text-[10px] h-7 px-2 rounded-lg"
+            className="text-red-600 hover:text-red-700 hover:bg-red-50 text-[11px] h-7 px-2 rounded-lg"
           >
             <Trash2 className="w-3 h-3 stroke-[2.5]" />
             Limpar
@@ -59,7 +59,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
       </div>
 
       {selectedClasses.length === 0 ? (
-        <p className="text-xs font-semibold text-neutral-500 text-center py-4 bg-[#F8FAFC] border-2 border-dashed border-black/25 rounded-xl">
+        <p className="text-xs font-semibold text-neutral-500 text-center py-4 bg-slate-50 border-2 border-dashed border-black/25 rounded-xl">
           Nenhuma disciplina adicionada. Escolha turmas no catálogo abaixo.
         </p>
       ) : (
@@ -77,14 +77,14 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
                     <Badge variant="neutral" size="sm">
                       T{cls.classCode}
                     </Badge>
-                    <Badge variant="neutral" size="sm" className="font-mono text-[10px]">
+                    <Badge variant="neutral" size="sm" className="font-mono text-[11px]">
                       {cls.scheduleCode}
                     </Badge>
                   </div>
                   <p className="text-[11px] font-bold text-neutral-800 truncate mt-0.5">
                     {cls.disciplineName}
                   </p>
-                  <p className="text-[10px] font-semibold text-neutral-600 truncate">
+                  <p className="text-[11px] font-semibold text-neutral-600 truncate">
                     {cls.classroom}
                     {cls.scheduleDescription ? ` • ${cls.scheduleDescription}` : ''}
                   </p>
@@ -149,7 +149,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
 
         {/* Navegação entre combinações geradas */}
         {scheduleOptionsCount > 1 ? (
-          <div className="flex items-center justify-between p-2 bg-[#F8FAFC] border-2 border-black rounded-xl text-xs font-bold shadow-[2px_2px_0px_0px_#000]">
+          <div className="flex items-center justify-between p-2 bg-slate-50 border-2 border-black rounded-xl text-xs font-bold shadow-[2px_2px_0px_0px_#000]">
             <Button
               type="button"
               variant="outline"
@@ -161,7 +161,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
               <ChevronLeft className="w-3.5 h-3.5 stroke-[2.5]" />
             </Button>
 
-            <span className="font-black text-[#468AFB]">
+            <span className="font-black text-neo-blue">
               Opção {currentOptionIndex + 1} de {scheduleOptionsCount}
             </span>
 

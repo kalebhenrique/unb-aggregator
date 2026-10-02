@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "plus jakarta sans",
+        "createdAt": "2026-10-02T04:06:47.489Z",
+        "reason": "Fonte de marca incumbente do projeto, documentada no DESIGN.md desde antes desta sessão; triada como exceção intencional no audit (/impeccable audit, achado overused-font classificado falso positivo). Trocar a identidade tipográfica está fora do escopo dos fixes aprovados."
+      }
+    ]
+  }
+}

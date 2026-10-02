@@ -22,13 +22,13 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           ref={ref}
           className={cn(
-            'w-full bg-white px-4 py-2.5 text-sm font-medium text-black placeholder:text-neutral-400 border-2 border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-[#468AFB] transition-all disabled:opacity-50 disabled:bg-neutral-100',
-            error && 'border-red-600 ring-red-600',
+            'w-full bg-white px-4 py-2.5 text-sm font-medium text-black placeholder:text-neutral-400 border-2 border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-neo-blue transition-[box-shadow,border-color] disabled:opacity-50 disabled:bg-neutral-100',
+            error && 'border-neo-danger ring-neo-danger',
             className
           )}
           {...props}
         />
-        {error ? <span className="text-xs font-bold text-red-600 mt-0.5">{error}</span> : null}
+        {error ? <span className="text-xs font-bold text-ink-error mt-0.5">{error}</span> : null}
       </div>
     );
   }

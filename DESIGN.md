@@ -2,11 +2,15 @@
 name: UnB Aggregator
 description: Feed acadêmico unificado da UnB com visual de mural de adesivos — borda preta declarada, sombra dura sem blur, cores de material escolar
 colors:
-  pen-blue: "#468AFB"
-  pen-blue-deep: "#3574DC"
+  pen-blue: "#2563EB"
+  pen-blue-deep: "#1D4ED8"
+  pen-blue-brand: "#468AFB"
   highlighter-yellow: "#FFE600"
+  highlighter-yellow-hover: "#F2DA00"
   chalk-green: "#46E297"
+  chalk-green-hover: "#39D68A"
   correction-red: "#FF6B6B"
+  correction-red-strong: "#DC2626"
   notebook-purple: "#C084FC"
   pencil-orange: "#FB923C"
   sky-blue: "#60A5FA"
@@ -18,15 +22,23 @@ colors:
   pastel-yellow: "#FFF9D2"
   pastel-purple: "#F3E8FF"
   pastel-red: "#FFEBEB"
-  success-ink: "#16A34A"
-  error-ink: "#DC2626"
+  success-ink: "#15803D"
+  error-ink: "#B91C1C"
   ink-black: "#000000"
   ink-soft: "#525252"
+  scroll-thumb: "#A3A3A3"
+  scroll-thumb-active: "#737373"
+  discipline-ink-blue: "#2563EB"
+  discipline-ink-green: "#15803D"
+  discipline-ink-yellow: "#EAB308"
+  discipline-ink-purple: "#A855F7"
+  discipline-ink-orange: "#F97316"
+  discipline-ink-sky: "#0EA5E9"
 typography:
   display:
     fontFamily: "Plus Jakarta Sans, system-ui, -apple-system, sans-serif"
     fontSize: "clamp(2.25rem, 5vw, 3rem)"
-    fontWeight: 900
+    fontWeight: 800
     lineHeight: 1.1
     letterSpacing: "-0.02em"
   title:
@@ -52,6 +64,11 @@ typography:
     fontWeight: 700
     lineHeight: 1.4
     letterSpacing: "0.05em"
+  micro:
+    fontFamily: "Plus Jakarta Sans, system-ui, -apple-system, sans-serif"
+    fontSize: "0.6875rem"
+    fontWeight: 700
+    lineHeight: 1.4
 rounded:
   sm: "8px"
   md: "12px"
@@ -80,6 +97,8 @@ components:
     rounded: "{rounded.md}"
     height: "40px"
     padding: "0 20px"
+  button-accent-hover:
+    backgroundColor: "{colors.chalk-green-hover}"
   button-yellow:
     backgroundColor: "{colors.highlighter-yellow}"
     textColor: "#000000"
@@ -87,13 +106,20 @@ components:
     rounded: "{rounded.md}"
     height: "40px"
     padding: "0 20px"
+  button-yellow-hover:
+    backgroundColor: "{colors.highlighter-yellow-hover}"
+  button-focus-visible:
+    outline: "none"
+    ring: "2px {colors.pen-blue}, offset 2px branco"
   button-destructive:
-    backgroundColor: "{colors.correction-red}"
+    backgroundColor: "{colors.correction-red-strong}"
     textColor: "#ffffff"
     typography: "{typography.label}"
     rounded: "{rounded.md}"
     height: "40px"
     padding: "0 20px"
+  button-destructive-hover:
+    backgroundColor: "{colors.error-ink}"
   button-outline:
     backgroundColor: "#ffffff"
     textColor: "#000000"
@@ -152,12 +178,16 @@ O mundo é opaco e de alto contraste. Sombras suaves difusas, vidro fosco, gradi
 Paleta de material escolar: uma cor de ação por intenção, versões pastel das mesmas cores para superfícies de apoio, tudo costurado por preto de tinta.
 
 ### Primary
-- **Azul Caneta** (#468AFB): a cor de ação do produto. Botões primários, tabs ativas, item de navegação ativo (fundo cheio com texto branco), foco de inputs (ring), links de marca ("Aggregator" no logo), ícones de cabeçalho de página. Hover escurece para **Azul Caneta Pressionado** (#3574DC).
+- **Azul Caneta Ação** (#2563EB): a cor de ação do produto. Todo fundo interativo sob texto branco e todo texto/ícone informativo sobre branco: botões primários, tabs ativas, item de navegação ativo, foco de inputs (ring), links de marca ("Aggregator" no logo), ícones de cabeçalho de página. Branco sobre ela = 5.17:1 (AA). Hover escurece para **Azul Caneta Pressionado** (#1D4ED8, 6.70:1 com branco).
+
+### Brand
+- **Azul Caneta** (#468AFB): cor de marca — logo-bloco "UnB", wordmark e blocos decorativos. Isenta de contraste WCAG como logotipo; nenhum texto pequeno branco sobre ela. Nunca como fundo interativo.
 
 ### Secondary
 - **Amarelo Marca-Texto** (#FFE600): ação de destaque e badge de tarefa/entrega — o amarelo de grifo em cima da leitura. Sempre com texto preto.
 - **Verde Giz** (#46E297): sucesso e plataforma SIGAA. Botão accent, badges de confirmado, badges de plataforma. Texto preto.
-- **Vermelho Correção** (#FF6B6B): destrutivo e urgente. Botão destructive (texto branco), badge urgent (texto branco), prazos vencidos ou < 24h.
+- **Vermelho Correção** (#FF6B6B): tinta de borda/acento destrutiva — contornos, ícones e acentos sempre com TEXTO PRETO (7.57:1). Nunca fundo sob texto branco.
+- **Vermelho Correção Forte** (#DC2626): destrutivo e urgente com texto branco. Botão destructive, badge urgent (4.83:1), prazos vencidos ou < 24h. Hover escurece para **Vermelho Erro** (#B91C1C, 6.47:1).
 
 ### Tertiary
 - **Lápis Laranja** (#FB923C): identidade da plataforma Aprender 3, texto preto.
@@ -174,8 +204,14 @@ Paleta de material escolar: uma cor de ação por intenção, versões pastel da
 - **Cinza Papel** (#F5F5F5, neutral-100): preenchimentos de hover, itens desabilitados, card de item concluído.
 
 ### Tintas de apoio
-- **Verde OK** (#16A34A): texto de confirmação dentro de superfícies pastel (checkmarks, selo "Zero Telemetria").
-- **Vermelho Erro** (#DC2626): texto e borda de erro de input.
+- **Verde OK** (#15803D): texto de confirmação dentro de superfícies pastel (checkmarks, selo "Zero Telemetria"). 5.02:1 sobre branco.
+- **Vermelho Erro** (#B91C1C): texto de erro sobre branco (mensagem de input); também é o hover do destrutivo. Bordas/rings de erro usam #DC2626 (não-texto).
+
+### Tintas de Grade e Scrollbar
+Inks escuras da mesma família das cores de ação, usadas como TEXTO e borda interna das células da Grade Horária sobre os pastéis, e no thumb da scrollbar. Texto da tinta sobre o pastel correspondente passa AA.
+
+- **Tinta Azul** (#2563EB) / **Tinta Verde** (#15803D) / **Tinta Amarela** (#EAB308) / **Tinta Roxa** (#A855F7) / **Tinta Laranja** (#F97316) / **Tinta Céu** (#0EA5E9): par tinta+pastel da disciplina (Azul Pastel, Verde Pastel, Amarelo Pastel, Lilás Pastel, Laranja sobre #FFEDD5, Céu sobre #E0F2FE).
+- **Thumb de Scroll** (#A3A3A3, hover #737373): scrollbar com borda preta de 2px, mantendo o estilo adesivo.
 
 ### Pastéis (superfícies, nunca texto)
 Versões lavadas das cores de ação, usadas como fundo de cards variante e alerts — sempre com texto preto e borda preta: **Azul Pastel** (#EBF3FF), **Verde Pastel** (#E6F8EE), **Amarelo Pastel** (#FFF9D2), **Lilás Pastel** (#F3E8FF), **Vermelho Pastel** (#FFEBEB).
@@ -190,19 +226,20 @@ Versões lavadas das cores de ação, usadas como fundo de cards variante e aler
 **Display Font:** Plus Jakarta Sans (fallback system-ui, -apple-system, sans-serif)
 **Body Font:** Plus Jakarta Sans (fallback system-ui, -apple-system, sans-serif)
 
-**Character:** Geométrica e arredondada, com personalidade de app jovem — os pesos extremos (800/900) dão voz de marcador grosso, enquanto 500/600 mantêm corpo de produto legível.
+**Character:** Geométrica e arredondada, com personalidade de app jovem — o peso extremo (800, teto real da família Plus Jakarta Sans, variable 200–800; usos `font-black` renderizam 800) dá voz de marcador grosso, enquanto 500/600 mantêm corpo de produto legível.
 
 ### Hierarchy
-- **Display** (900, clamp(2.25rem, 5vw, 3rem), 1.1, tracking -0.02em): título de boas-vindas no onboarding ("UnB Aggregator"). Único momento de hero.
+- **Display** (800, clamp(2.25rem, 5vw, 3rem), 1.1, tracking -0.02em): título de boas-vindas no onboarding ("UnB Aggregator"). Único momento de hero.
 - **Title** (800, 1.5rem, 1.25, tracking -0.01em): cabeçalho de página (PageHeader), com ícone azul de 24px ao lado.
 - **Heading** (700, 1.125rem, 1.4, tracking -0.01em): título de card (CardTitle).
 - **Body** (500, 0.875rem, 1.5): conteúdo de cards, descrições, itens de lista. Texto secundário em neutral-600/700 mesma faixa de tamanho.
 - **Label** (700, 0.75rem, 1.4): labels de input, badges, botões, tabs. Versão uppercase com tracking 0.05em para rótulos de grupo (SelectLabel, cabeçalhos da grade).
+- **Micro** (700, 0.6875rem/11px, 1.4): rótulos mínimos — contadores, badges sm, micro-etiquetas. 10px está banido do sistema.
 
 ### Named Rules
-**A Regra do Marcador Grosso.** Hierarquia vem de peso (900 → 800 → 700 → 500), não de esmaecer cinza. Nunca enfraqueça texto baixando o peso para abaixo de 500 — baixe o tom (neutral-600) mantendo o peso.
+**A Regra do Marcador Grosso.** Hierarquia vem de peso (800 → 700 → 600 → 500), não de esmaecer cinza. Nunca enfraqueça texto baixando o peso para abaixo de 500 — baixe o tom (neutral-600) mantendo o peso.
 
-**A Regra do Rótulo Gritado.** Rótulos estruturais (grupos, cabeçalhos de tabela, micro-cabeçalhos) são uppercase, font-black ou font-bold, 10–12px. Dá o tom de etiqueta de fichário.
+**A Regra do Rótulo Gritado.** Rótulos estruturais (grupos, cabeçalhos de tabela, micro-cabeçalhos) são uppercase, font-black ou font-bold, 11–12px. Dá o tom de etiqueta de fichário.
 
 ## Layout
 
@@ -237,13 +274,13 @@ Forma de adesivo: cantos arredondados generosos sob borda reta de 2px. Botões e
 
 ### Buttons
 - **Shape:** raio 12px (md), 8px (sm), 16px (lg); borda preta 2px; altura 40px (md).
-- **Primary:** fundo **Azul Caneta**, texto branco, fonte 700; hover **Azul Caneta Pressionado**. Variantes: accent (**Verde Giz**, texto preto), yellow (**Amarelo Marca-Texto**, texto preto), destructive (**Vermelho Correção**, texto branco), outline (branco, texto preto), ghost (transparente, sem borda visível, sem sombra, hover black/5).
-- **Hover / Focus:** hover levanta (translate -1px,-1px, sombra 3px→4px); active afunda (translate +2px,+2px, sombra none). Transição 150ms ease-out. Disabled: opacity 50%, congela a física.
+- **Primary:** fundo **Azul Caneta Ação**, texto branco, fonte 700; hover **Azul Caneta Pressionado**. Variantes: accent (**Verde Giz**, texto preto; hover **Verde Giz Pressionado** #39D68A), yellow (**Amarelo Marca-Texto**, texto preto; hover #F2DA00), destructive (**Vermelho Correção Forte**, texto branco; hover **Vermelho Erro**), outline (branco, texto preto), ghost (transparente, sem borda visível, sem sombra, hover black/5).
+- **Hover / Focus:** hover levanta (translate -1px,-1px, sombra 3px→4px); active afunda (translate +2px,+2px, sombra none). Transição 150ms ease-out. **Focus via teclado:** ring 2px **Azul Caneta Ação** com offset branco 2px, sem glow — mesmo token do Input. Disabled: opacity 50%, congela a física.
 - **Loading:** spinner circular de borda 2px corrente no lugar do conteúdo.
 
 ### Chips (tabs e filtros)
-- **Style:** pill retangular raio 12px, borda preta 2px, branco com texto preto; ativa vira **Azul Caneta** com texto branco; contador em sub-pill (10px, bold) com cores invertidas.
-- **State:** mesma física de botão (hover levanta, active afunda), sombra 2px.
+- **Style:** pill retangular raio 12px, borda preta 2px, branco com texto preto; ativa vira **Azul Caneta Ação** com texto branco; contador em sub-pill (Micro, 11px, bold) com cores invertidas.
+- **State:** mesma física de botão (hover levanta, active afunda), sombra 2px; mesmo ring de foco via teclado.
 
 ### Cards / Containers
 - **Corner Style:** 16px.
@@ -254,32 +291,33 @@ Forma de adesivo: cantos arredondados generosos sob borda reta de 2px. Botões e
 
 ### Inputs / Fields
 - **Style:** fundo branco, borda preta 2px, raio 12px, padding 10px 16px, texto 0.875rem/500; label acima em 0.75rem/700.
-- **Focus:** ring de 2px **Azul Caneta**, sem glow.
-- **Error:** borda e ring **Vermelho Erro**, mensagem abaixo em 0.75rem/700 vermelha.
+- **Focus:** ring de 2px **Azul Caneta Ação**, sem glow.
+- **Error:** borda e ring **Vermelho Correção Forte** (#DC2626, não-texto), mensagem abaixo em 0.75rem/700 **Vermelho Erro** (#B91C1C).
 - **Disabled:** opacity 50%, fundo Cinza Papel.
 
 ### Navigation (Sidebar Ledger)
-- **Style:** coluna full-bleed: cada item é uma faixa inteira separada por borda preta 2px (estilo fichário). Item ativo: fundo **Azul Caneta** cheio, texto branco, font-black. Inativo: branco, font-bold, hover Cinza Papel.
+- **Style:** coluna full-bleed: cada item é uma faixa inteira separada por borda preta 2px (estilo fichário). Item ativo: fundo **Azul Caneta Ação** cheio, texto branco, font-black. Inativo: branco, font-bold, hover Cinza Papel.
 - **States:** sem sombra e sem física de pressionar — a navegação é a encadernação, não um adesivo. Colapsável (264px ↔ 80px); recolhida mostra só ícones centralizados; botões de expandir/recolher aparecem no hover do grupo.
 
 ### Badge (sticker de plataforma/tipo)
-- **Style:** pill (9999px), borda preta 2px, sombra micro 1.5px, padding 2px 12px, texto 0.75rem/700; cor por identidade: Sigaa **Verde Giz**, Aprender 3 **Lápis Laranja**, MoodleMat **Lilás Caderno**, tarefa **Amarelo Marca-Texto**, urgente **Vermelho Correção** (texto branco), neutra branca.
+- **Style:** pill (9999px), borda preta 2px, sombra micro 1.5px, padding 2px 12px, texto 0.75rem/700; cor por identidade: Sigaa **Verde Giz**, Aprender 3 **Lápis Laranja**, MoodleMat **Lilás Caderno**, tarefa **Amarelo Marca-Texto**, urgente **Vermelho Correção Forte** (texto branco), neutra branca.
 - **Icon:** Lucide 14–16px, stroke 2.5, opcional à esquerda.
 
 ### Alert
 - **Style:** fundo pastel por variante, borda preta 2px, raio 16px, sombra 3px; ícone em bloco branco próprio (borda 2px, raio 12px, sombra micro); título 0.875rem/700, descrição 0.75rem/600.
 
 ### Signature: Grade Horária (ScheduleTimetable)
-O componente mais identitário: tabela de 7 colunas (Seg–Sáb) × 15 linhas de horário (turnos M/T/N), cabeçalhos de dia como mini-adesivos (Cinza Papel, borda preta 1px, sombra 1px), células de aula em uma de 6 cores de disciplina (par fundo-pastel + borda de tinta + texto escuro da mesma família: azul, verde, amarelo, roxo, laranja, céu). Cabeçalho institucional em uppercase font-black **Azul Caneta**. Exporta como PNG.
+O componente mais identitário: tabela de 7 colunas (Seg–Sáb) × 15 linhas de horário (turnos M/T/N), cabeçalhos de dia como mini-adesivos (Cinza Papel, borda preta 1px, sombra 1px), células de aula em uma de 6 cores de disciplina (par fundo-pastel + borda de tinta + texto escuro da mesma família: azul, verde, amarelo, roxo, laranja, céu). Cabeçalho institucional em uppercase font-black **Azul Caneta Ação**. Exporta como PNG.
 
 ## Do's and Don'ts
 
 ### Do:
 - **Do** dar borda preta de 2px a toda superfície e elemento interativo (A Regra do Risco Preto).
 - **Do** usar sombra dura deslocada preta (`Xpx Xpx 0 0 #000`) e física completa: hover levanta, active afunda, disabled congela.
-- **Do** construir hierarquia com peso de fonte (900/800/700/500) e usar pastéis como fundo, nunca como cor de ação.
-- **Do** usar Plus Jakarta Sans e ícones Lucide com stroke 2.5; rótulos estruturais em uppercase bold 10–12px.
+- **Do** construir hierarquia com peso de fonte (800/700/600/500) e usar pastéis como fundo, nunca como cor de ação.
+- **Do** usar Plus Jakarta Sans e ícones Lucide com stroke 2.5; rótulos estruturais em uppercase bold 11–12px (Micro, 11px, para rótulos mínimos).
 - **Do** usar as cores de plataforma como identidade fixa (Sigaa verde, Aprender 3 laranja) em badges e filtros.
+- **Do** usar #2563EB/#DC2626 como fundo sob texto branco; #468AFB/#FF6B6B ficam para marca/bordas.
 
 ### Don't:
 - **Don't** usar sombra com blur, box-shadow difusa, rgba ambiente ou elevação estilo Material — sombra dura ou nenhuma.
@@ -287,3 +325,4 @@ O componente mais identitário: tabela de 7 colunas (Seg–Sáb) × 15 linhas de
 - **Don't** criar elemento interativo com sombra que não afunde no active (A Regra do Afundar).
 - **Don't** enfraquecer texto reduzindo peso abaixo de font-medium; baixe o tom, mantenha o peso (A Regra do Marcador Grosso).
 - **Don't** usar cor de ação cheia como fundo de seção, ou pastel como cor de botão (A Regra do Pastel como Papel).
+- **Don't** colocar texto pequeno branco sobre **Azul Caneta** (#468AFB) ou **Vermelho Correção** (#FF6B6B) — são marca/borda/acento; fundo interativo sob texto branco é **Azul Caneta Ação** (#2563EB) ou **Vermelho Correção Forte** (#DC2626).

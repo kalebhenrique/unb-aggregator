@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
   Button,
   Input,
   Badge,
@@ -30,6 +27,33 @@ export interface SettingsScreenProps {
   onResetCredentials: () => void;
 }
 
+type FeedbackState = { type: "success" | "error"; message: string } | null;
+
+const FEEDBACK_TIMEOUT_MS = 3000;
+
+const FeedbackMessage: React.FC<{ feedback: FeedbackState }> = ({
+  feedback,
+}) => (
+  <div
+    role="status"
+    aria-live="polite"
+    className={`${feedback ? "mt-2" : ""} text-xs font-bold flex items-center gap-1 ${
+      feedback?.type === "error" ? "text-ink-error" : "text-ink-success"
+    }`}
+  >
+    {feedback ? (
+      <>
+        {feedback.type === "success" ? (
+          <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
+        ) : (
+          <AlertCircle className="w-3.5 h-3.5 stroke-[2.5]" />
+        )}
+        <span>{feedback.message}</span>
+      </>
+    ) : null}
+  </div>
+);
+
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   onResetCredentials,
 }) => {
@@ -47,80 +71,119 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   // Estados locais dos formulários
   const [sigaaMat, setSigaaMat] = useState("");
   const [sigaaPass, setSigaaPass] = useState("");
-  const [sigaaFeedback, setSigaaFeedback] = useState<string | null>(null);
+  const [sigaaFeedback, setSigaaFeedback] = useState<FeedbackState>(null);
 
   const [aprenderCpf, setAprenderCpf] = useState("");
   const [aprenderPass, setAprenderPass] = useState("");
-  const [aprenderFeedback, setAprenderFeedback] = useState<string | null>(null);
+  const [aprenderFeedback, setAprenderFeedback] = useState<FeedbackState>(null);
 
   const [moodleMatMat, setMoodleMatMat] = useState("");
   const [moodleMatPass, setMoodleMatPass] = useState("");
-  const [moodleMatFeedback, setMoodleMatFeedback] = useState<string | null>(
-    null,
-  );
+  const [moodleMatFeedback, setMoodleMatFeedback] =
+    useState<FeedbackState>(null);
 
   const [teamsEmail, setTeamsEmail] = useState("");
-  const [teamsFeedback, setTeamsFeedback] = useState<string | null>(null);
+  const [teamsFeedback, setTeamsFeedback] = useState<FeedbackState>(null);
 
   const [isWiping, setIsWiping] = useState(false);
   const [wipeConfirmed, setWipeConfirmed] = useState(false);
+
+  // Senhas salvas ficam apenas em refs — nunca são reexibidas nos inputs
+  const sigaaPassRef = useRef("");
+  const aprenderPassRef = useRef("");
+  const moodleMatPassRef = useRef("");
+
+  // Timers de feedback (limpos no unmount para evitar setState após desmontar)
+  const feedbackTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
   useEffect(() => {
+    const timers = feedbackTimersRef.current;
+    return () => {
+      timers.forEach((id) => clearTimeout(id));
+    };
+  }, []);
+
+  useEffect(() => {
     if (allCredentials.sigaa) {
       setSigaaMat(allCredentials.sigaa.matricula || "");
-      setSigaaPass(allCredentials.sigaa.senha || "");
+      sigaaPassRef.current = allCredentials.sigaa.senha || "";
     }
     if (allCredentials.aprender3) {
       setAprenderCpf(allCredentials.aprender3.cpf || "");
-      setAprenderPass(allCredentials.aprender3.senha || "");
+      aprenderPassRef.current = allCredentials.aprender3.senha || "";
     }
     if (allCredentials.moodlemat) {
       setMoodleMatMat(allCredentials.moodlemat.matricula || "");
-      setMoodleMatPass(allCredentials.moodlemat.senha || "");
+      moodleMatPassRef.current = allCredentials.moodlemat.senha || "";
     }
     if (allCredentials.teams) {
       setTeamsEmail(allCredentials.teams.email || "");
     }
   }, [allCredentials]);
 
+  const setTimedFeedback = (
+    setter: React.Dispatch<React.SetStateAction<FeedbackState>>,
+    next: NonNullable<FeedbackState>,
+  ) => {
+    setter(next);
+    feedbackTimersRef.current.push(
+      setTimeout(() => setter(null), FEEDBACK_TIMEOUT_MS),
+    );
+  };
+
   const handleSaveSigaa = async () => {
     setSigaaFeedback(null);
-    const ok = await saveSigaa({ matricula: sigaaMat, senha: sigaaPass });
-    setSigaaFeedback(
+    const senha = sigaaPass || sigaaPassRef.current;
+    const ok = await saveSigaa({ matricula: sigaaMat, senha });
+    if (ok) sigaaPassRef.current = senha;
+    setTimedFeedback(
+      setSigaaFeedback,
       ok
-        ? "Credenciais do SIGAA atualizadas com sucesso!"
-        : "Falha ao salvar SIGAA",
+        ? {
+            type: "success",
+            message: "Credenciais do SIGAA atualizadas com sucesso!",
+          }
+        : { type: "error", message: "Falha ao salvar SIGAA" },
     );
-    setTimeout(() => setSigaaFeedback(null), 3000);
   };
 
   const handleSaveAprender3 = async () => {
     setAprenderFeedback(null);
-    const ok = await saveAprender3({ cpf: aprenderCpf, senha: aprenderPass });
-    setAprenderFeedback(
+    const senha = aprenderPass || aprenderPassRef.current;
+    const ok = await saveAprender3({ cpf: aprenderCpf, senha });
+    if (ok) aprenderPassRef.current = senha;
+    setTimedFeedback(
+      setAprenderFeedback,
       ok
-        ? "Credenciais do Aprender 3 atualizadas com sucesso!"
-        : "Falha ao salvar Aprender 3",
+        ? {
+            type: "success",
+            message: "Credenciais do Aprender 3 atualizadas com sucesso!",
+          }
+        : { type: "error", message: "Falha ao salvar Aprender 3" },
     );
-    setTimeout(() => setAprenderFeedback(null), 3000);
   };
 
   const handleSaveMoodleMat = async () => {
     setMoodleMatFeedback(null);
+    const senha = moodleMatPass || moodleMatPassRef.current;
     const ok = await saveMoodleMat({
       matricula: moodleMatMat,
-      senha: moodleMatPass,
+      senha,
     });
-    setMoodleMatFeedback(
+    if (ok) moodleMatPassRef.current = senha;
+    setTimedFeedback(
+      setMoodleMatFeedback,
       ok
-        ? "Credenciais do MoodleMat atualizadas com sucesso!"
-        : "Falha ao salvar MoodleMat",
+        ? {
+            type: "success",
+            message: "Credenciais do MoodleMat atualizadas com sucesso!",
+          }
+        : { type: "error", message: "Falha ao salvar MoodleMat" },
     );
-    setTimeout(() => setMoodleMatFeedback(null), 3000);
   };
 
   const handleToggleTeams = async () => {
@@ -128,15 +191,25 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     const isCurrentlyConnected = Boolean(allCredentials.teams?.isConnected);
     if (isCurrentlyConnected) {
       await clearPlatform("teams");
-      setTeamsFeedback("Microsoft Teams desconectado.");
+      setTimedFeedback(setTeamsFeedback, {
+        type: "success",
+        message: "Microsoft Teams desconectado.",
+      });
     } else {
-      await saveTeams({
+      const ok = await saveTeams({
         isConnected: true,
         email: teamsEmail || "aluno@aluno.unb.br",
       });
-      setTeamsFeedback("Microsoft Teams conectado com sucesso!");
+      setTimedFeedback(
+        setTeamsFeedback,
+        ok
+          ? {
+              type: "success",
+              message: "Microsoft Teams conectado com sucesso!",
+            }
+          : { type: "error", message: "Falha ao conectar Microsoft Teams" },
+      );
     }
-    setTimeout(() => setTeamsFeedback(null), 3000);
   };
 
   const handleWipeAll = async () => {
@@ -169,7 +242,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-[#46E297] text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
+                <div className="p-1.5 bg-platform-sigaa text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
                   <School className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <h3 className="font-bold text-base text-black">
@@ -197,29 +270,29 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <Input
                 type="password"
                 label="Senha"
-                placeholder="Senha do SIGAA"
+                placeholder={
+                  allCredentials.sigaa?.senha
+                    ? "•••••• (senha salva — digite para trocar)"
+                    : "Senha do SIGAA"
+                }
                 value={sigaaPass}
                 onChange={(e) => setSigaaPass(e.target.value)}
               />
             </div>
 
-            {sigaaFeedback ? (
-              <div className="mt-2 text-xs font-bold text-[#16A34A] flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>{sigaaFeedback}</span>
-              </div>
-            ) : null}
+            <FeedbackMessage feedback={sigaaFeedback} />
           </div>
 
           <div className="pt-4 border-t-2 border-black/10 mt-4 flex justify-end">
-            <button
+            <Button
               type="button"
+              variant="primary"
+              size="md"
               onClick={handleSaveSigaa}
-              className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#468AFB] hover:bg-[#3574DC] text-white font-bold text-xs border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
             >
               <Save className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Salvar SIGAA</span>
-            </button>
+            </Button>
           </div>
         </Card>
 
@@ -228,7 +301,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-[#FB923C] text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
+                <div className="p-1.5 bg-platform-aprender3 text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
                   <BookOpen className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <h3 className="font-bold text-base text-black">
@@ -259,29 +332,29 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <Input
                 type="password"
                 label="Senha"
-                placeholder="Senha do Aprender 3"
+                placeholder={
+                  allCredentials.aprender3?.senha
+                    ? "•••••• (senha salva — digite para trocar)"
+                    : "Senha do Aprender 3"
+                }
                 value={aprenderPass}
                 onChange={(e) => setAprenderPass(e.target.value)}
               />
             </div>
 
-            {aprenderFeedback ? (
-              <div className="mt-2 text-xs font-bold text-[#16A34A] flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>{aprenderFeedback}</span>
-              </div>
-            ) : null}
+            <FeedbackMessage feedback={aprenderFeedback} />
           </div>
 
           <div className="pt-4 border-t-2 border-black/10 mt-4 flex justify-end">
-            <button
+            <Button
               type="button"
+              variant="primary"
+              size="md"
               onClick={handleSaveAprender3}
-              className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#468AFB] hover:bg-[#3574DC] text-white font-bold text-xs border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
             >
               <Save className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Salvar Aprender 3</span>
-            </button>
+            </Button>
           </div>
         </Card>
 
@@ -290,7 +363,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-[#C084FC] text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
+                <div className="p-1.5 bg-platform-moodlemat text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
                   <Globe className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <h3 className="font-bold text-base text-black">
@@ -323,29 +396,29 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               <Input
                 type="password"
                 label="Senha"
-                placeholder="Senha do MoodleMat"
+                placeholder={
+                  allCredentials.moodlemat?.senha
+                    ? "•••••• (senha salva — digite para trocar)"
+                    : "Senha do MoodleMat"
+                }
                 value={moodleMatPass}
                 onChange={(e) => setMoodleMatPass(e.target.value)}
               />
             </div>
 
-            {moodleMatFeedback ? (
-              <div className="mt-2 text-xs font-bold text-[#16A34A] flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>{moodleMatFeedback}</span>
-              </div>
-            ) : null}
+            <FeedbackMessage feedback={moodleMatFeedback} />
           </div>
 
           <div className="pt-4 border-t-2 border-black/10 mt-4 flex justify-end">
-            <button
+            <Button
               type="button"
+              variant="primary"
+              size="md"
               onClick={handleSaveMoodleMat}
-              className="cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 bg-[#468AFB] hover:bg-[#3574DC] text-white font-bold text-xs border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out"
             >
               <Save className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Salvar MoodleMat</span>
-            </button>
+            </Button>
           </div>
         </Card>
 
@@ -354,7 +427,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-[#60A5FA] text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
+                <div className="p-1.5 bg-platform-teams text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
                   <MessageSquare className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <h3 className="font-bold text-base text-black">
@@ -386,23 +459,17 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
               />
             </div>
 
-            {teamsFeedback ? (
-              <div className="mt-2 text-xs font-bold text-[#16A34A] flex items-center gap-1">
-                <CheckCircle2 className="w-3.5 h-3.5 stroke-[2.5]" />
-                <span>{teamsFeedback}</span>
-              </div>
-            ) : null}
+            <FeedbackMessage feedback={teamsFeedback} />
           </div>
 
           <div className="pt-4 border-t-2 border-black/10 mt-4 flex justify-end">
-            <button
+            <Button
               type="button"
+              variant={
+                allCredentials.teams?.isConnected ? "destructive" : "primary"
+              }
+              size="md"
               onClick={handleToggleTeams}
-              className={`cursor-pointer inline-flex items-center gap-1.5 px-4 py-2 text-white font-bold text-xs border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-150 ease-out ${
-                allCredentials.teams?.isConnected
-                  ? "bg-[#FF6B6B] hover:bg-[#EE5A5A]"
-                  : "bg-[#468AFB] hover:bg-[#3574DC]"
-              }`}
             >
               <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>
@@ -410,7 +477,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                   ? "Desconectar Teams"
                   : "Conectar Teams"}
               </span>
-            </button>
+            </Button>
           </div>
         </Card>
       </div>
@@ -419,7 +486,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t-2 border-black/10">
         <Card className="border-2 border-black bg-white rounded-2xl p-4 shadow-[4px_4px_0px_0px_#000]">
           <div className="flex items-center gap-2 mb-1.5">
-            <Scale className="w-4 h-4 stroke-[2.5] text-[#468AFB]" />
+            <Scale className="w-4 h-4 stroke-[2.5] text-neo-blue" />
             <h4 className="text-xs font-bold text-black">
               Licença Apache 2.0
             </h4>
@@ -432,7 +499,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
 
         <Card className="border-2 border-black bg-white rounded-2xl p-4 shadow-[4px_4px_0px_0px_#000]">
           <div className="flex items-center gap-2 mb-1.5">
-            <GitBranch className="w-4 h-4 stroke-[2.5] text-[#468AFB]" />
+            <GitBranch className="w-4 h-4 stroke-[2.5] text-neo-blue" />
             <h4 className="text-xs font-bold text-black">
               Auditoria Pública no GitHub
             </h4>
@@ -445,10 +512,10 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
       </div>
 
       {/* Zona de Perigo / Limpeza */}
-      <Card className="border-2 border-red-600 bg-red-50 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#000]">
+      <Card className="border-2 border-neo-danger bg-red-50 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#000]">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-red-600 mb-1">
+            <div className="flex items-center gap-2 text-ink-error mb-1">
               <AlertCircle className="w-5 h-5 stroke-[2.5]" />
               <h4 className="text-sm font-black uppercase tracking-tight">
                 Redefinir Acessos

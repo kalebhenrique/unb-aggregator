@@ -9,17 +9,17 @@ export interface OnboardingScreenProps {
 
 export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onContinue, onExplore }) => {
   return (
-    <div className="min-h-screen bg-[#E8EFF8] bg-grid flex flex-col justify-center items-center p-6 md:p-12">
+    <div className="min-h-screen bg-canvas bg-grid flex flex-col justify-center items-center p-6 md:p-12">
       <div className="w-full max-w-2xl space-y-8">
         {/* Header institucional */}
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-[#468AFB] text-white border-2 border-black rounded-full shadow-[2px_2px_0px_0px_#000]">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-neo-blue text-white border-2 border-black rounded-full shadow-[2px_2px_0px_0px_#000]">
             <Layers className="w-4 h-4 stroke-[2.5]" />
             <span className="text-xs font-bold">Universidade de Brasília</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl font-black text-black tracking-tight">
-            UnB <span className="text-[#468AFB]">Aggregator</span>
+            UnB <span className="text-unb-blue">Aggregator</span>
           </h1>
 
           <p className="text-base md:text-lg font-medium text-neutral-700 max-w-xl mx-auto">
@@ -30,9 +30,9 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onContinue, 
         {/* 3 Destaques Obrigatórios */}
         <div className="space-y-4">
           {/* Destaque 1: Zero Telemetria */}
-          <div className="flex items-start gap-4 p-5 bg-[#E6F8EE] border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000]">
+          <div className="flex items-start gap-4 p-5 bg-pastel-green border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000]">
             <div className="p-3 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] shrink-0">
-              <ShieldCheck className="w-6 h-6 text-[#16A34A] stroke-[2.5]" />
+              <ShieldCheck className="w-6 h-6 text-ink-success stroke-[2.5]" />
             </div>
             <div className="space-y-1">
               <h3 className="text-base font-bold text-black tracking-tight">
@@ -45,7 +45,7 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onContinue, 
           </div>
 
           {/* Destaque 2: Licença Apache 2.0 */}
-          <div className="flex items-start gap-4 p-5 bg-[#FFF9D2] border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000]">
+          <div className="flex items-start gap-4 p-5 bg-pastel-yellow border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000]">
             <div className="p-3 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] shrink-0">
               <Scale className="w-6 h-6 text-black stroke-[2.5]" />
             </div>
@@ -60,9 +60,9 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onContinue, 
           </div>
 
           {/* Destaque 3: Código Aberto no GitHub */}
-          <div className="flex items-start gap-4 p-5 bg-[#EBF3FF] border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000]">
+          <div className="flex items-start gap-4 p-5 bg-pastel-blue border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000]">
             <div className="p-3 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] shrink-0">
-              <GitBranch className="w-6 h-6 text-[#468AFB] stroke-[2.5]" />
+              <GitBranch className="w-6 h-6 text-neo-blue stroke-[2.5]" />
             </div>
             <div className="space-y-1">
               <h3 className="text-base font-bold text-black tracking-tight">
@@ -82,16 +82,16 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onContinue, 
               Plataformas Integradas
             </span>
             <div className="flex flex-wrap justify-center gap-2">
-              <span className="px-3 py-1 bg-[#46E297] text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="px-3 py-1 bg-platform-sigaa text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
                 Sigaa
               </span>
-              <span className="px-3 py-1 bg-[#FB923C] text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="px-3 py-1 bg-platform-aprender3 text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
                 Aprender 3
               </span>
-              <span className="px-3 py-1 bg-[#C084FC] text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="px-3 py-1 bg-platform-moodlemat text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
                 MoodleMat
               </span>
-              <span className="px-3 py-1 bg-[#60A5FA] text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="px-3 py-1 bg-platform-teams text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
                 Microsoft Teams
               </span>
             </div>
