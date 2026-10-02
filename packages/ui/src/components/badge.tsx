@@ -3,17 +3,27 @@ import { cn } from '../utils/cn';
 import { BookOpen, School, Globe, MessageSquare, AlertCircle, FileText, CheckCircle2 } from 'lucide-react';
 
 export type PlatformBadgeVariant = 'sigaa' | 'aprender3' | 'moodlemat' | 'teams';
-export type BadgeTypeVariant = PlatformBadgeVariant | 'assignment' | 'post' | 'urgent' | 'neutral';
+export type BadgeTypeVariant =
+  | PlatformBadgeVariant
+  | 'assignment'
+  | 'post'
+  | 'urgent'
+  | 'neutral'
+  | 'success'
+  | 'primary'
+  | 'outline';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: BadgeTypeVariant;
+  size?: 'sm' | 'md';
   showIcon?: boolean;
 }
 
 export const Badge: React.FC<BadgeProps> = ({
   className,
   variant = 'neutral',
-  showIcon = true,
+  size = 'md',
+  showIcon = false,
   children,
   ...props
 }) => {
@@ -26,11 +36,19 @@ export const Badge: React.FC<BadgeProps> = ({
     post: 'bg-[#E2E8F0] text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
     urgent: 'bg-[#FF4D4F] text-white border-2 border-black shadow-[2px_2px_0px_0px_#000]',
     neutral: 'bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    success: 'bg-[#006633] text-white border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    primary: 'bg-[#003366] text-white border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    outline: 'bg-white text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+  };
+
+  const sizeStyles = {
+    sm: 'px-1.5 py-0.5 text-[10px] rounded',
+    md: 'px-2.5 py-0.5 text-xs rounded-md',
   };
 
   const renderIcon = () => {
     if (!showIcon) return null;
-    const iconClass = 'w-3.5 h-3.5 shrink-0 stroke-[2.5]';
+    const iconClass = size === 'sm' ? 'w-3 h-3 shrink-0 stroke-[2.5]' : 'w-3.5 h-3.5 shrink-0 stroke-[2.5]';
 
     switch (variant) {
       case 'sigaa':
@@ -55,8 +73,9 @@ export const Badge: React.FC<BadgeProps> = ({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-black uppercase tracking-wider rounded-md select-none',
+        'inline-flex items-center gap-1.5 font-black uppercase tracking-wider select-none',
         variantStyles[variant],
+        sizeStyles[size],
         className
       )}
       {...props}

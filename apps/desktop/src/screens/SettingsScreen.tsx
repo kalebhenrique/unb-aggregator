@@ -7,9 +7,12 @@ import {
   Button,
   Input,
   Badge,
+  PageContainer,
+  PageHeader,
 } from "@unb-aggregator/ui";
 import { useCredentials } from "../hooks/useCredentials";
 import {
+  Settings,
   School,
   BookOpen,
   Globe,
@@ -152,13 +155,12 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   };
 
   return (
-    <div className="space-y-8 w-full max-w-5xl mx-auto">
-      {/* Título da Página */}
-      <div>
-        <h2 className="text-2xl font-black uppercase text-[#003366] tracking-tight">
-          Configuração de Acesso das Plataformas
-        </h2>
-      </div>
+    <PageContainer>
+      {/* Título Padronizado da Página com Ícone da Sidebar */}
+      <PageHeader
+        icon={Settings}
+        title="Configuração de Acesso das Plataformas"
+      />
 
       {/* Grid de Configuração por Plataforma */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -475,6 +477,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           </Button>
         </div>
       </Card>
-    </div>
+    </PageContainer>
   );
 };

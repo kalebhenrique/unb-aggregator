@@ -1,0 +1,260 @@
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useContainer } from '../context/ContainerContext';
+import type {
+  Department,
+  ScrapedDiscipline,
+  ScrapedClass,
+  ScheduleOption,
+  SavedGrade,
+} from '@unb-aggregator/core';
+
+export function useGrade() {
+  const container = useContainer();
+
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [selectedDeptId, setSelectedDeptId] = useState<string>('508');
+  const [year, setYear] = useState<string>('2026');
+  const [period, setPeriod] = useState<string>('2');
+
+  const [disciplines, setDisciplines] = useState<ScrapedDiscipline[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const [selectedClasses, setSelectedClasses] = useState<ScrapedClass[]>([]);
+  const [conflicts, setConflicts] = useState<string[]>([]);
+
+  const [scheduleOptions, setScheduleOptions] = useState<ScheduleOption[]>([]);
+  const [currentOptionIndex, setCurrentOptionIndex] = useState<number>(0);
+
+  const [isScraping, setIsScraping] = useState<boolean>(false);
+  const [isSolving, setIsSolving] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+
+  // Carrega departamentos e grade salva no início
+  useEffect(() => {
+    let isMounted = true;
+
+    async function init() {
+      console.log('[useGrade] Inicializando tela de montar grade...');
+      try {
+        const depts = await container.useCases.getDepartments.execute();
+        console.log('[useGrade] Departamentos carregados:', depts?.length);
+        if (isMounted) {
+          setDepartments(depts);
+        }
+
+        // Tenta carregar grade salva do SQLite
+        const saved = await container.useCases.manageGrade.get();
+        console.log('[useGrade] Grade salva recuperada do SQLite:', saved);
+        if (isMounted && saved && saved.selectedClasses && saved.selectedClasses.length > 0) {
+          setSelectedClasses(saved.selectedClasses);
+        }
+      } catch (e) {
+        console.warn('[useGrade] Erro ao inicializar grade:', e);
+      }
+    }
+
+    init();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [container]);
+
+  // Coleta turmas do departamento selecionado
+  const fetchClasses = useCallback(
+    async (deptId = selectedDeptId, y = year, p = period) => {
+      console.log(`[useGrade] fetchClasses: iniciando coleta para depto=${deptId}, ano=${y}, período=${p}`);
+      setIsScraping(true);
+      setFeedbackMessage(null);
+      try {
+        const result = await container.useCases.scrapeClasses.execute(deptId, y, p);
+        console.log(`[useGrade] fetchClasses: sucesso com ${result.length} disciplinas recebidas`);
+        setDisciplines(result);
+        setFeedbackMessage(`Coleta realizada: ${result.length} disciplinas disponíveis.`);
+      } catch (err: any) {
+        console.error('[useGrade] fetchClasses: erro capturado:', err);
+        setFeedbackMessage(`Aviso: ${err.message || 'Erro ao consultar turmas no SIGAA'}`);
+      } finally {
+        setIsScraping(false);
+      }
+    },
+    [container, selectedDeptId, year, period]
+  );
+
+  // Carrega turmas do CIC por padrão ao iniciar com o período mais recente (2026.2)
+  useEffect(() => {
+    fetchClasses('508', '2026', '2');
+  }, [fetchClasses]);
+
+  // Recalcula conflitos sempre que as turmas selecionadas mudarem
+  useEffect(() => {
+    let isMounted = true;
+
+    async function checkCurrentConflicts() {
+      if (selectedClasses.length < 2) {
+        if (isMounted) setConflicts([]);
+        return;
+      }
+
+      try {
+        const found = await container.useCases.solveSchedule.checkConflicts(selectedClasses);
+        if (isMounted) setConflicts(found);
+      } catch {
+        if (isMounted) setConflicts([]);
+      }
+    }
+
+    checkCurrentConflicts();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedClasses, container]);
+
+  // Filtro de disciplinas por busca
+  const filteredDisciplines = useMemo(() => {
+    if (!searchQuery.trim()) return disciplines;
+    const q = searchQuery.toLowerCase();
+    return disciplines.filter(
+      (d) => d.code.toLowerCase().includes(q) || d.name.toLowerCase().includes(q)
+    );
+  }, [disciplines, searchQuery]);
+
+  // Adiciona ou remove turma
+  const toggleClass = useCallback((cls: ScrapedClass) => {
+    setSelectedClasses((prev) => {
+      const exists = prev.some((c) => c.id === cls.id);
+      if (exists) {
+        return prev.filter((c) => c.id !== cls.id);
+      } else {
+        // Se já existe turma da mesma disciplina, substitui por esta turma escolhida
+        const filtered = prev.filter((c) => c.disciplineCode !== cls.disciplineCode);
+        return [...filtered, cls];
+      }
+    });
+  }, []);
+
+  const removeClass = useCallback((classId: string) => {
+    setSelectedClasses((prev) => prev.filter((c) => c.id !== classId));
+  }, []);
+
+  const clearGrade = useCallback(() => {
+    setSelectedClasses([]);
+    setConflicts([]);
+    setScheduleOptions([]);
+    setCurrentOptionIndex(0);
+    setFeedbackMessage(null);
+  }, []);
+
+  // Gerador automático de combinações sem conflito
+  const generateCombinations = useCallback(
+    async (preferenceShift?: 'M' | 'T' | 'N') => {
+      if (selectedClasses.length === 0) {
+        setFeedbackMessage('Selecione ao menos uma disciplina para gerar combinações.');
+        return;
+      }
+
+      setIsSolving(true);
+      setFeedbackMessage(null);
+
+      try {
+        // Pega todas as turmas disponíveis para as disciplinas atualmente selecionadas
+        const targetDisciplineCodes = new Set(selectedClasses.map((c) => c.disciplineCode));
+        const candidateClasses: ScrapedClass[] = [];
+
+        for (const disc of disciplines) {
+          if (targetDisciplineCodes.has(disc.code)) {
+            candidateClasses.push(...disc.classes);
+          }
+        }
+
+        // Se nenhuma turma foi encontrada no catálogo local, usa as próprias turmas selecionadas
+        const pool = candidateClasses.length > 0 ? candidateClasses : selectedClasses;
+        const options = await container.useCases.solveSchedule.execute(pool, preferenceShift);
+
+        setScheduleOptions(options);
+        setCurrentOptionIndex(0);
+
+        if (options.length > 0) {
+          setSelectedClasses(options[0].classes);
+          setFeedbackMessage(
+            `Geradas ${options.length} opções sem conflito! Exibindo opção 1.`
+          );
+        } else {
+          setFeedbackMessage('Nenhuma combinação sem conflito foi encontrada para essas disciplinas.');
+        }
+      } catch (err: any) {
+        setFeedbackMessage(`Erro ao gerar grade: ${err.message}`);
+      } finally {
+        setIsSolving(false);
+      }
+    },
+    [container, selectedClasses, disciplines]
+  );
+
+  const applyOption = useCallback(
+    (index: number) => {
+      if (index >= 0 && index < scheduleOptions.length) {
+        setCurrentOptionIndex(index);
+        setSelectedClasses(scheduleOptions[index].classes);
+      }
+    },
+    [scheduleOptions]
+  );
+
+  // Salvar no SQLite
+  const saveGrade = useCallback(async () => {
+    if (selectedClasses.length === 0) {
+      setFeedbackMessage('Não há turmas na grade para salvar.');
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const grade: SavedGrade = {
+        id: `grade-${year}-${period}`,
+        name: `Grade ${year}.${period}`,
+        semester: `${year}.${period}`,
+        selectedClasses,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await container.useCases.manageGrade.save(grade);
+      setFeedbackMessage('Grade salva com sucesso no banco de dados SQLite local!');
+    } catch (err: any) {
+      setFeedbackMessage(`Erro ao salvar grade: ${err.message}`);
+    } finally {
+      setIsSaving(false);
+    }
+  }, [container, selectedClasses, year, period]);
+
+  return {
+    departments,
+    selectedDeptId,
+    setSelectedDeptId,
+    year,
+    setYear,
+    period,
+    setPeriod,
+    disciplines,
+    filteredDisciplines,
+    searchQuery,
+    setSearchQuery,
+    selectedClasses,
+    conflicts,
+    scheduleOptions,
+    currentOptionIndex,
+    isScraping,
+    isSolving,
+    isSaving,
+    feedbackMessage,
+    fetchClasses,
+    toggleClass,
+    removeClass,
+    clearGrade,
+    generateCombinations,
+    applyOption,
+    saveGrade,
+  };
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FeedItemCard } from '../components/FeedItemCard';
 import { useFeed } from '../hooks/useFeed';
-import { Tabs } from '@unb-aggregator/ui';
+import { Tabs, PageContainer } from '@unb-aggregator/ui';
 import { Search, Inbox } from 'lucide-react';
 import type { PlatformType, FeedItemType } from '@unb-aggregator/core';
 
@@ -33,7 +33,7 @@ export const DashboardScreen: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6 w-full max-w-5xl mx-auto">
+    <PageContainer>
       {/* Barra de Filtros e Busca (Sem título conforme solicitado) */}
       <div className="bg-white border-2 border-black rounded-2xl p-5 shadow-[3px_3px_0px_0px_#000] space-y-4">
         {/* Campo de Busca Textual */}
@@ -112,6 +112,6 @@ export const DashboardScreen: React.FC = () => {
           </div>
         </div>
       )}
-    </div>
+    </PageContainer>
   );
 };

@@ -3,6 +3,7 @@ import { OnboardingScreen } from './screens/OnboardingScreen';
 import { CredentialsScreen } from './screens/CredentialsScreen';
 import { DashboardScreen } from './screens/DashboardScreen';
 import { CoursesScreen } from './screens/CoursesScreen';
+import { GradeBuilderScreen } from './screens/GradeBuilderScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { Sidebar, type NavTab } from './components/Sidebar';
 import { useCredentials } from './hooks/useCredentials';
@@ -80,18 +81,17 @@ export const App: React.FC = () => {
 
       {/* Área Central de Conteúdo (Sem Header global, títulos direto no corpo) */}
       <div className="flex-1 flex flex-col h-screen overflow-hidden">
-        <main className="flex-1 overflow-y-auto p-4 md:p-8">
-          <div className="max-w-6xl mx-auto">
-            {currentTab === 'home' && <DashboardScreen />}
-            {currentTab === 'courses' && <CoursesScreen />}
-            {currentTab === 'settings' && (
-              <SettingsScreen
-                onResetCredentials={() => {
-                  setStep('onboarding');
-                }}
-              />
-            )}
-          </div>
+        <main className="flex-1 overflow-y-auto px-4 py-6 md:px-8 md:py-8">
+          {currentTab === 'home' && <DashboardScreen />}
+          {currentTab === 'courses' && <CoursesScreen />}
+          {currentTab === 'grade' && <GradeBuilderScreen />}
+          {currentTab === 'settings' && (
+            <SettingsScreen
+              onResetCredentials={() => {
+                setStep('onboarding');
+              }}
+            />
+          )}
         </main>
       </div>
     </div>

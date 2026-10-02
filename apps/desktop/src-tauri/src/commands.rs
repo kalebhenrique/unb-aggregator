@@ -104,8 +104,38 @@ pub fn check_vault_status() -> serde_json::Value {
     })
 }
 
+#[command]
+pub async fn get_sigaa_departments() -> Result<Vec<crate::grade_scraper::Department>, String> {
+    crate::grade_scraper::SigaaGradeScraper::fetch_departments().await
+}
+
+#[command]
+pub async fn scrape_sigaa_classes(
+    department_id: String,
+    year: String,
+    period: String,
+) -> Result<Vec<crate::grade_scraper::ScrapedDiscipline>, String> {
+    crate::grade_scraper::SigaaGradeScraper::scrape_department_classes(&department_id, &year, &period).await
+}
+
+#[command]
+pub fn solve_schedules(
+    candidate_classes: Vec<crate::grade_scraper::ScrapedClass>,
+    preference_shift: Option<char>,
+) -> Result<Vec<crate::schedule_solver::ScheduleOption>, String> {
+    Ok(crate::schedule_solver::ScheduleSolver::solve(candidate_classes, preference_shift))
+}
+
+#[command]
+pub fn check_schedule_conflicts(
+    classes: Vec<crate::grade_scraper::ScrapedClass>,
+) -> Result<Vec<String>, String> {
+    Ok(crate::schedule_solver::ScheduleSolver::find_conflicts(&classes))
+}
+
 fn chrono_like_timestamp() -> String {
     let now = std::time::SystemTime::now();
     let duration = now.duration_since(std::time::UNIX_EPOCH).unwrap_or_default();
     format!("{}.000Z", duration.as_secs())
 }
+

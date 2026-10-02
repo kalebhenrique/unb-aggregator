@@ -1,30 +1,31 @@
-import React from "react";
-import { useFeed } from "../hooks/useFeed";
-import { Card, Badge } from "@unb-aggregator/ui";
-import { User, MapPin, Clock, CheckSquare, MessageSquare } from "lucide-react";
+import React from 'react';
+import { useFeed } from '../hooks/useFeed';
+import { Card, Badge, PageContainer, PageHeader } from '@unb-aggregator/ui';
+import { GraduationCap, User, MapPin, Clock, CheckSquare, MessageSquare } from 'lucide-react';
 
 export const CoursesScreen: React.FC = () => {
   const { courses, isLoading } = useFeed();
 
   if (isLoading) {
     return (
-      <div className="p-12 text-center bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_0px_#000]">
-        <div className="inline-block animate-spin border-3 border-black border-t-transparent rounded-full h-8 w-8 mb-3" />
-        <p className="text-sm font-black uppercase tracking-wider text-black">
-          Carregando Turmas...
-        </p>
-      </div>
+      <PageContainer>
+        <div className="p-12 text-center bg-white border-2 border-black rounded-2xl shadow-[3px_3px_0px_0px_#000]">
+          <div className="inline-block animate-spin border-3 border-black border-t-transparent rounded-full h-8 w-8 mb-3" />
+          <p className="text-sm font-black uppercase tracking-wider text-black">
+            Carregando Turmas...
+          </p>
+        </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="space-y-6 w-full max-w-5xl mx-auto">
-      {/* Título no corpo da página */}
-      <div>
-        <h2 className="text-2xl font-black uppercase text-[#003366] tracking-tight">
-          Turmas do Semestre
-        </h2>
-      </div>
+    <PageContainer>
+      {/* Título Padronizado da Página com Ícone da Sidebar */}
+      <PageHeader
+        icon={GraduationCap}
+        title="Turmas do Semestre"
+      />
 
       <div className="flex items-center justify-between text-xs font-black uppercase tracking-wider text-neutral-600 px-1">
         <span>Disciplinas Matriculadas ({courses.length})</span>
@@ -44,13 +45,13 @@ export const CoursesScreen: React.FC = () => {
                   {course.code}
                 </span>
                 <Badge variant={course.platform}>
-                  {course.platform === "sigaa"
-                    ? "Sigaa"
-                    : course.platform === "aprender3"
-                      ? "Aprender 3"
-                      : course.platform === "moodlemat"
-                        ? "MoodleMat"
-                        : "Teams"}
+                  {course.platform === 'sigaa'
+                    ? 'Sigaa'
+                    : course.platform === 'aprender3'
+                    ? 'Aprender 3'
+                    : course.platform === 'moodlemat'
+                    ? 'MoodleMat'
+                    : 'Teams'}
                 </Badge>
               </div>
 
@@ -109,6 +110,6 @@ export const CoursesScreen: React.FC = () => {
           </Card>
         ))}
       </div>
-    </div>
+    </PageContainer>
   );
 };

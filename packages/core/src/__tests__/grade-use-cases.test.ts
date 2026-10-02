@@ -1,0 +1,133 @@
+import { describe, it, expect, beforeEach } from 'vitest';
+import { createContainer } from '../container';
+import { ScrapedClass } from '../domain/entities/grade';
+
+describe('Clean Architecture Grade & Web Scraping Use Cases', () => {
+  let container: ReturnType<typeof createContainer>;
+
+  beforeEach(() => {
+    container = createContainer();
+  });
+
+  it('deve listar departamentos disponíveis da UnB', async () => {
+    const departments = await container.useCases.getDepartments.execute();
+    expect(departments.length).toBeGreaterThan(0);
+    const cic = departments.find((d) => d.id === '508');
+    expect(cic).toBeDefined();
+    expect(cic?.name).toContain('COMPUTAÇÃO');
+  });
+
+  it('deve consultar e obter turmas do departamento de computação (CIC)', async () => {
+    const disciplines = await container.useCases.scrapeClasses.execute('508', '2026', '1');
+    expect(disciplines.length).toBeGreaterThan(0);
+
+    const apc = disciplines.find((d) => d.code === 'CIC0004');
+    expect(apc).toBeDefined();
+    expect(apc?.classes.length).toBeGreaterThanOrEqual(2);
+    expect(apc?.classes[0].scheduleSlots.length).toBeGreaterThan(0);
+  });
+
+  it('deve validar obrigatoriedade do id do departamento ao coletar turmas', async () => {
+    await expect(container.useCases.scrapeClasses.execute('', '2026', '1')).rejects.toThrow(
+      'Código do departamento é obrigatório'
+    );
+  });
+
+  it('deve detectar conflito entre turmas com mesmo horário no solver', async () => {
+    // Duas turmas no mesmo horário: Segunda e Quarta das 10:00 às 11:50 (24M34)
+    const classA: ScrapedClass = {
+      id: 'CIC0004-01',
+      disciplineCode: 'CIC0004',
+      disciplineName: 'APC',
+      classCode: '01',
+      teachers: ['Prof. Carla'],
+      classroom: 'PJC BT 110',
+      scheduleCode: '24M34',
+      scheduleSlots: [
+        { day: 2, dayName: 'Seg', shift: 'M', period: 3, timeRange: '10:00 - 10:55', globalSlotIndex: 2 },
+        { day: 2, dayName: 'Seg', shift: 'M', period: 4, timeRange: '10:55 - 11:50', globalSlotIndex: 3 },
+      ],
+    };
+
+    const classB: ScrapedClass = {
+      id: 'MAT0025-01',
+      disciplineCode: 'MAT0025',
+      disciplineName: 'CÁLCULO 1',
+      classCode: '01',
+      teachers: ['Prof. Luciana'],
+      classroom: 'ICC CENTRO',
+      scheduleCode: '24M34',
+      scheduleSlots: [
+        { day: 2, dayName: 'Seg', shift: 'M', period: 3, timeRange: '10:00 - 10:55', globalSlotIndex: 2 },
+        { day: 2, dayName: 'Seg', shift: 'M', period: 4, timeRange: '10:55 - 11:50', globalSlotIndex: 3 },
+      ],
+    };
+
+    const conflicts = await container.useCases.solveSchedule.checkConflicts([classA, classB]);
+    expect(conflicts.length).toBeGreaterThan(0);
+    expect(conflicts[0]).toContain('CIC0004');
+    expect(conflicts[0]).toContain('MAT0025');
+  });
+
+  it('deve gerar combinações sem conflito para turmas compatíveis', async () => {
+    const classA: ScrapedClass = {
+      id: 'CIC0004-01',
+      disciplineCode: 'CIC0004',
+      disciplineName: 'APC',
+      classCode: '01',
+      teachers: ['Prof. Carla'],
+      classroom: 'PJC BT 110',
+      scheduleCode: '24M34',
+      scheduleSlots: [
+        { day: 2, dayName: 'Seg', shift: 'M', period: 3, timeRange: '10:00 - 10:55', globalSlotIndex: 2 },
+      ],
+    };
+
+    const classB: ScrapedClass = {
+      id: 'MAT0025-01',
+      disciplineCode: 'MAT0025',
+      disciplineName: 'CÁLCULO 1',
+      classCode: '01',
+      teachers: ['Prof. Luciana'],
+      classroom: 'ICC CENTRO',
+      scheduleCode: '35T23',
+      scheduleSlots: [
+        { day: 3, dayName: 'Ter', shift: 'T', period: 2, timeRange: '14:00 - 14:55', globalSlotIndex: 6 },
+      ],
+    };
+
+    const options = await container.useCases.solveSchedule.execute([classA, classB]);
+    expect(options.length).toBe(1);
+    expect(options[0].hasConflict).toBe(false);
+    expect(options[0].classes.length).toBe(2);
+  });
+
+  it('deve salvar e carregar a grade planejada no repositório de persistência', async () => {
+    const gradeToSave = {
+      id: 'grade-2026-1',
+      name: 'Minha Grade Ideal',
+      semester: '2026.1',
+      selectedClasses: [
+        {
+          id: 'CIC0004-01',
+          disciplineCode: 'CIC0004',
+          disciplineName: 'APC',
+          classCode: '01',
+          teachers: ['Prof. Carla'],
+          classroom: 'PJC BT 110',
+          scheduleCode: '24M34',
+          scheduleSlots: [],
+        },
+      ],
+      updatedAt: new Date().toISOString(),
+    };
+
+    await container.useCases.manageGrade.save(gradeToSave);
+
+    const saved = await container.useCases.manageGrade.get();
+    expect(saved).toBeDefined();
+    expect(saved?.id).toBe('grade-2026-1');
+    expect(saved?.selectedClasses.length).toBe(1);
+    expect(saved?.selectedClasses[0].disciplineCode).toBe('CIC0004');
+  });
+});

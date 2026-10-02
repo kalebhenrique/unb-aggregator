@@ -1,6 +1,8 @@
 pub mod commands;
+pub mod grade_scraper;
 pub mod models;
 pub mod moodle;
+pub mod schedule_solver;
 pub mod scraper;
 
 use tauri::Manager;
@@ -33,6 +35,10 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::sync_platforms,
             commands::check_vault_status,
+            commands::get_sigaa_departments,
+            commands::scrape_sigaa_classes,
+            commands::solve_schedules,
+            commands::check_schedule_conflicts,
         ])
         .run(tauri::generate_context!())
         .expect("erro durante a execução do aplicativo UnB Aggregator");
