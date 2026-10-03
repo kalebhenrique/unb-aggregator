@@ -26,21 +26,21 @@ export const DAYS_HEADER = [
 ];
 
 export const TIME_ROWS = [
-  { shift: 'M', period: 1, range: '08:00 - 08:55', globalIndex: 0 },
-  { shift: 'M', period: 2, range: '08:55 - 09:50', globalIndex: 1 },
-  { shift: 'M', period: 3, range: '10:00 - 10:55', globalIndex: 2 },
-  { shift: 'M', period: 4, range: '10:55 - 11:50', globalIndex: 3 },
-  { shift: 'M', period: 5, range: '12:00 - 12:55', globalIndex: 4 },
-  { shift: 'T', period: 1, range: '12:55 - 13:50', globalIndex: 5 },
-  { shift: 'T', period: 2, range: '14:00 - 14:55', globalIndex: 6 },
-  { shift: 'T', period: 3, range: '14:55 - 15:50', globalIndex: 7 },
-  { shift: 'T', period: 4, range: '16:00 - 16:55', globalIndex: 8 },
-  { shift: 'T', period: 5, range: '16:55 - 17:50', globalIndex: 9 },
-  { shift: 'T', period: 6, range: '18:00 - 18:55', globalIndex: 10 },
-  { shift: 'N', period: 1, range: '19:00 - 19:50', globalIndex: 11 },
-  { shift: 'N', period: 2, range: '19:50 - 20:40', globalIndex: 12 },
-  { shift: 'N', period: 3, range: '20:50 - 21:40', globalIndex: 13 },
-  { shift: 'N', period: 4, range: '21:40 - 22:30', globalIndex: 14 },
+  { shift: 'M', period: 1, range: '08:00–08:55', globalIndex: 0 },
+  { shift: 'M', period: 2, range: '08:55–09:50', globalIndex: 1 },
+  { shift: 'M', period: 3, range: '10:00–10:55', globalIndex: 2 },
+  { shift: 'M', period: 4, range: '10:55–11:50', globalIndex: 3 },
+  { shift: 'M', period: 5, range: '12:00–12:55', globalIndex: 4 },
+  { shift: 'T', period: 1, range: '12:55–13:50', globalIndex: 5 },
+  { shift: 'T', period: 2, range: '14:00–14:55', globalIndex: 6 },
+  { shift: 'T', period: 3, range: '14:55–15:50', globalIndex: 7 },
+  { shift: 'T', period: 4, range: '16:00–16:55', globalIndex: 8 },
+  { shift: 'T', period: 5, range: '16:55–17:50', globalIndex: 9 },
+  { shift: 'T', period: 6, range: '18:00–18:55', globalIndex: 10 },
+  { shift: 'N', period: 1, range: '19:00–19:50', globalIndex: 11 },
+  { shift: 'N', period: 2, range: '19:50–20:40', globalIndex: 12 },
+  { shift: 'N', period: 3, range: '20:50–21:40', globalIndex: 13 },
+  { shift: 'N', period: 4, range: '21:40–22:30', globalIndex: 14 },
 ];
 
 export const SHIFT_TABS: TabItem[] = [

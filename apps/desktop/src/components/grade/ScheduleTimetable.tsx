@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, useState } from "react";
+import { forwardRef, useMemo, useState } from "react";
 import { Card, Button } from "@unb-aggregator/ui";
 import {
   Download,
@@ -170,14 +170,14 @@ export const ScheduleTimetable = forwardRef<
           </div>
 
           {/* Cabeçalho dos Dias da Semana */}
-          <div className="grid grid-cols-7 gap-1.5 pb-2 border-b-2 border-black text-center text-xs font-black uppercase text-black">
-            <div className="p-1.5 text-neutral-500 font-bold text-[11px]">
+          <div className="grid grid-cols-[88px_repeat(6,minmax(0,1fr))] gap-1.5 pb-2 border-b-2 border-neutral-400 text-center text-xs font-black uppercase text-black">
+            <div className="p-1.5 text-[11px] font-black uppercase tracking-wider text-neutral-500">
               Horário
             </div>
             {DAYS_HEADER.map((day) => (
               <div
                 key={day.id}
-                className="p-1.5 bg-neutral-100 border border-black rounded-lg shadow-[1px_1px_0px_0px_#000]"
+                className="p-1.5 bg-neutral-100 border-2 border-black rounded-lg"
               >
                 <span>{day.short}</span>
               </div>
@@ -196,19 +196,19 @@ export const ScheduleTimetable = forwardRef<
               return (
                 <div
                   key={`${timeRow.shift}-${timeRow.period}`}
-                  className={`grid grid-cols-7 gap-1.5 py-1 items-stretch ${
+                  className={`grid grid-cols-[88px_repeat(6,minmax(0,1fr))] gap-1.5 py-1 items-stretch ${
                     isShiftStart
                       ? "mt-1.5 pt-1.5 border-t-2 border-black/20"
                       : ""
                   }`}
                 >
                   {/* Faixa horária na esquerda */}
-                  <div className="flex flex-col justify-center items-center text-[11px] font-mono font-bold text-neutral-600 bg-neutral-50 rounded border border-black/15 px-1 py-1">
+                  <div className="flex flex-col justify-center items-center text-[11px] font-mono font-bold text-neutral-600 bg-neutral-50 rounded border border-black/15 px-2 py-1">
                     <span className="font-black text-black">
                       {timeRow.shift}
                       {timeRow.period}
                     </span>
-                    <span className="text-[11px] tracking-tight">
+                    <span className="text-[11px] tracking-tight whitespace-nowrap">
                       {timeRow.range}
                     </span>
                   </div>
@@ -256,12 +256,12 @@ export const ScheduleTimetable = forwardRef<
                     return (
                       <div
                         key={day.id}
-                        className={`h-11 p-1 rounded-lg border-2 ${color.border} ${color.bg} shadow-[1.5px_1.5px_0px_0px_#000] flex flex-col justify-between overflow-hidden`}
+                        className={`h-11 p-1 rounded-lg border-2 ${color.border} ${color.bg} flex flex-col justify-between overflow-hidden`}
                         title={`${c.disciplineCode} - ${c.disciplineName} (Turma ${c.classCode}) - Sala: ${c.classroom}`}
                       >
                         <div className="flex items-center justify-between text-[11px] font-black leading-none">
                           <span className={color.text}>{c.disciplineCode}</span>
-                          <span className="text-black bg-white/80 px-1 rounded text-[11px]">
+                          <span className="text-black px-1 rounded text-[11px]">
                             T{c.classCode}
                           </span>
                         </div>

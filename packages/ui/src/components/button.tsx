@@ -20,9 +20,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    // Efeito de botão neobrutalista pop: repouso (3px 3px), hover levanta levemente (4px 4px), active afunda (shadow-none)
+    // Efeito de botão neobrutalista press: repouso (3px 3px), hover afunda quase tudo (2px, snap inteiro pra não borrar em meia-pixel), active afunda tudo (shadow-none)
     const baseStyles =
-      'cursor-pointer inline-flex items-center justify-center gap-2 font-bold tracking-normal select-none border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_0px_#000] disabled:active:translate-x-0 disabled:active:translate-y-0';
+      'cursor-pointer inline-flex items-center justify-center gap-2 font-bold tracking-normal select-none border-2 border-black rounded-xl translate-x-0 translate-y-0 shadow-[3px_3px_0px_0px_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[3px] active:translate-y-[3px] active:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[3px_3px_0px_0px_#000] disabled:active:translate-x-0 disabled:active:translate-y-0';
 
     const variantStyles = {
       default: 'bg-neo-blue text-white hover:bg-neo-blueHover',

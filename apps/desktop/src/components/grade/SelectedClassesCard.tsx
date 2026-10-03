@@ -33,14 +33,14 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
     <Card className="rounded-xl p-4 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="p-1.5 bg-white border-2 border-black rounded-lg shadow-[1.5px_1.5px_0px_0px_#000] shrink-0">
+          <div className="p-1.5 bg-white border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000] shrink-0">
             <BookMarked className="w-4 h-4 stroke-[2.5] text-neo-blue" />
           </div>
           <h3 className="text-sm font-extrabold tracking-tight text-black">
             Minha grade
           </h3>
           {selectedClasses.length > 0 ? (
-            <Badge variant="primary" size="sm">
+            <Badge variant="neutral" size="sm">
               {selectedClasses.length}
             </Badge>
           ) : null}
@@ -57,6 +57,51 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
             Limpar
           </Button>
         ) : null}
+      </div>
+
+      {/* Ações do Gerador Automático de Horários */}
+      <div className="pb-4 border-b-2 border-neutral-400 space-y-3">
+        <div>
+          <span className="text-[11px] font-black uppercase tracking-wider text-neutral-500 block mb-1.5">
+            Preferência de turno
+          </span>
+          <Tabs
+            items={SHIFT_TABS}
+            activeId={shiftFilter}
+            onChange={(id) =>
+              onShiftFilterChange(id as "ALL" | "M" | "T" | "N")
+            }
+          />
+        </div>
+
+        <div className="flex items-center gap-2 pt-1">
+          <Button
+            type="button"
+            variant="accent"
+            size="sm"
+            onClick={onGenerateCombinations}
+            disabled={selectedClasses.length === 0 || isSolving}
+            isLoading={isSolving}
+            className="flex-1"
+            title="O solver troca as turmas de cada disciplina por combinações sem conflito"
+          >
+            <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>Gerar combinações</span>
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={onSaveGrade}
+            disabled={selectedClasses.length === 0 || isSaving}
+            isLoading={isSaving}
+            title="Salva a grade no seu computador"
+          >
+            <Save className="w-3.5 h-3.5 stroke-[2.5]" />
+            <span>Salvar grade</span>
+          </Button>
+        </div>
       </div>
 
       {selectedClasses.length === 0 ? (
@@ -79,23 +124,16 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
             return (
               <div
                 key={cls.id}
-                className={`p-2.5 rounded-xl border-2 ${color.border} ${color.bg} flex items-center justify-between gap-2 shadow-[2px_2px_0px_0px_#000]`}
+                className={`p-2.5 rounded-xl border-2 ${color.border} ${color.bg} flex items-center justify-between gap-2`}
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 flex-wrap">
                     <span className="font-black text-xs text-black">
                       {cls.disciplineCode}
                     </span>
-                    <Badge variant="neutral" size="sm">
-                      T{cls.classCode}
-                    </Badge>
-                    <Badge
-                      variant="neutral"
-                      size="sm"
-                      className="font-mono text-[11px]"
-                    >
-                      {cls.scheduleCode}
-                    </Badge>
+                    <span className="font-black text-xs text-black">
+                      (T{cls.classCode} - {cls.scheduleCode})
+                    </span>
                   </div>
                   <p className="text-[11px] font-bold text-neutral-800 truncate mt-0.5">
                     {cls.disciplineName}
@@ -123,51 +161,6 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
           })}
         </div>
       )}
-
-      {/* Ações do Gerador Automático de Horários */}
-      <div className="pt-3 border-t-2 border-black/10 space-y-3">
-        <div>
-          <span className="text-[11px] font-black uppercase tracking-wider text-neutral-500 block mb-1.5">
-            Preferência de turno
-          </span>
-          <Tabs
-            items={SHIFT_TABS}
-            activeId={shiftFilter}
-            onChange={(id) =>
-              onShiftFilterChange(id as "ALL" | "M" | "T" | "N")
-            }
-          />
-        </div>
-
-        <div className="flex items-center gap-2 pt-1">
-          <Button
-            type="button"
-            variant="accent"
-            size="sm"
-            onClick={onGenerateCombinations}
-            disabled={selectedClasses.length === 0 || isSolving}
-            isLoading={isSolving}
-            className="flex-1"
-            title="O solver troca as turmas de cada disciplina por combinações sem conflito"
-          >
-            <Sparkles className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span>Gerar combinações</span>
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={onSaveGrade}
-            disabled={selectedClasses.length === 0 || isSaving}
-            isLoading={isSaving}
-            title="Salva a grade no seu computador"
-          >
-            <Save className="w-3.5 h-3.5 stroke-[2.5]" />
-            <span>Salvar grade</span>
-          </Button>
-        </div>
-      </div>
     </Card>
   );
 };

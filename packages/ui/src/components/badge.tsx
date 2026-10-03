@@ -28,21 +28,21 @@ export const Badge: React.FC<BadgeProps> = ({
   ...props
 }) => {
   const variantStyles: Record<BadgeTypeVariant, string> = {
-    sigaa: 'bg-platform-sigaa text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
-    aprender3: 'bg-platform-aprender3 text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
-    moodlemat: 'bg-platform-moodlemat text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
-    teams: 'bg-platform-teams text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
-    assignment: 'bg-neo-yellow text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
-    post: 'bg-slate-200 text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
-    urgent: 'bg-neo-danger text-white border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
-    neutral: 'bg-white text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
-    success: 'bg-neo-green text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
-    primary: 'bg-neo-blue text-white border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
-    outline: 'bg-white text-black border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]',
+    sigaa: 'bg-platform-sigaa text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    aprender3: 'bg-platform-aprender3 text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    moodlemat: 'bg-platform-moodlemat text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    teams: 'bg-platform-teams text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    assignment: 'bg-neo-yellow text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    post: 'bg-slate-200 text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    urgent: 'bg-neo-danger text-white border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    neutral: 'bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    success: 'bg-neo-green text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    primary: 'bg-neo-blue text-white border-2 border-black shadow-[2px_2px_0px_0px_#000]',
+    outline: 'bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_#000]',
   };
 
   const sizeStyles = {
-    sm: 'px-2 py-0.5 text-[11px] rounded-full',
+    sm: 'px-2 py-0.5 text-[11px] leading-4 rounded-full',
     md: 'px-3 py-0.5 text-xs rounded-full',
   };
 

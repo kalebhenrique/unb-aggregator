@@ -382,7 +382,7 @@
       {
         "name": "sticker-card",
         "value": "4px 4px 0 0 #000",
-        "purpose": "Cards e botões em hover."
+        "purpose": "Cards."
       },
       {
         "name": "sticker-max",
@@ -390,16 +390,21 @@
         "purpose": "Reservado para ênfase máxima; ainda sem uso."
       },
       {
+        "name": "sunk-snap",
+        "value": "1px 1px 0 0 #000",
+        "purpose": "Estado hover com snap inteiro: botão translada +2px (sombra 3px→1px, fica a 1px do papel), tab translada +1px (sombra 2px→1px). Nunca meia-pixel — antialiasa a borda e borra."
+      },
+      {
         "name": "pressed",
         "value": "none",
-        "purpose": "Estado active: elemento afunda (translate 2px) até a sombra sumir."
+        "purpose": "Estado active: elemento afunda o offset completo (translate = offset da sombra de repouso) até a superfície tocar o papel."
       }
     ],
     "motion": [
       {
         "name": "press",
         "value": "150ms ease-out",
-        "purpose": "Todas as transições de estado: hover levanta, active afunda."
+        "purpose": "Transições de transform/box-shadow/cor dos estados: hover afunda com snap inteiro, active afunda tudo, disabled congela."
       },
       {
         "name": "collapse",
@@ -441,9 +446,9 @@
       "name": "Botão Primário",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Ação principal da tela. Azul Caneta Ação com física de adesivo: levanta no hover, afunde no click.",
+      "description": "Ação principal da tela. Azul Caneta Ação com física de adesivo: afunda com snap inteiro no hover (fica a 1px do papel), afunda tudo no click.",
       "html": "<button class=\"ds-btn ds-btn-primary\">Sincronizar agora</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-primary{background:#2563EB;color:#fff}.ds-btn-primary:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-primary:hover{background:#1D4ED8}.ds-btn-primary:active{transform:translate(2px,2px);box-shadow:none;}.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0 0 #000,0 0 0 2px #2563EB}.ds-btn:disabled{opacity:.5;cursor:not-allowed}"
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:transform 150ms ease-out,box-shadow 150ms ease-out,background-color 150ms ease-out,border-color 150ms ease-out;}.ds-btn-primary{background:#2563EB;color:#fff}.ds-btn-primary:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 0 #000;}.ds-btn-primary:hover{background:#1D4ED8}.ds-btn-primary:active{transform:translate(3px,3px);box-shadow:none;}.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0 0 #000,0 0 0 2px #2563EB}.ds-btn:disabled{opacity:.5;cursor:not-allowed}"
     },
     {
       "name": "Botão Accent",
@@ -451,7 +456,7 @@
       "refersTo": "button-accent",
       "description": "Ação positiva de destaque em Verde Giz, texto preto.",
       "html": "<button class=\"ds-btn ds-btn-accent\">Concluir tarefa</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-accent{background:#46E297;color:#000}.ds-btn-accent:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-accent:hover{background:#39D68A}.ds-btn-accent:active{transform:translate(2px,2px);box-shadow:none;}\n.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0px 0px #000,0 0 0 2px #ffffff,0 0 0 4px #2563EB}"
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:transform 150ms ease-out,box-shadow 150ms ease-out,background-color 150ms ease-out,border-color 150ms ease-out;}.ds-btn-accent{background:#46E297;color:#000}.ds-btn-accent:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 0 #000;}.ds-btn-accent:hover{background:#39D68A}.ds-btn-accent:active{transform:translate(3px,3px);box-shadow:none;}\n.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0px 0px #000,0 0 0 2px #ffffff,0 0 0 4px #2563EB}"
     },
     {
       "name": "Botão Outline",
@@ -459,7 +464,7 @@
       "refersTo": "button-outline",
       "description": "Ação secundária sobre papel branco; mesma física dos demais.",
       "html": "<button class=\"ds-btn ds-btn-outline\">Cancelar</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:all 150ms ease-out;}.ds-btn-outline{background:#fff;color:#000}.ds-btn-outline:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 0 #000;}.ds-btn-outline:hover{background:#F5F5F5}.ds-btn-outline:active{transform:translate(2px,2px);box-shadow:none;}\n.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0px 0px #000,0 0 0 2px #ffffff,0 0 0 4px #2563EB}"
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 20px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:3px 3px 0 0 #000;transition:transform 150ms ease-out,box-shadow 150ms ease-out,background-color 150ms ease-out,border-color 150ms ease-out;}.ds-btn-outline{background:#fff;color:#000}.ds-btn-outline:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 0 #000;}.ds-btn-outline:hover{background:#F5F5F5}.ds-btn-outline:active{transform:translate(3px,3px);box-shadow:none;}\n.ds-btn:focus-visible{outline:none;box-shadow:3px 3px 0px 0px #000,0 0 0 2px #ffffff,0 0 0 4px #2563EB}"
     },
     {
       "name": "Campo de Texto",
@@ -489,9 +494,9 @@
       "name": "Chips de Filtro",
       "kind": "chip",
       "refersTo": "card-default",
-      "description": "Tabs/filtros: inativa branca, ativa Azul Caneta Ação com contador invertido; física de pressionar.",
+      "description": "Tabs/filtros: inativa branca, ativa Azul Caneta Ação com contador invertido; física de pressionar na escala 2px.",
       "html": "<div class=\"ds-chips\"><button class=\"ds-chip ds-chip-active\">Todas<span class=\"ds-chip-count ds-chip-count-active\">7</span></button><button class=\"ds-chip\">Aprender 3<span class=\"ds-chip-count\">2</span></button></div>",
-      "css": ".ds-chips{display:flex;gap:10px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:#fff;color:#404040;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:2px 2px 0 0 #000;transition:all 150ms ease-out}.ds-chip:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 0 #000}.ds-chip:active{transform:translate(2px,2px);box-shadow:none}.ds-chip-active{background:#2563EB;color:#fff}.ds-chip-count{padding:2px 8px;background:#2563EB;color:#fff;border-radius:9999px;font-size:11px;font-weight:700}.ds-chip-count-active{background:#fff;color:#2563EB}"
+      "css": ".ds-chips{display:flex;gap:10px;font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif}.ds-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:#fff;color:#404040;font-size:0.75rem;font-weight:700;border:2px solid #000;border-radius:12px;cursor:pointer;user-select:none;transform:translate(0,0);box-shadow:2px 2px 0 0 #000;transition:transform 150ms ease-out,box-shadow 150ms ease-out,background-color 150ms ease-out,border-color 150ms ease-out}.ds-chip:hover{transform:translate(1px,1px);box-shadow:1px 1px 0 0 #000}.ds-chip:active{transform:translate(2px,2px);box-shadow:none}.ds-chip-active{background:#2563EB;color:#fff}.ds-chip-count{padding:2px 8px;background:#2563EB;color:#fff;border-radius:9999px;font-size:11px;font-weight:700}.ds-chip-count-active{background:#fff;color:#2563EB}"
     },
     {
       "name": "Alert Pastel",
@@ -516,7 +521,7 @@
     "keyCharacteristics": [
       "Borda preta de 2px em toda superfície e elemento interativo",
       "Sombra dura deslocada, cor preta sólida, blur zero",
-      "Física de pressionar: hover levanta, active afunda até a sombra sumir",
+      "Física de pressionar: hover afunda com snap inteiro, active afunda tudo até a superfície tocar o papel",
       "Cores candy de material escolar sobre papel quadriculado (#E8EFF8, grid de 32px)",
       "Hierarquia por peso de fonte, não por cinza",
       "Raio generoso (12–16px) suavizando a agressividade das bordas",
@@ -540,7 +545,7 @@
       },
       {
         "name": "A Regra do Rótulo Gritado",
-        "body": "Rótulos estruturais (grupos, cabeçalhos de tabela, micro-cabeçalhos) são uppercase, font-black ou font-bold, 10–12px. Dá o tom de etiqueta de fichário.",
+        "body": "Rótulos estruturais (grupos, cabeçalhos de tabela, micro-cabeçalhos) são uppercase, font-black ou font-bold, 11–12px. Dá o tom de etiqueta de fichário.",
         "section": "typography"
       },
       {
@@ -550,13 +555,18 @@
       },
       {
         "name": "A Regra do Afundar",
-        "body": "Todo elemento interativo em repouso com sombra deve afundar no active (sombra some, elemento desloca 2px na direção da sombra). Elemento que levanta no hover e não afunda no click é bug físico.",
+        "body": "Todo elemento interativo em repouso com sombra dura afunda em dois tempos: no hover, com snap inteiro (botão de sombra 3px: translate +2px na direção da sombra, sombra reduzida a 1px — fica a 1px do papel; tab de sombra 2px: +1px e sombra 1px); no active, tudo (translate +offset completo, shadow-none — a superfície toca o papel). Ghost sem sombra mantém micro-afundar de 1px no active. Elemento que levanta no hover (translate negativo ou sombra crescendo) é bug físico.",
+        "section": "elevation"
+      },
+      {
+        "name": "A Regra do Snap Inteiro",
+        "body": "Todo translate de press é número inteiro de pixels — nunca meia-pixel (1.5px), que antialiasa a borda preta em telas de escala não-inteira e borra o adesivo. Se a metade do offset não é inteira, afunde para o inteiro imediato (metade de 3px vira 2px) e dê o resto à sombra; meia-pixel é bug de render, não refinamento.",
         "section": "elevation"
       }
     ],
     "dos": [
       "Do dar borda preta de 2px a toda superfície e elemento interativo (A Regra do Risco Preto).",
-      "Do usar sombra dura deslocada preta (Xpx Xpx 0 0 #000) e física completa: hover levanta, active afunda, disabled congela.",
+      "Do usar sombra dura deslocada preta (Xpx Xpx 0 0 #000) e física completa: hover afunda com snap inteiro, active afunda tudo, disabled congela.",
       "Do construir hierarquia com peso de fonte (800/700/600/500) e usar pastéis como fundo, nunca como cor de ação.",
       "Do usar Plus Jakarta Sans e ícones Lucide com stroke 2.5; rótulos estruturais em uppercase bold 11–12px (Micro, 11px, para rótulos mínimos).",
       "Do usar as cores de plataforma como identidade fixa (Sigaa verde, Aprender 3 laranja) em badges e filtros.",
@@ -566,6 +576,8 @@
       "Don't usar sombra com blur, box-shadow difusa, rgba ambiente ou elevação estilo Material — sombra dura ou nenhuma.",
       "Don't usar glassmorphism, backdrop-blur, gradientes ou superfícies translúcidas — o mundo é opaco.",
       "Don't criar elemento interativo com sombra que não afunde no active (A Regra do Afundar).",
+      "Don't fazer hover levantar o adesivo (translate negativo ou sombra crescendo) — o adesivo só afunda, com snap inteiro, e fica a 1px do papel em sombra de 3px (A Regra do Afundar).",
+      "Don't transladar press em meia-pixel (1.5px) — antialiasa a borda e borra o adesivo; snap para inteiro (A Regra do Snap Inteiro).",
       "Don't enfraquecer texto reduzindo peso abaixo de font-medium; baixe o tom, mantenha o peso (A Regra do Marcador Grosso).",
       "Don't usar cor de ação cheia como fundo de seção, ou pastel como cor de botão (A Regra do Pastel como Papel)."
     ]
