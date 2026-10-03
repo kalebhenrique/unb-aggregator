@@ -1,14 +1,16 @@
-import React, { useState, useRef, useMemo } from 'react';
-import { useGrade } from '../hooks/useGrade';
-import { PageContainer, PageHeader, Alert } from '@unb-aggregator/ui';
-import { CalendarDays, AlertTriangle, CheckCircle2 } from 'lucide-react';
-import { toPng } from 'html-to-image';
-import type { ScrapedClass } from '@unb-aggregator/core';
-import { GradeFilters } from '../components/grade/GradeFilters';
-import { SelectedClassesCard } from '../components/grade/SelectedClassesCard';
-import { DisciplineCatalog } from '../components/grade/DisciplineCatalog';
-import { ScheduleTimetable } from '../components/grade/ScheduleTimetable';
-import { DISCIPLINE_COLORS } from '../components/grade/types';
+import React, { useState, useRef, useMemo } from "react";
+import { useGrade } from "../hooks/useGrade";
+import { PageContainer, PageHeader } from "@unb-aggregator/ui";
+import { toast } from "../components/ui/toast";
+import { CalendarDays } from "lucide-react";
+import { toPng } from "html-to-image";
+import type { ScrapedClass } from "@unb-aggregator/core";
+import { GradeFilters } from "../components/grade/GradeFilters";
+import { SelectedClassesCard } from "../components/grade/SelectedClassesCard";
+import { DisciplineCatalog } from "../components/grade/DisciplineCatalog";
+import { ScheduleTimetable } from "../components/grade/ScheduleTimetable";
+import { OptionNavigator } from "../components/grade/OptionNavigator";
+import { DISCIPLINE_COLORS } from "../components/grade/types";
 
 export const GradeBuilderScreen: React.FC = () => {
   const {
@@ -20,6 +22,7 @@ export const GradeBuilderScreen: React.FC = () => {
     period,
     setPeriod,
     filteredDisciplines,
+    disciplines,
     searchQuery,
     setSearchQuery,
     selectedClasses,
@@ -39,8 +42,12 @@ export const GradeBuilderScreen: React.FC = () => {
     saveGrade,
   } = useGrade();
 
-  const [expandedDisciplines, setExpandedDisciplines] = useState<Record<string, boolean>>({});
-  const [shiftFilter, setShiftFilter] = useState<'ALL' | 'M' | 'T' | 'N'>('ALL');
+  const [expandedDisciplines, setExpandedDisciplines] = useState<
+    Record<string, boolean>
+  >({});
+  const [shiftFilter, setShiftFilter] = useState<"ALL" | "M" | "T" | "N">(
+    "ALL",
+  );
   const [isExportingPng, setIsExportingPng] = useState(false);
   const scheduleGridRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +61,9 @@ export const GradeBuilderScreen: React.FC = () => {
   // Mapeia disciplinas para cores distintas no grid
   const disciplineColorMap = useMemo(() => {
     const map = new Map<string, (typeof DISCIPLINE_COLORS)[0]>();
-    const uniqueCodes = Array.from(new Set(selectedClasses.map((c) => c.disciplineCode)));
+    const uniqueCodes = Array.from(
+      new Set(selectedClasses.map((c) => c.disciplineCode)),
+    );
     uniqueCodes.forEach((code, index) => {
       map.set(code, DISCIPLINE_COLORS[index % DISCIPLINE_COLORS.length]);
     });
@@ -75,6 +84,24 @@ export const GradeBuilderScreen: React.FC = () => {
     return map;
   }, [selectedClasses]);
 
+  // Feedback da tela vira toast no canto da tela (sucesso, aviso ou erro)
+  const lastToastRef = React.useRef<string | null>(null);
+  React.useEffect(() => {
+    if (!feedbackMessage) return;
+    if (lastToastRef.current === feedbackMessage) return;
+    lastToastRef.current = feedbackMessage;
+
+    const msg = feedbackMessage;
+    if (/^exibindo/i.test(msg)) return; // cache silencioso
+    if (/^erro/i.test(msg)) {
+      toast.add({ title: 'Algo deu errado', description: msg, type: 'error', timeout: 7000 });
+    } else if (/^(aviso|nenhuma|n\u00e3o|selecione)/i.test(msg)) {
+      toast.add({ title: 'Aten\u00e7\u00e3o', description: msg, type: 'warning', timeout: 6000 });
+    } else {
+      toast.add({ description: msg, type: 'success', timeout: 4000 });
+    }
+  }, [feedbackMessage]);
+
   // Exportar grade horária para imagem PNG em alta resolução (2x retina)
   const handleDownloadPng = async () => {
     if (!scheduleGridRef.current) return;
@@ -83,23 +110,26 @@ export const GradeBuilderScreen: React.FC = () => {
       const dataUrl = await toPng(scheduleGridRef.current, {
         cacheBust: true,
         pixelRatio: 2,
-        backgroundColor: '#FFFFFF',
+        backgroundColor: "#FFFFFF",
         filter: (node) => {
-          if (node instanceof HTMLElement && node.classList.contains('no-export')) {
+          if (
+            node instanceof HTMLElement &&
+            node.classList.contains("no-export")
+          ) {
             return false;
           }
           return true;
         },
       });
 
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.download = `grade-unb-${year}-${period}.png`;
       link.href = dataUrl;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (error) {
-      console.error('Falha ao exportar grade para PNG:', error);
+      console.error("Falha ao exportar grade para PNG:", error);
     } finally {
       setIsExportingPng(false);
     }
@@ -108,12 +138,11 @@ export const GradeBuilderScreen: React.FC = () => {
   return (
     <PageContainer>
       {/* Título Padronizado da Página com Ícone da Sidebar */}
-      <PageHeader
-        icon={CalendarDays}
-        title="Montar Grade Horária"
-      />
+      <div className="space-y-1.5">
+        <PageHeader icon={CalendarDays} title="Montar Grade Horária" />
+      </div>
 
-      {/* Barra de Filtros e Coleta do SIGAA */}
+      {/* Seção de busca: parâmetros e coleta do SIGAA */}
       <GradeFilters
         departments={departments}
         selectedDeptId={selectedDeptId}
@@ -124,14 +153,11 @@ export const GradeBuilderScreen: React.FC = () => {
         onSelectPeriod={setPeriod}
         isScraping={isScraping}
         onFetchClasses={() => fetchClasses(selectedDeptId, year, period, true)}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        feedbackMessage={feedbackMessage}
       />
 
       {/* Grid Principal: 2 Colunas */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Coluna Esquerda: Minhas Matérias e Catálogo de Disciplinas (5 colunas) */}
+        {/* Coluna Esquerda: montar a grade (5 colunas) */}
         <div className="lg:col-span-5 space-y-4">
           <SelectedClassesCard
             selectedClasses={selectedClasses}
@@ -141,14 +167,13 @@ export const GradeBuilderScreen: React.FC = () => {
             shiftFilter={shiftFilter}
             onShiftFilterChange={setShiftFilter}
             onGenerateCombinations={() =>
-              generateCombinations(shiftFilter === 'ALL' ? undefined : shiftFilter)
+              generateCombinations(
+                shiftFilter === "ALL" ? undefined : shiftFilter,
+              )
             }
             onSaveGrade={saveGrade}
             isSolving={isSolving}
             isSaving={isSaving}
-            scheduleOptionsCount={scheduleOptions.length}
-            currentOptionIndex={currentOptionIndex}
-            onApplyOption={applyOption}
           />
 
           <DisciplineCatalog
@@ -157,35 +182,19 @@ export const GradeBuilderScreen: React.FC = () => {
             expandedDisciplines={expandedDisciplines}
             onToggleExpand={toggleExpand}
             onToggleClass={toggleClass}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            isCatalogLoaded={disciplines.length > 0}
           />
         </div>
 
-        {/* Coluna Direita: Alertas de Conflito e Grid Semanal com Exportação PNG (7 colunas) */}
+        {/* Coluna Direita: resultado (7 colunas) */}
         <div className="lg:col-span-7 space-y-4">
-          {conflicts.length > 0 ? (
-            <Alert
-              variant="destructive"
-              icon={AlertTriangle}
-              title={`Conflito de Horário Detectado (${conflicts.length})`}
-              description={
-                <div className="space-y-1">
-                  <ul className="list-disc pl-4 space-y-0.5 text-xs font-bold text-red-900">
-                    {conflicts.map((conf, i) => (
-                      <li key={i}>{conf}</li>
-                    ))}
-                  </ul>
-                  <p className="text-[11px] font-medium pt-1 text-neutral-800">
-                    Remova uma das turmas conflitantes ou clique em "Gerar Combinações" para resolver automaticamente.
-                  </p>
-                </div>
-              }
-            />
-          ) : selectedClasses.length > 0 ? (
-            <Alert
-              variant="green"
-              icon={CheckCircle2}
-              title="Grade Válida"
-              description="Nenhum conflito de horário detectado na grade atual."
+          {scheduleOptions.length > 1 ? (
+            <OptionNavigator
+              optionsCount={scheduleOptions.length}
+              currentIndex={currentOptionIndex}
+              onApplyOption={applyOption}
             />
           ) : null}
 
@@ -196,6 +205,7 @@ export const GradeBuilderScreen: React.FC = () => {
             disciplineColorMap={disciplineColorMap}
             year={year}
             period={period}
+            conflicts={conflicts}
             onDownloadPng={handleDownloadPng}
             isExportingPng={isExportingPng}
           />

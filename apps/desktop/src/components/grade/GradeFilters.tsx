@@ -8,8 +8,9 @@ import {
   SelectContent,
   SelectItem,
 } from '@unb-aggregator/ui';
-import { RefreshCw, Search } from 'lucide-react';
+import { RefreshCw, ShieldCheck } from 'lucide-react';
 import type { Department } from '@unb-aggregator/core';
+import { DepartmentSelect } from './DepartmentSelect';
 
 export interface GradeFiltersProps {
   departments: Department[];
@@ -21,9 +22,6 @@ export interface GradeFiltersProps {
   onSelectPeriod: (period: string) => void;
   isScraping: boolean;
   onFetchClasses: () => void;
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
-  feedbackMessage?: string | null;
 }
 
 export const GradeFilters: React.FC<GradeFiltersProps> = ({
@@ -36,147 +34,114 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
   onSelectPeriod,
   isScraping,
   onFetchClasses,
-  searchQuery,
-  onSearchChange,
-  feedbackMessage,
 }) => {
-  const departmentItems = React.useMemo(
-    () => departments.map((d) => ({ value: d.id, label: d.name })),
-    [departments]
-  );
-
   const selectedDeptName = React.useMemo(
     () => departments.find((d) => d.id === selectedDeptId)?.name,
     [departments, selectedDeptId]
   );
 
-  const yearItems = React.useMemo(
-    () => [
-      { value: '2027', label: '2027' },
-      { value: '2026', label: '2026' },
-      { value: '2025', label: '2025' },
-    ],
-    []
-  );
-
-  const periodItems = React.useMemo(
-    () => [
-      { value: '2', label: '2' },
-      { value: '1', label: '1' },
-    ],
-    []
-  );
+  // Apenas o semestre atual e o seguinte (ex.: hoje = out/2026 -> 2026.2 e 2027.1)
+  const semesterOptions = React.useMemo(() => {
+    const now = new Date();
+    const y = now.getFullYear();
+    const p = now.getMonth() <= 5 ? '1' : '2';
+    const current = `${y}-${p}`;
+    const next = p === '1' ? `${y}-2` : `${y + 1}-1`;
+    const stored = `${year}-${period}`;
+    return Array.from(new Set([stored, current, next])).map((v) => {
+      const [yy, pp] = v.split('-');
+      return { value: v, label: `${yy} • ${pp === '1' ? '1º semestre' : '2º semestre'}` };
+    });
+  }, [year, period]);
 
   return (
     <Card className="rounded-xl p-4 space-y-4">
+      {/* Cabeçalho da seção de busca */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="p-1.5 bg-white border-2 border-black rounded-lg shadow-[1.5px_1.5px_0px_0px_#000] shrink-0">
+            <RefreshCw className="w-4 h-4 stroke-[2.5] text-neo-blue" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-sm font-extrabold tracking-tight text-black">
+              Buscar turmas no SIGAA
+            </h3>
+            <p className="text-[11px] font-semibold text-neutral-600">
+              Escolha o semestre e o departamento para carregar a oferta de turmas.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Parâmetros da coleta: semestre letivo + departamento + ação */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
-        {/* Seletor de Departamento */}
-        <div className="md:col-span-6 lg:col-span-6 flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-neutral-800">
-            Departamento da UnB
-          </label>
+        {/* Semestre letivo: ano + período agrupados sob um rótulo único */}
+        <div className="md:col-span-3 flex flex-col gap-1.5">
+          <span className="text-[11px] font-black uppercase tracking-wider text-neutral-500">
+            Semestre letivo
+          </span>
           <Select
-            value={selectedDeptId}
-            items={departmentItems}
+            value={`${year}-${period}`}
+            items={semesterOptions}
             onValueChange={(val) => {
-              if (val) onSelectDeptId(val);
+              if (!val) return;
+              const [y, p] = val.split('-');
+              onSelectYear(y);
+              onSelectPeriod(p);
             }}
           >
             <SelectTrigger className="rounded-lg">
-              <SelectValue placeholder="Selecione o departamento">
-                {selectedDeptName}
+              <SelectValue placeholder="Semestre">
+                {semesterOptions.find((o) => o.value === `${year}-${period}`)?.label}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="rounded-lg">
-              {departments.map((dept) => (
-                <SelectItem key={dept.id} value={dept.id}>
-                  {dept.name}
+            <SelectContent className="rounded-lg border-2 border-black bg-canvas shadow-none">
+              {semesterOptions.map((item) => (
+                <SelectItem key={item.value} value={item.value}>
+                  {item.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
 
-        {/* Ano */}
-        <div className="md:col-span-2 lg:col-span-2 flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-neutral-800">
-            Ano
-          </label>
-          <Select
-            value={year}
-            items={yearItems}
-            onValueChange={(val) => {
-              if (val) onSelectYear(val);
-            }}
-          >
-            <SelectTrigger className="rounded-lg">
-              <SelectValue placeholder="Ano">{year}</SelectValue>
-            </SelectTrigger>
-            <SelectContent className="rounded-lg">
-              <SelectItem value="2026">2026</SelectItem>
-              <SelectItem value="2025">2025</SelectItem>
-              <SelectItem value="2024">2024</SelectItem>
-            </SelectContent>
-          </Select>
+        {/* Departamento com busca interna */}
+        <div className="md:col-span-6 flex flex-col gap-1.5">
+          <span className="text-[11px] font-black uppercase tracking-wider text-neutral-500">
+            Departamento
+          </span>
+          <DepartmentSelect
+            departments={departments}
+            value={selectedDeptId}
+            onChange={onSelectDeptId}
+          />
         </div>
 
-        {/* Período */}
-        <div className="md:col-span-2 lg:col-span-2 flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-neutral-800">
-            Período
-          </label>
-          <Select
-            value={period}
-            items={periodItems}
-            onValueChange={(val) => {
-              if (val) onSelectPeriod(val);
-            }}
-          >
-            <SelectTrigger className="rounded-lg">
-              <SelectValue placeholder="Período">{period}</SelectValue>
-            </SelectTrigger>
-            <SelectContent className="rounded-lg">
-              <SelectItem value="1">1</SelectItem>
-              <SelectItem value="2">2</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Botão de Raspagem no SIGAA */}
-        <div className="md:col-span-2 lg:col-span-2">
+        {/* Ação: coletar a oferta do SIGAA para os parâmetros escolhidos */}
+        <div className="md:col-span-3 flex flex-col gap-1.5">
+          <span className="text-[11px] font-black uppercase tracking-wider text-neutral-500 invisible">
+            Ação
+          </span>
           <Button
             type="button"
             variant="primary"
             size="md"
-            className="w-full rounded-lg"
+            className="w-full rounded-lg mb-[3px]"
             isLoading={isScraping}
             onClick={onFetchClasses}
           >
-            <RefreshCw className={`w-3.5 h-3.5 stroke-[2.5] ${isScraping ? 'animate-spin' : ''}`} />
-            <span>{isScraping ? 'Buscando...' : 'Buscar'}</span>
+            {!isScraping ? <RefreshCw className="w-3.5 h-3.5 stroke-[2.5]" /> : null}
+            <span>{isScraping ? 'Consultando…' : 'Buscar no SIGAA'}</span>
           </Button>
         </div>
       </div>
 
-      {/* Linha de Busca Rápida e Feedback */}
-      <div className="pt-3 border-t-2 border-black/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        <div className="relative w-full sm:w-96">
-          <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 stroke-[2.5]" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            aria-label="Buscar disciplina"
-            placeholder="Filtrar por código ou nome (ex: APC)..."
-            className="w-full bg-white pl-9 pr-3 py-2 text-xs font-semibold text-black border-2 border-black rounded-lg shadow-none focus:outline-none focus:ring-2 focus:ring-neo-blue placeholder:text-neutral-400 transition-[transform,box-shadow,background-color,border-color]"
-          />
-        </div>
-
-        {feedbackMessage ? (
-          <span className="text-xs font-bold text-ink-success truncate">
-            {feedbackMessage}
-          </span>
-        ) : null}
+      {/* Linha de confiança: onde os dados vivem */}
+      <div className="pt-3 border-t-2 border-black/10 flex items-center gap-2">
+        <ShieldCheck className="w-3.5 h-3.5 stroke-[2.5] text-neutral-400 shrink-0" />
+        <span className="text-xs font-semibold text-neutral-500">
+          As turmas vêm do SIGAA e ficam salvas apenas no seu computador.
+        </span>
       </div>
     </Card>
   );

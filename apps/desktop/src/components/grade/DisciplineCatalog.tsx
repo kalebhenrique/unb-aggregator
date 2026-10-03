@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Button, Badge } from '@unb-aggregator/ui';
-import { ChevronDown, ChevronUp, User, MapPin, Clock, Calendar, BookOpen } from 'lucide-react';
+import { ChevronDown, ChevronUp, User, MapPin, Clock, Calendar, LibraryBig, Search } from 'lucide-react';
 import type { ScrapedDiscipline, ScrapedClass } from '@unb-aggregator/core';
 
 export interface DisciplineCatalogProps {
@@ -9,6 +9,9 @@ export interface DisciplineCatalogProps {
   expandedDisciplines: Record<string, boolean>;
   onToggleExpand: (code: string) => void;
   onToggleClass: (cls: ScrapedClass) => void;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
+  isCatalogLoaded: boolean;
 }
 
 export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
@@ -17,27 +20,49 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
   expandedDisciplines,
   onToggleExpand,
   onToggleClass,
+  searchQuery,
+  onSearchChange,
+  isCatalogLoaded,
 }) => {
   return (
     <Card className="rounded-xl overflow-hidden p-0">
       {/* Header unificado do Catálogo */}
-      <div className="px-4 py-3 border-b-2 border-black flex items-center justify-between bg-white">
-        <div className="flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-neo-blue stroke-[2.5]" />
-          <h3 className="text-xs font-black uppercase text-black tracking-tight">
-            Catálogo de Disciplinas
+      <div className="px-4 py-3 border-b-2 border-black flex flex-wrap items-center justify-between gap-3 bg-white">
+        <div className="flex items-center gap-2.5 min-w-0 shrink-0">
+          <div className="p-1.5 bg-white border-2 border-black rounded-lg shadow-[1.5px_1.5px_0px_0px_#000] shrink-0">
+            <LibraryBig className="w-4 h-4 stroke-[2.5] text-neo-blue" />
+          </div>
+          <h3 className="text-sm font-extrabold tracking-tight text-black whitespace-nowrap">
+            Catálogo de disciplinas
           </h3>
           <Badge variant="neutral" size="sm">
             {filteredDisciplines.length}
           </Badge>
         </div>
+        {/* Busca do catálogo: junto de quem ela filtra */}
+        <div className="relative w-full sm:w-60 shrink">
+          <Search className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-neutral-500 stroke-[2.5]" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            aria-label="Buscar disciplina no catálogo"
+            placeholder="Filtrar por código ou nome…"
+            className="w-full bg-white pl-9 pr-3 h-8 text-xs font-semibold text-black border-2 border-black rounded-lg shadow-none focus:outline-none focus:ring-2 focus:ring-neo-blue placeholder:text-neutral-500 transition-[box-shadow,border-color]"
+          />
+        </div>
       </div>
-
       {/* Conteúdo com scroll independente para não esticar a tela */}
       {filteredDisciplines.length === 0 ? (
-        <div className="p-8 text-center bg-white">
-          <p className="text-xs font-bold text-neutral-600">
-            Nenhuma disciplina encontrada para os filtros aplicados. Clique em "Buscar" acima para carregar o SIGAA.
+        <div className="p-8 text-center bg-white space-y-1.5">
+          <div className="w-10 h-10 mx-auto bg-pastel-blue border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] flex items-center justify-center">
+            <Search className="w-4 h-4 stroke-[2.5] text-neo-blue" />
+          </div>
+          <p className="text-xs font-extrabold text-black">Nenhuma disciplina encontrada</p>
+          <p className="text-[11px] font-semibold text-neutral-600 max-w-xs mx-auto">
+            {isCatalogLoaded
+              ? 'Nenhuma disciplina corresponde à busca. Tente parte do nome ou do código (ex.: APC).'
+              : 'Clique em "Buscar no SIGAA" acima para carregar a oferta do departamento.'}
           </p>
         </div>
       ) : (

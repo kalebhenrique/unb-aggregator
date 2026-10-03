@@ -11,6 +11,14 @@ import type {
 // Cache em memória de disciplinas por depto-ano-período
 const disciplinesCache = new Map<string, ScrapedDiscipline[]>();
 
+// Busca sem sensibilidade a acentos, maiúsculas ou pontuação ("calculo" acha "Cálculo")
+const normalizeText = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+
 export function useGrade() {
   const container = useContainer();
 
@@ -188,9 +196,9 @@ export function useGrade() {
   // Filtro de disciplinas por busca
   const filteredDisciplines = useMemo(() => {
     if (!searchQuery.trim()) return disciplines;
-    const q = searchQuery.toLowerCase();
+    const q = normalizeText(searchQuery);
     return disciplines.filter(
-      (d) => d.code.toLowerCase().includes(q) || d.name.toLowerCase().includes(q)
+      (d) => normalizeText(d.code).includes(q) || normalizeText(d.name).includes(q)
     );
   }, [disciplines, searchQuery]);
 
@@ -294,7 +302,7 @@ export function useGrade() {
       };
 
       await container.useCases.manageGrade.save(grade);
-      setFeedbackMessage('Grade salva com sucesso no banco de dados SQLite local!');
+      setFeedbackMessage('Grade salva com sucesso no seu computador!');
     } catch (err: any) {
       setFeedbackMessage(`Erro ao salvar grade: ${err.message}`);
     } finally {

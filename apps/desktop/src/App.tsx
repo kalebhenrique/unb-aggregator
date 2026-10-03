@@ -6,12 +6,14 @@ import { CoursesScreen } from './screens/CoursesScreen';
 import { GradeBuilderScreen } from './screens/GradeBuilderScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { Sidebar, type NavTab } from './components/Sidebar';
+import { TooltipProvider } from './components/ui/tooltip';
+import { Toaster } from './components/ui/toast';
 import { useCredentials } from './hooks/useCredentials';
 import { useFeed } from './hooks/useFeed';
 
 type AppStep = 'onboarding' | 'credentials' | 'main';
 
-export const App: React.FC = () => {
+const AppShell: React.FC = () => {
   const { hasCredentials, isLoading: isCheckingAuth } = useCredentials();
   const { sync, isSyncing, lastSyncedAt } = useFeed();
 
@@ -97,3 +99,12 @@ export const App: React.FC = () => {
     </div>
   );
 };
+
+const App: React.FC = () => (
+  <TooltipProvider delay={150}>
+    <Toaster />
+    <AppShell />
+  </TooltipProvider>
+);
+
+export { App };
