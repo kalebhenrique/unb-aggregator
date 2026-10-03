@@ -47,6 +47,7 @@ pub struct Course {
     pub schedule: Option<String>,
     pub unread_count: Option<u32>,
     pub pending_assignments_count: Option<u32>,
+    pub url: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

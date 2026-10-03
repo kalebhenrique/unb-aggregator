@@ -1,4 +1,4 @@
-use crate::models::{Course, FeedItem, FeedItemType, PlatformType};
+use crate::models::{Course, FeedItem};
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 
 pub struct HiddenWebviewScraper;
@@ -62,36 +62,8 @@ impl HiddenWebviewScraper {
             log::info!("Hidden webview do Sigaa finalizada e destruída com sucesso.");
         }
 
-        // Dados extraídos do Portal do Discente do Sigaa
-        let courses = vec![Course {
-            id: "sigaa-ed".into(),
-            code: "CIC0090".into(),
-            name: "Estruturas de Dados".into(),
-            semester: "2026.1".into(),
-            platform: PlatformType::Sigaa,
-            professor: Some("Prof. Carlos Eduardo".into()),
-            classroom: Some("PJC BT 110".into()),
-            schedule: Some("Seg/Qua 14:00 - 15:50".into()),
-            unread_count: Some(3),
-            pending_assignments_count: Some(0),
-        }];
-
-        let items = vec![FeedItem {
-            id: "sigaa-aviso-prova-1".into(),
-            platform: PlatformType::Sigaa,
-            title: "Divulgação das Notas da Prova 1 e Revisão de Menções".into(),
-            content: "As notas da primeira avaliação individual foram cadastradas no sistema. A sessão de revisão presencial ocorrerá na próxima quarta-feira na sala dos professores.".into(),
-            course_name: "Estruturas de Dados".into(),
-            course_code: Some("CIC0090".into()),
-            author: Some("Prof. Carlos Eduardo".into()),
-            item_type: FeedItemType::Post,
-            created_at: "2026-09-30T08:00:00Z".into(),
-            due_date: None,
-            is_completed: None,
-            external_url: Some("https://sigaa.unb.br/sigaa/portais/discente/discente.jsf".into()),
-        }];
-
-        Ok((items, courses))
+        // Sem mocks no ambiente Tauri nativo: apenas dados reais extraídos
+        Ok((Vec::new(), Vec::new()))
     }
 
     /// Sincronização do Teams via Hidden Webview com injeção JS preservando o estado React SPA
@@ -132,34 +104,7 @@ impl HiddenWebviewScraper {
             log::info!("Hidden webview do Teams finalizada e destruída com sucesso.");
         }
 
-        let courses = vec![Course {
-            id: "teams-mds".into(),
-            code: "FGA0138".into(),
-            name: "Métodos de Desenvolvimento de Software".into(),
-            semester: "2026.1".into(),
-            platform: PlatformType::Teams,
-            professor: Some("Prof. Fernando Mendes".into()),
-            classroom: Some("Teams Online / FGA UED".into()),
-            schedule: Some("Ter/Qui 16:00 - 17:50".into()),
-            unread_count: Some(4),
-            pending_assignments_count: Some(1),
-        }];
-
-        let items = vec![FeedItem {
-            id: "teams-sprint-2".into(),
-            platform: PlatformType::Teams,
-            title: "Sprint 2: Reunião de Alinhamento e Definição de Arquitetura".into(),
-            content: "Disponibilizado o link da gravação da aula síncrona sobre Clean Architecture e microsserviços. Os diagramas e requisitos estão na aba Arquivos do canal Geral.".into(),
-            course_name: "Métodos de Desenvolvimento de Software".into(),
-            course_code: Some("FGA0138".into()),
-            author: Some("Prof. Fernando Mendes".into()),
-            item_type: FeedItemType::Post,
-            created_at: "2026-09-29T18:00:00Z".into(),
-            due_date: None,
-            is_completed: None,
-            external_url: Some("https://teams.microsoft.com".into()),
-        }];
-
-        Ok((items, courses))
+        // Sem mocks no ambiente Tauri nativo
+        Ok((Vec::new(), Vec::new()))
     }
 }

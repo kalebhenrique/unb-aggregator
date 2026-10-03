@@ -153,11 +153,17 @@ export class TauriSyncRepository implements ISyncRepository {
 
         return response;
       } catch (error) {
-        console.warn('Erro ao chamar comando nativo Tauri de sincronização, utilizando fallback:', error);
+        console.error('Erro no comando nativo Tauri de sincronização:', error);
+        return {
+          items: [],
+          courses: [],
+          syncedAt: new Date().toISOString(),
+          errors: { aprender3: error instanceof Error ? error.message : String(error) },
+        };
       }
     }
 
-    // Fallback enriquecido e realista para ambiente de desenvolvimento/testes
+    // Mocks estritamente para o modo web (navegador sem Tauri)
     await new Promise((resolve) => setTimeout(resolve, 800));
 
     const filteredItems = MOCK_FEED_ITEMS.filter((item) =>

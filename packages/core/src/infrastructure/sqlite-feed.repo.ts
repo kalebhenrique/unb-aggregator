@@ -32,6 +32,7 @@ interface SqliteCourseRow {
   schedule: string | null;
   unread_count: number;
   pending_assignments_count: number;
+  url: string | null;
 }
 
 // Cache global de conexão com o banco SQLite
@@ -62,9 +63,17 @@ async function getDatabase(): Promise<any> {
             classroom TEXT,
             schedule TEXT,
             unread_count INTEGER NOT NULL DEFAULT 0,
-            pending_assignments_count INTEGER NOT NULL DEFAULT 0
+            pending_assignments_count INTEGER NOT NULL DEFAULT 0,
+            url TEXT
           );
         `);
+
+        // Migração suave para bases pré-existentes sem a coluna url
+        try {
+          await db.execute('ALTER TABLE courses ADD COLUMN url TEXT;');
+        } catch {
+          // Ignora se a coluna já existir
+        }
 
         // Cria a tabela de avisos e tarefas (feed_items)
         await db.execute(`
@@ -74,7 +83,7 @@ async function getDatabase(): Promise<any> {
             title TEXT NOT NULL,
             content TEXT NOT NULL,
             course_name TEXT NOT NULL,
-            course_code TEXT NOT NULL,
+            course_code TEXT,
             author TEXT,
             item_type TEXT NOT NULL,
             created_at TEXT NOT NULL,
@@ -83,6 +92,18 @@ async function getDatabase(): Promise<any> {
             external_url TEXT
           );
         `);
+
+        // Limpa registros mock que possam ter sido persistidos em execuções anteriores no ambiente nativo
+        try {
+          await db.execute(`
+            DELETE FROM courses WHERE id IN ('course-1', 'course-2', 'course-3', 'course-4', 'sigaa-ed', 'teams-mds', 'moodlemat-calc1', 'aprender-apc');
+          `);
+          await db.execute(`
+            DELETE FROM feed_items WHERE id IN ('feed-1', 'feed-2', 'feed-3', 'feed-4', 'feed-5', 'sigaa-aviso-prova-1', 'moodlemat-lista-3', 'teams-sprint-2', 'aprender-vpl-1', 'aprender-aviso-1');
+          `);
+        } catch {
+          // Ignora se não houver registros
+        }
 
         return db;
       } catch (err) {
@@ -204,7 +225,7 @@ export class SqliteFeedRepository implements IFeedRepository {
               item.title,
               item.content,
               item.courseName,
-              item.courseCode,
+              item.courseCode || item.courseName || '',
               item.author ?? null,
               item.itemType,
               item.createdAt,
@@ -259,6 +280,7 @@ export class SqliteFeedRepository implements IFeedRepository {
           schedule: row.schedule ?? undefined,
           unreadCount: Number(row.unread_count || 0),
           pendingAssignmentsCount: Number(row.pending_assignments_count || 0),
+          url: row.url ?? undefined,
         }));
 
         for (const c of courses) {
@@ -285,8 +307,8 @@ export class SqliteFeedRepository implements IFeedRepository {
         for (const course of newCourses) {
           await db.execute(
             `INSERT OR REPLACE INTO courses (
-              id, code, name, semester, platform, professor, classroom, schedule, unread_count, pending_assignments_count
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`,
+              id, code, name, semester, platform, professor, classroom, schedule, unread_count, pending_assignments_count, url
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`,
             [
               course.id,
               course.code,
@@ -298,6 +320,7 @@ export class SqliteFeedRepository implements IFeedRepository {
               course.schedule ?? null,
               course.unreadCount ?? 0,
               course.pendingAssignmentsCount ?? 0,
+              course.url ?? null,
             ]
           );
         }

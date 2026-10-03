@@ -51,7 +51,7 @@ export class StrongholdCredentialsRepository implements ICredentialsRepository {
             client = await stronghold.createClient('unb_credentials');
           } catch {
             try {
-              client = new Client(vaultPath, 'unb_credentials');
+              client = await stronghold.loadClient('unb_credentials');
             } catch {
               client = null;
             }
@@ -64,9 +64,19 @@ export class StrongholdCredentialsRepository implements ICredentialsRepository {
 
       return {
         store: client.getStore(),
-        saveVault: async () => stronghold.save(),
+        saveVault: async () => {
+          try {
+            await stronghold.save();
+          } catch (saveErr) {
+            console.warn('Falha ao salvar snapshot do Stronghold:', saveErr);
+            sharedCachedClient = null;
+            sharedCachedStronghold = null;
+          }
+        },
       };
     } catch (e) {
+      sharedCachedClient = null;
+      sharedCachedStronghold = null;
       console.warn('Erro ao conectar com Stronghold nativo, usando isolamento em memória:', e);
       return null;
     }

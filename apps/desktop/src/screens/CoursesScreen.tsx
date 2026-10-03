@@ -1,7 +1,8 @@
 import React from 'react';
 import { useFeed } from '../hooks/useFeed';
 import { Card, Badge, PageContainer, PageHeader } from '@unb-aggregator/ui';
-import { GraduationCap, User, MapPin, Clock, CheckSquare, MessageSquare } from 'lucide-react';
+import { GraduationCap, User, MapPin, Clock, CheckSquare, MessageSquare, ExternalLink } from 'lucide-react';
+import { openExternalUrl } from '../lib/utils';
 
 export const CoursesScreen: React.FC = () => {
   const { courses, isLoading } = useFeed();
@@ -85,8 +86,8 @@ export const CoursesScreen: React.FC = () => {
               </div>
             </div>
 
-            {/* Rodapé com indicadores */}
-            <div className="flex items-center justify-between gap-2 pt-4 border-t-2 border-black/10 mt-4 text-xs font-bold">
+            {/* Rodapé com indicadores e link direto */}
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-4 border-t-2 border-black/10 mt-4 text-xs font-bold">
               <span className="text-neutral-500">
                 {course.semester}
               </span>
@@ -104,6 +105,17 @@ export const CoursesScreen: React.FC = () => {
                     <MessageSquare className="w-3.5 h-3.5 stroke-[2.5]" />
                     <span>{course.unreadCount} novos</span>
                   </div>
+                ) : null}
+
+                {course.url ? (
+                  <button
+                    type="button"
+                    onClick={() => openExternalUrl(course.url!)}
+                    className="cursor-pointer inline-flex items-center gap-1 px-2.5 py-1 bg-platform-aprender3 text-black border-2 border-black rounded-lg shadow-[1.5px_1.5px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[2.5px_2.5px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
+                  >
+                    <span>Acessar Turma</span>
+                    <ExternalLink className="w-3 h-3 stroke-[2.5]" />
+                  </button>
                 ) : null}
               </div>
             </div>

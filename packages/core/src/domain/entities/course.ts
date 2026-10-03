@@ -11,4 +11,5 @@ export interface Course {
   schedule?: string;
   unreadCount?: number;
   pendingAssignmentsCount?: number;
+  url?: string;
 }

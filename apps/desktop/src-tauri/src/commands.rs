@@ -26,58 +26,67 @@ pub async fn sync_platforms(
         match platform {
             PlatformType::Aprender3 => {
                 let (cpf, senha) = match &aprender3 {
-                    Some(c) => (c.cpf.as_str(), c.senha.as_str()),
+                    Some(c) => (c.cpf.trim(), c.senha.as_str()),
                     None => ("", ""),
                 };
-                match moodle.sync_aprender3(cpf, senha).await {
-                    Ok((items, courses)) => {
-                        all_items.extend(items);
-                        all_courses.extend(courses);
-                    }
-                    Err(e) => {
-                        errors.insert(PlatformType::Aprender3, e);
+                if !cpf.is_empty() && !senha.is_empty() {
+                    match moodle.sync_aprender3(cpf, senha).await {
+                        Ok((items, courses)) => {
+                            all_items.extend(items);
+                            all_courses.extend(courses);
+                        }
+                        Err(e) => {
+                            errors.insert(PlatformType::Aprender3, e);
+                        }
                     }
                 }
             }
             PlatformType::MoodleMat => {
                 let (matricula, senha) = match &moodlemat {
-                    Some(c) => (c.matricula.as_str(), c.senha.as_str()),
+                    Some(c) => (c.matricula.trim(), c.senha.as_str()),
                     None => ("", ""),
                 };
-                match moodle.sync_moodlemat(matricula, senha).await {
-                    Ok((items, courses)) => {
-                        all_items.extend(items);
-                        all_courses.extend(courses);
-                    }
-                    Err(e) => {
-                        errors.insert(PlatformType::MoodleMat, e);
+                if !matricula.is_empty() && !senha.is_empty() {
+                    match moodle.sync_moodlemat(matricula, senha).await {
+                        Ok((items, courses)) => {
+                            all_items.extend(items);
+                            all_courses.extend(courses);
+                        }
+                        Err(e) => {
+                            errors.insert(PlatformType::MoodleMat, e);
+                        }
                     }
                 }
             }
             PlatformType::Sigaa => {
                 let (matricula, senha) = match &sigaa {
-                    Some(c) => (c.matricula.as_str(), c.senha.as_str()),
+                    Some(c) => (c.matricula.trim(), c.senha.as_str()),
                     None => ("", ""),
                 };
-                match HiddenWebviewScraper::sync_sigaa(&app, matricula, senha).await {
-                    Ok((items, courses)) => {
-                        all_items.extend(items);
-                        all_courses.extend(courses);
-                    }
-                    Err(e) => {
-                        errors.insert(PlatformType::Sigaa, e);
+                if !matricula.is_empty() && !senha.is_empty() {
+                    match HiddenWebviewScraper::sync_sigaa(&app, matricula, senha).await {
+                        Ok((items, courses)) => {
+                            all_items.extend(items);
+                            all_courses.extend(courses);
+                        }
+                        Err(e) => {
+                            errors.insert(PlatformType::Sigaa, e);
+                        }
                     }
                 }
             }
             PlatformType::Teams => {
+                let is_connected = teams.as_ref().and_then(|t| t.is_connected).unwrap_or(false);
                 let email = teams.as_ref().and_then(|t| t.email.as_deref()).unwrap_or("");
-                match HiddenWebviewScraper::sync_teams(&app, email, "").await {
-                    Ok((items, courses)) => {
-                        all_items.extend(items);
-                        all_courses.extend(courses);
-                    }
-                    Err(e) => {
-                        errors.insert(PlatformType::Teams, e);
+                if is_connected && !email.is_empty() {
+                    match HiddenWebviewScraper::sync_teams(&app, email, "").await {
+                        Ok((items, courses)) => {
+                            all_items.extend(items);
+                            all_courses.extend(courses);
+                        }
+                        Err(e) => {
+                            errors.insert(PlatformType::Teams, e);
+                        }
                     }
                 }
             }
@@ -133,9 +142,35 @@ pub fn check_schedule_conflicts(
     Ok(crate::schedule_solver::ScheduleSolver::find_conflicts(&classes))
 }
 
-fn chrono_like_timestamp() -> String {
-    let now = std::time::SystemTime::now();
-    let duration = now.duration_since(std::time::UNIX_EPOCH).unwrap_or_default();
-    format!("{}.000Z", duration.as_secs())
+#[command]
+pub fn open_external_url(url: String) -> Result<(), String> {
+    log::info!("Abrindo URL externa no navegador padrão: {}", url);
+    #[cfg(target_os = "macos")]
+    {
+        std::process::Command::new("open")
+            .arg(&url)
+            .spawn()
+            .map_err(|e| format!("Falha ao abrir URL no macOS: {}", e))?;
+    }
+    #[cfg(target_os = "windows")]
+    {
+        std::process::Command::new("cmd")
+            .args(["/C", "start", "", &url])
+            .spawn()
+            .map_err(|e| format!("Falha ao abrir URL no Windows: {}", e))?;
+    }
+    #[cfg(target_os = "linux")]
+    {
+        std::process::Command::new("xdg-open")
+            .arg(&url)
+            .spawn()
+            .map_err(|e| format!("Falha ao abrir URL no Linux: {}", e))?;
+    }
+    Ok(())
 }
+
+fn chrono_like_timestamp() -> String {
+    chrono::Utc::now().to_rfc3339()
+}
+
 

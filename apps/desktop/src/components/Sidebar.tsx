@@ -34,7 +34,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const formatLastSync = (isoString?: string | null) => {
     if (!isoString) return 'Não sincronizado';
     try {
-      const date = new Date(isoString);
+      let date = new Date(isoString);
+      if (isNaN(date.getTime())) {
+        const numeric = Number(isoString.replace(/[^0-9]/g, ''));
+        if (numeric > 0) {
+          date = new Date(numeric < 1e11 ? numeric * 1000 : numeric);
+        }
+      }
+      if (isNaN(date.getTime())) return 'Não sincronizado';
       return `Último: ${date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`;
     } catch {
       return '';

@@ -10,6 +10,7 @@ import {
   User,
   AlertTriangle,
 } from 'lucide-react';
+import { openExternalUrl } from '../lib/utils';
 
 export interface FeedItemCardProps {
   item: FeedItem;
@@ -182,15 +183,14 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
           ) : null}
 
           {item.externalUrl ? (
-            <a
-              href={item.externalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 bg-neo-blue hover:bg-neo-blueHover text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-[transform,box-shadow,background-color,border-color]"
+            <button
+              type="button"
+              onClick={() => openExternalUrl(item.externalUrl!)}
+              className="cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 bg-neo-blue hover:bg-neo-blueHover text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-[transform,box-shadow,background-color,border-color]"
             >
-              <span>Abrir</span>
+              <span>{item.platform === 'aprender3' ? 'Abrir no Aprender 3' : 'Abrir'}</span>
               <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
-            </a>
+            </button>
           ) : null}
         </div>
       </div>

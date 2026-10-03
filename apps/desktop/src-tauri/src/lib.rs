@@ -39,6 +39,7 @@ pub fn run() {
             commands::scrape_sigaa_classes,
             commands::solve_schedules,
             commands::check_schedule_conflicts,
+            commands::open_external_url,
         ])
         .run(tauri::generate_context!())
         .expect("erro durante a execução do aplicativo UnB Aggregator");
