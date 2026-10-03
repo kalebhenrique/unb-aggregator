@@ -4,6 +4,7 @@ pub mod models;
 pub mod moodle;
 pub mod schedule_solver;
 pub mod scraper;
+pub mod sigaa;
 
 use tauri::Manager;
 

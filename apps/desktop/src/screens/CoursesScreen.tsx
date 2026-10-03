@@ -111,7 +111,13 @@ export const CoursesScreen: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => openExternalUrl(course.url!)}
-                    className="cursor-pointer inline-flex items-center gap-1 px-2.5 py-1 bg-platform-aprender3 text-black border-2 border-black rounded-lg shadow-[1.5px_1.5px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[2.5px_2.5px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
+                    className={`cursor-pointer inline-flex items-center gap-1 px-2.5 py-1 ${
+                      course.platform === 'sigaa'
+                        ? 'bg-platform-sigaa'
+                        : course.platform === 'aprender3'
+                        ? 'bg-platform-aprender3'
+                        : 'bg-primary'
+                    } text-black border-2 border-black rounded-lg shadow-[1.5px_1.5px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[2.5px_2.5px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all`}
                   >
                     <span>Acessar Turma</span>
                     <ExternalLink className="w-3 h-3 stroke-[2.5]" />

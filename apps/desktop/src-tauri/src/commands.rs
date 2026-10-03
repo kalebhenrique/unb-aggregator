@@ -4,7 +4,9 @@ use crate::models::{
 };
 use crate::moodle::MoodleClient;
 use crate::scraper::HiddenWebviewScraper;
+use crate::sigaa::SigaaClient;
 use std::collections::HashMap;
+
 use tauri::{command, AppHandle};
 
 #[command]
@@ -64,7 +66,8 @@ pub async fn sync_platforms(
                     None => ("", ""),
                 };
                 if !matricula.is_empty() && !senha.is_empty() {
-                    match HiddenWebviewScraper::sync_sigaa(&app, matricula, senha).await {
+                    let client = SigaaClient::new();
+                    match client.sync_sigaa(matricula, senha).await {
                         Ok((items, courses)) => {
                             all_items.extend(items);
                             all_courses.extend(courses);
