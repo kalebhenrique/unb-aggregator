@@ -94,7 +94,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
             variant="outline"
             size="sm"
             onClick={onSaveGrade}
-            disabled={selectedClasses.length === 0 || isSaving}
+            disabled={isSaving}
             isLoading={isSaving}
             title="Salva a grade no seu computador"
           >

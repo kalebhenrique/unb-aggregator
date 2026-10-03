@@ -11,6 +11,9 @@ import type {
 // Cache em memória de disciplinas por depto-ano-período
 const disciplinesCache = new Map<string, ScrapedDiscipline[]>();
 
+// Cache da última grade salva para restauração instantânea ao revisitar a tela
+let savedGradeCache: SavedGrade | null = null;
+
 // Busca sem sensibilidade a acentos, maiúsculas ou pontuação ("calculo" acha "Cálculo")
 const normalizeText = (text: string) =>
   text
@@ -77,7 +80,10 @@ export function useGrade() {
   });
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const [selectedClasses, setSelectedClasses] = useState<ScrapedClass[]>([]);
+  // Restaura instantaneamente da visita anterior da sessão (evita flash de empty state)
+  const [selectedClasses, setSelectedClasses] = useState<ScrapedClass[]>(
+    () => savedGradeCache?.selectedClasses ?? [],
+  );
   const [conflicts, setConflicts] = useState<string[]>([]);
 
   const [scheduleOptions, setScheduleOptions] = useState<ScheduleOption[]>([]);
@@ -101,11 +107,12 @@ export function useGrade() {
           setDepartments(depts);
         }
 
-        // Tenta carregar grade salva do SQLite
+        // Tenta carregar grade salva do SQLite (inclusive grade vazia salva de propósito)
         const saved = await container.useCases.manageGrade.get();
         console.log('[useGrade] Grade salva recuperada do SQLite:', saved);
-        if (isMounted && saved && saved.selectedClasses && saved.selectedClasses.length > 0) {
-          setSelectedClasses(saved.selectedClasses);
+        savedGradeCache = saved;
+        if (isMounted && saved) {
+          setSelectedClasses(saved.selectedClasses ?? []);
         }
       } catch (e) {
         console.warn('[useGrade] Erro ao inicializar grade:', e);
@@ -284,13 +291,8 @@ export function useGrade() {
     [scheduleOptions]
   );
 
-  // Salvar no SQLite
+  // Salvar no SQLite (grade vazia também é salvable: persiste o estado "sem grade")
   const saveGrade = useCallback(async () => {
-    if (selectedClasses.length === 0) {
-      setFeedbackMessage('Não há turmas na grade para salvar.');
-      return;
-    }
-
     setIsSaving(true);
     try {
       const grade: SavedGrade = {
@@ -302,6 +304,7 @@ export function useGrade() {
       };
 
       await container.useCases.manageGrade.save(grade);
+      savedGradeCache = grade;
       setFeedbackMessage('Grade salva com sucesso no seu computador!');
     } catch (err: any) {
       setFeedbackMessage(`Erro ao salvar grade: ${err.message}`);
