@@ -6,8 +6,8 @@ dist
 
 # Rust / Tauri
 target
-apps/desktop/src-tauri/target
-apps/desktop/src-tauri/gen
+src-tauri/target
+src-tauri/gen
 *.hold
 vault.salt
 salt.txt

@@ -27,7 +27,7 @@ Agregação local-first com credenciais em cofre criptografado no próprio dispo
 - Empacotado como app desktop via Tauri (UI web: React 19, Tailwind, Base UI); roda em desktop, não é site.
 - Scrape/sync das plataformas com credenciais do próprio aluno; sincronização manual disparada pelo usuário.
 - Calendário e vocabulário da UnB: departamentos, códigos de disciplina, turnos Matutino/Turno/Noturno, período letivo/semestre.
-- Monorepo pnpm: `apps/desktop` (app), `packages/core` (domínio/casos de uso), `packages/ui` (componentes).
+- Projeto único (sem monorepo): `src/core` (domínio/casos de uso/adapters), `src/components` (UI), `src-tauri` (Rust: scraping e commands).
 
 ## Capabilities and Constraints
 
@@ -52,7 +52,7 @@ Restrições e undecided (trabalho futuro não deve tratá-los como promessa):
 
 ## Evidence on Hand
 
-- App funcional com todas as telas implementadas em `apps/desktop/src/screens/`.
+- App funcional com todas as telas implementadas em `src/screens/`.
 - Nenhum asset de marca além do bloco-logo "UnB" renderizado em componente; sem logo arquivo, sem testemunhos, métricas ou cases. Trabalho futuro **não deve fabricar** depoimentos, números de usuários ou provas sociais.
 
 ## Product Principles
