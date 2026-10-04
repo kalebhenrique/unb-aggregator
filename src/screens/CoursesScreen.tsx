@@ -10,7 +10,6 @@ import {
   MessageSquare,
   ExternalLink,
   ArrowLeft,
-  BookOpen,
   Inbox,
   AlertCircle,
   Link2,

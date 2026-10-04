@@ -1,5 +1,4 @@
-import type { FeedItem, PlatformType } from '../domain/entities/feed-item';
-import type { Course } from '../domain/entities/course';
+import type { PlatformType } from '../domain/entities/feed-item';
 import type { ISyncRepository, SyncResult } from '../domain/interfaces/sync-repo.interface';
 import type { IFeedRepository } from '../domain/interfaces/feed-repo.interface';
 

@@ -2,6 +2,8 @@ import type { FeedItem, PlatformType, FeedItemType } from '../domain/entities/fe
 import type { Course, CourseAssociation } from '../domain/entities/course';
 import type { IFeedRepository, FeedFilterOptions } from '../domain/interfaces/feed-repo.interface';
 
+import type Database from '@tauri-apps/plugin-sql';
+
 function isTauriEnvironment(): boolean {
   return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
 }
@@ -44,7 +46,7 @@ interface SqliteCourseAssociationRow {
 }
 
 // Cache global de conexão com o banco SQLite
-let cachedDbPromise: Promise<any> | null = null;
+let cachedDbPromise: Promise<Database | null> | null = null;
 
 // Espelho em memória para ambientes sem Tauri (testes unitários e prévia web)
 const inMemoryItems = new Map<string, FeedItem>();
@@ -52,7 +54,7 @@ const inMemoryCourses = new Map<string, Course>();
 const inMemoryAssociations = new Map<string, CourseAssociation>();
 
 
-async function getDatabase(): Promise<any> {
+async function getDatabase(): Promise<Database | null> {
   if (!isTauriEnvironment()) return null;
 
   if (!cachedDbPromise) {
@@ -151,7 +153,7 @@ export class SqliteFeedRepository implements IFeedRepository {
     if (db) {
       try {
         let query = 'SELECT * FROM feed_items WHERE 1=1';
-        const params: any[] = [];
+        const params: (string | number)[] = [];
 
         if (filters?.onlyHidden) {
           query += ' AND is_hidden = 1';

@@ -148,9 +148,9 @@ export function useGrade() {
         disciplinesCache.set(key, result);
         setDisciplines(result);
         setFeedbackMessage(`Coleta realizada: ${result.length} disciplinas disponíveis.`);
-      } catch (err: any) {
+      } catch (err) {
         console.error('[useGrade] fetchClasses: erro capturado:', err);
-        setFeedbackMessage(`Aviso: ${err.message || 'Erro ao consultar turmas no SIGAA'}`);
+        setFeedbackMessage(`Aviso: ${errMsg(err)}`);
       } finally {
         setIsScraping(false);
       }
@@ -272,8 +272,8 @@ export function useGrade() {
         } else {
           setFeedbackMessage('Nenhuma combinação sem conflito foi encontrada para essas disciplinas.');
         }
-      } catch (err: any) {
-        setFeedbackMessage(`Erro ao gerar grade: ${err.message}`);
+      } catch (err) {
+        setFeedbackMessage(`Erro ao gerar grade: ${errMsg(err)}`);
       } finally {
         setIsSolving(false);
       }
@@ -306,8 +306,8 @@ export function useGrade() {
       await container.useCases.manageGrade.save(grade);
       savedGradeCache = grade;
       setFeedbackMessage('Grade salva com sucesso no seu computador!');
-    } catch (err: any) {
-      setFeedbackMessage(`Erro ao salvar grade: ${err.message}`);
+    } catch (err) {
+      setFeedbackMessage(`Erro ao salvar grade: ${errMsg(err)}`);
     } finally {
       setIsSaving(false);
     }
@@ -341,4 +341,8 @@ export function useGrade() {
     applyOption,
     saveGrade,
   };
+}
+
+function errMsg(e: unknown): string {
+  return e instanceof Error ? e.message : String(e);
 }

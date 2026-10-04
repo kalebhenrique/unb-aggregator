@@ -8,23 +8,23 @@ const SIGAA_HOME_URL: &str = "https://sigaa.unb.br/sigaa/public/home.jsf";
 const SIGAA_TURMAS_URL: &str = "https://sigaa.unb.br/sigaa/public/turmas/listar.jsf?aba=p-ensino";
 const USER_AGENT: &str = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 pub struct Department {
     pub id: String,
     pub name: String,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, specta::Type)]
 pub struct ScheduleSlot {
     pub day: u8,
     pub day_name: String,
     pub shift: char,
     pub period: u8,
     pub time_range: String,
-    pub global_slot_index: usize,
+    pub global_slot_index: u32,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 pub struct ScrapedClass {
     pub id: String,
     pub discipline_code: String,
@@ -42,7 +42,7 @@ pub struct ScrapedClass {
     pub occupied: Option<u32>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 pub struct ScrapedDiscipline {
     pub code: String,
     pub name: String,

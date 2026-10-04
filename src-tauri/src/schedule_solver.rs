@@ -2,7 +2,7 @@ use crate::grade_scraper::ScrapedClass;
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, HashSet};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
 pub struct ScheduleOption {
     pub id: String,
     pub classes: Vec<ScrapedClass>,
@@ -17,7 +17,7 @@ impl ScheduleSolver {
     /// Detecta conflitos de horário em uma lista de turmas
     pub fn find_conflicts(classes: &[ScrapedClass]) -> Vec<String> {
         let mut conflicts = Vec::new();
-        let mut slot_map: HashMap<(u8, usize), &ScrapedClass> = HashMap::new();
+        let mut slot_map: HashMap<(u8, u32), &ScrapedClass> = HashMap::new();
 
         for class_item in classes {
             for slot in &class_item.schedule_slots {
@@ -48,7 +48,7 @@ impl ScheduleSolver {
 
     /// Verifica se uma combinação de turmas não possui sobreposições de horários
     pub fn is_valid_combination(classes: &[ScrapedClass]) -> bool {
-        let mut occupied_slots: HashSet<(u8, usize)> = HashSet::new();
+        let mut occupied_slots: HashSet<(u8, u32)> = HashSet::new();
 
         for class_item in classes {
             for slot in &class_item.schedule_slots {

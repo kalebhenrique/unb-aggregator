@@ -7,6 +7,7 @@ import type {
   AllPlatformCredentials,
 } from '../domain/entities/credential';
 import type { PlatformType } from '../domain/entities/feed-item';
+import type { Stronghold, Client } from '@tauri-apps/plugin-stronghold';
 import type { ICredentialsRepository } from '../domain/interfaces/credentials-repo.interface';
 
 function isTauriEnvironment(): boolean {
@@ -14,8 +15,8 @@ function isTauriEnvironment(): boolean {
 }
 
 let sharedInMemoryStore: AllPlatformCredentials = {};
-let sharedCachedStronghold: any = null;
-let sharedCachedClient: any = null;
+let sharedCachedStronghold: Stronghold | null = null;
+let sharedCachedClient: Client | null = null;
 
 export class StrongholdCredentialsRepository implements ICredentialsRepository {
   private vaultPassword = 'unb-aggregator-internal-vault-key';
@@ -24,13 +25,15 @@ export class StrongholdCredentialsRepository implements ICredentialsRepository {
     if (!isTauriEnvironment()) return null;
     try {
       if (sharedCachedClient && sharedCachedStronghold) {
+        const stronghold = sharedCachedStronghold;
+        const client = sharedCachedClient;
         return {
-          store: sharedCachedClient.getStore(),
-          saveVault: async () => sharedCachedStronghold.save(),
+          store: client.getStore(),
+          saveVault: async () => stronghold.save(),
         };
       }
 
-      const { Stronghold, Client } = await import('@tauri-apps/plugin-stronghold');
+      const { Stronghold } = await import('@tauri-apps/plugin-stronghold');
       const { appLocalDataDir } = await import('@tauri-apps/api/path');
 
       const dataDir = await appLocalDataDir();

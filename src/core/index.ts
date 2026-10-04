@@ -21,12 +21,7 @@ export * from './application/scrape-classes.use-case';
 export * from './application/solve-schedule.use-case';
 export * from './application/manage-grade.use-case';
 
-// Infrastructure
-export * from './infrastructure/stronghold-credentials.repo';
-export * from './infrastructure/tauri-sync.repo';
-export * from './infrastructure/in-memory-feed.repo';
-export * from './infrastructure/sqlite-feed.repo';
-export * from './infrastructure/tauri-grade.repo';
-
 // DI Container
+// Nota: repositórios concretos (adapters) não são exportados aqui de propósito.
+// O único lugar que os conhece é o container.
 export * from './container';

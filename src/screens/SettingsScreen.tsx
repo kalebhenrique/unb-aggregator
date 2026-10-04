@@ -29,7 +29,6 @@ import {
   GitBranch,
   Trash2,
   Save,
-  Timer,
 } from "lucide-react";
 
 export interface SettingsScreenProps {

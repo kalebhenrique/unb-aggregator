@@ -15,8 +15,15 @@ import { ManageGradeUseCase } from './application/manage-grade.use-case';
 
 import { StrongholdCredentialsRepository } from './infrastructure/stronghold-credentials.repo';
 import { TauriSyncRepository } from './infrastructure/tauri-sync.repo';
+import { InMemorySyncRepository } from './infrastructure/in-memory-sync.repo';
 import { SqliteFeedRepository } from './infrastructure/sqlite-feed.repo';
+import { InMemoryFeedRepository } from './infrastructure/in-memory-feed.repo';
 import { TauriGradeRepository } from './infrastructure/tauri-grade.repo';
+import { InMemoryGradeRepository } from './infrastructure/in-memory-grade.repo';
+
+function isTauriRuntime(): boolean {
+  return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
+}
 
 export interface Repositories {
   credentialsRepo: ICredentialsRepository;
@@ -47,17 +54,22 @@ export interface ContainerOverrides {
 }
 
 export function createContainer(overrides?: ContainerOverrides): Container {
+  const tauri = isTauriRuntime();
+
   const credentialsRepo: ICredentialsRepository =
     overrides?.repos?.credentialsRepo ?? new StrongholdCredentialsRepository();
 
   const syncRepo: ISyncRepository =
-    overrides?.repos?.syncRepo ?? new TauriSyncRepository(credentialsRepo);
+    overrides?.repos?.syncRepo ??
+    (tauri ? new TauriSyncRepository(credentialsRepo) : new InMemorySyncRepository());
 
   const feedRepo: IFeedRepository =
-    overrides?.repos?.feedRepo ?? new SqliteFeedRepository();
+    overrides?.repos?.feedRepo ??
+    (tauri ? new SqliteFeedRepository() : new InMemoryFeedRepository());
 
   const gradeRepo: IGradeRepository =
-    overrides?.repos?.gradeRepo ?? new TauriGradeRepository();
+    overrides?.repos?.gradeRepo ??
+    (tauri ? new TauriGradeRepository() : new InMemoryGradeRepository());
 
   const repos: Repositories = {
     credentialsRepo,

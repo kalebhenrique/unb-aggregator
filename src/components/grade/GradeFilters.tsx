@@ -35,10 +35,6 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
   isScraping,
   onFetchClasses,
 }) => {
-  const selectedDeptName = React.useMemo(
-    () => departments.find((d) => d.id === selectedDeptId)?.name,
-    [departments, selectedDeptId]
-  );
 
   // Apenas o semestre atual e o seguinte (ex.: hoje = out/2026 -> 2026.2 e 2027.1)
   const semesterOptions = React.useMemo(() => {

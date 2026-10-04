@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Card, CardTitle, CardContent } from '@/components/ui';
-import { ShieldCheck, Scale, GitBranch, ArrowRight, Layers, Lock } from 'lucide-react';
+import { Button, Card, CardContent } from '@/components/ui';
+import { ShieldCheck, Scale, GitBranch, ArrowRight, Layers } from 'lucide-react';
 
 export interface OnboardingScreenProps {
   onContinue: () => void;

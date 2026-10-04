@@ -7,9 +7,34 @@ pub mod scraper;
 pub mod sigaa;
 
 use tauri::Manager;
+use tauri_specta::{collect_commands, Builder};
+
+/// Fonte única da superfície IPC: os commands registrados aqui geram os
+/// bindings TypeScript em `src/lib/bindings.ts` (via `cargo test export_bindings`).
+pub fn builder() -> Builder<tauri::Wry> {
+    Builder::<tauri::Wry>::new().commands(collect_commands![
+        commands::sync_platforms,
+        commands::check_vault_status,
+        commands::get_sigaa_departments,
+        commands::scrape_sigaa_classes,
+        commands::solve_schedules,
+        commands::check_schedule_conflicts,
+        commands::open_external_url,
+    ])
+}
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    let builder = builder();
+
+    #[cfg(debug_assertions)]
+    builder
+        .export(
+            specta_typescript::Typescript::default(),
+            "../src/core/infrastructure/bindings.ts",
+        )
+        .expect("Falha ao exportar bindings TypeScript");
+
     tauri::Builder::default()
         .setup(|app| {
             // Inicialização do cofre criptográfico com derivação Argon2 do Tauri Stronghold
@@ -33,15 +58,20 @@ pub fn run() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![
-            commands::sync_platforms,
-            commands::check_vault_status,
-            commands::get_sigaa_departments,
-            commands::scrape_sigaa_classes,
-            commands::solve_schedules,
-            commands::check_schedule_conflicts,
-            commands::open_external_url,
-        ])
+        .invoke_handler(builder.invoke_handler())
         .run(tauri::generate_context!())
         .expect("erro durante a execução do aplicativo UnB Aggregator");
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn export_bindings() {
+        crate::builder()
+            .export(
+                specta_typescript::Typescript::default(),
+                "../src/core/infrastructure/bindings.ts",
+            )
+            .expect("Falha ao exportar bindings TypeScript");
+    }
 }
