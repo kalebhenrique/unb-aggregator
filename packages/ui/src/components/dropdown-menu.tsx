@@ -1,6 +1,6 @@
 import { Menu as MenuPrimitive } from '@base-ui/react/menu';
 import * as React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '../utils/cn';
 
 /* Porta Base UI do menu de contexto, no vocabulário adesivo do mundo:
    popup = papel quadriculado (bg-canvas) SEM sombra, como tooltips e o popup

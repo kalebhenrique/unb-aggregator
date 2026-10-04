@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { FeedList } from '../components/feed/FeedList';
 import { useFeed } from '../hooks/useFeed';
-import { Card, Pagination, Tabs, PageContainer, PageHeader, Button } from '@unb-aggregator/ui';
+import { Card, Pagination, Tabs, PageContainer, PageHeader, Button, toast } from '@unb-aggregator/ui';
 import { Search, Inbox, Home, EyeOff, Eye } from 'lucide-react';
-import { toast } from '../components/ui/toast';
 import type { PlatformType, FeedItemType } from '@unb-aggregator/core';
 
 export const DashboardScreen: React.FC = () => {

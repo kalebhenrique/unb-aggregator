@@ -6,8 +6,7 @@ import { CoursesScreen } from './screens/CoursesScreen';
 import { GradeBuilderScreen } from './screens/GradeBuilderScreen';
 import { SettingsScreen } from './screens/SettingsScreen';
 import { Sidebar, type NavTab } from './components/Sidebar';
-import { TooltipProvider } from './components/ui/tooltip';
-import { Toaster } from './components/ui/toast';
+import { TooltipProvider, Toaster } from '@unb-aggregator/ui';
 import { useCredentials } from './hooks/useCredentials';
 import { useFeed } from './hooks/useFeed';
 

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useMemo } from "react";
 import { useGrade } from "../hooks/useGrade";
-import { PageContainer, PageHeader } from "@unb-aggregator/ui";
-import { toast } from "../components/ui/toast";
+import { PageContainer, PageHeader, toast } from "@unb-aggregator/ui";
 import { CalendarDays } from "lucide-react";
 import { toPng } from "html-to-image";
 import type { ScrapedClass } from "@unb-aggregator/core";

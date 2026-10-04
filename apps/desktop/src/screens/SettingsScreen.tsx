@@ -6,18 +6,16 @@ import {
   Badge,
   PageContainer,
   PageHeader,
-} from "@unb-aggregator/ui";
-import { useCredentials } from "../hooks/useCredentials";
-import { useFeed } from "../hooks/useFeed";
-import { useContainer } from "../context/ContainerContext";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
   DialogFooter,
-} from "../components/ui/dialog";
+} from "@unb-aggregator/ui";
+import { useCredentials } from "../hooks/useCredentials";
+import { useFeed } from "../hooks/useFeed";
+import { useContainer } from "../context/ContainerContext";
 import {
   Settings,
   School,

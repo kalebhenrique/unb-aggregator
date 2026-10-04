@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { Course, Discipline } from '@unb-aggregator/core';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from './ui/dialog';
-import { Badge, Button } from '@unb-aggregator/ui';
+import { Badge, Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@unb-aggregator/ui';
 import { Link2, EyeOff, BookOpen, AlertCircle } from 'lucide-react';
 
 export interface UnmatchedCourseDialogProps {

@@ -1,5 +1,5 @@
 import { forwardRef, useMemo, useState } from "react";
-import { Card, Button } from "@unb-aggregator/ui";
+import { Card, Button, Tooltip, TooltipTrigger, TooltipContent } from "@unb-aggregator/ui";
 import {
   Download,
   CheckCircle2,
@@ -7,7 +7,6 @@ import {
   FoldVertical,
   UnfoldVertical,
 } from "lucide-react";
-import { Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip";
 import type { ScrapedClass } from "@unb-aggregator/core";
 import {
   DAYS_HEADER,

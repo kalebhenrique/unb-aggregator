@@ -10,9 +10,9 @@ import {
 
 import * as React from "react"
 
-import { Button } from "@unb-aggregator/ui"
+import { Button } from "./button"
 
-import { cn } from "@/lib/utils"
+import { cn } from "../utils/cn"
 
 const toast = ToastPrimitive.createToastManager()
 

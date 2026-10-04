@@ -9,3 +9,7 @@ export * from './components/pagination';
 export * from './components/page-header';
 export * from './components/page-container';
 export * from './utils/cn';
+export * from './components/dialog';
+export * from './components/dropdown-menu';
+export * from './components/toast';
+export * from './components/tooltip';

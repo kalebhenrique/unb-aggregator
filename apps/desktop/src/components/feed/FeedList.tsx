@@ -1,15 +1,7 @@
 import React, { useMemo } from 'react';
-import { Badge, Button } from '@unb-aggregator/ui';
+import { Badge, Button, Tooltip, TooltipTrigger, TooltipContent, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@unb-aggregator/ui';
 import type { Discipline, FeedItem } from '@unb-aggregator/core';
 import { Circle, CheckCircle, ClipboardList, ExternalLink, Eye, EyeOff, FileText, MoreHorizontal } from 'lucide-react';
-import { Tooltip, TooltipTrigger, TooltipContent } from '../ui/tooltip';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from '../ui/dropdown-menu';
 import { openExternalUrl } from '../../lib/utils';
 
 export interface FeedListProps {
