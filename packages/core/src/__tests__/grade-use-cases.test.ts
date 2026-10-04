@@ -129,5 +129,9 @@ describe('Clean Architecture Grade & Web Scraping Use Cases', () => {
     expect(saved?.id).toBe('grade-2026-1');
     expect(saved?.selectedClasses.length).toBe(1);
     expect(saved?.selectedClasses[0].disciplineCode).toBe('CIC0004');
+
+    await container.useCases.manageGrade.clear();
+    const afterClear = await container.useCases.manageGrade.get();
+    expect(afterClear).toBeNull();
   });
 });

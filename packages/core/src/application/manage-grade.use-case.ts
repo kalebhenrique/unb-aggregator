@@ -14,4 +14,8 @@ export class ManageGradeUseCase {
   async get(): Promise<SavedGrade | null> {
     return this.gradeRepo.getSavedGrade();
   }
+
+  async clear(): Promise<void> {
+    await this.gradeRepo.clearSavedGrade();
+  }
 }

@@ -641,4 +641,16 @@ export class TauriGradeRepository implements IGradeRepository {
     }
     return inMemorySavedGrade;
   }
+
+  async clearSavedGrade(): Promise<void> {
+    inMemorySavedGrade = null;
+    const db = await this.getDb();
+    if (db) {
+      try {
+        await db.execute('DELETE FROM saved_grades');
+      } catch (e) {
+        console.warn('[TauriGradeRepository] Falha ao limpar saved_grades:', e);
+      }
+    }
+  }
 }

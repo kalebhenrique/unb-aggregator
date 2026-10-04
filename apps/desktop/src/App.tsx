@@ -91,6 +91,7 @@ const AppShell: React.FC = () => {
             <SettingsScreen
               onResetCredentials={() => {
                 setStep('onboarding');
+                setCurrentTab('home');
               }}
             />
           )}

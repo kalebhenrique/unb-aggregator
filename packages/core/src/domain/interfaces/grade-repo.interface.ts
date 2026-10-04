@@ -7,4 +7,5 @@ export interface IGradeRepository {
   checkConflicts(classes: ScrapedClass[]): Promise<string[]>;
   saveGrade(grade: SavedGrade): Promise<void>;
   getSavedGrade(): Promise<SavedGrade | null>;
+  clearSavedGrade(): Promise<void>;
 }

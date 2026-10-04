@@ -228,5 +228,29 @@ describe('Clean Architecture Use Cases - UnB Aggregator', () => {
       expect(fis2Clean?.aprenderCourses.some((c) => c.id === 'aprender-forum-geral')).toBe(false);
     });
   });
+
+  describe('GetFeedUseCase.clear() - Limpeza Total de Feed e Turmas', () => {
+    it('deve limpar completamente itens de feed, turmas e associações do repositório', async () => {
+      // 1. Sincroniza dados simulados
+      await container.useCases.syncPlatforms.execute();
+      const feedBefore = await container.useCases.getFeed.execute();
+      const coursesBefore = await container.useCases.getCourses.execute();
+      expect(feedBefore.length).toBeGreaterThan(0);
+      expect(coursesBefore.length).toBeGreaterThan(0);
+
+      // 2. Executa a limpeza total
+      await container.useCases.getFeed.clear();
+
+      // 3. Valida que tudo foi zerado
+      const feedAfter = await container.useCases.getFeed.execute();
+      const coursesAfter = await container.useCases.getCourses.execute();
+      const disciplinesAfter = await container.useCases.getCourses.getDisciplines();
+
+      expect(feedAfter).toEqual([]);
+      expect(coursesAfter).toEqual([]);
+      expect(disciplinesAfter.disciplines).toEqual([]);
+      expect(disciplinesAfter.unmatchedAprenderCourses).toEqual([]);
+    });
+  });
 });
 

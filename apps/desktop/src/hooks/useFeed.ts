@@ -2,6 +2,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { useContainer } from '../context/ContainerContext';
 import type { FeedItem, Course, PlatformType, FeedItemType, Discipline } from '@unb-aggregator/core';
 
+// Notificador global entre instâncias ativas do hook useFeed
+const feedListeners = new Set<() => void>();
+
+function notifyFeedListeners() {
+  feedListeners.forEach((fn) => fn());
+}
+
 export function useFeed() {
   const { useCases } = useContainer();
   const [items, setItems] = useState<FeedItem[]>([]);
@@ -45,6 +52,15 @@ export function useFeed() {
 
   useEffect(() => {
     loadFeed();
+
+    const listener = () => {
+      loadFeed();
+    };
+    feedListeners.add(listener);
+
+    return () => {
+      feedListeners.delete(listener);
+    };
   }, [loadFeed]);
 
   const sync = async (platforms?: PlatformType[]) => {
@@ -63,6 +79,7 @@ export function useFeed() {
       if (result.errors && Object.keys(result.errors).length > 0) {
         setSyncErrors(result.errors);
       }
+      notifyFeedListeners();
       return result;
     } catch (err) {
       console.error('Erro durante a sincronização:', err);
@@ -71,6 +88,24 @@ export function useFeed() {
       setIsSyncing(false);
     }
   };
+
+  const clearFeedData = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await useCases.getFeed.clear();
+      setItems([]);
+      setCourses([]);
+      setDisciplines([]);
+      setUnmatchedCourses([]);
+      setLastSyncedAt(null);
+      notifyFeedListeners();
+    } catch (err) {
+      console.error('Erro ao limpar dados do feed e turmas:', err);
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [useCases]);
 
   const toggleTaskCompleted = async (id: string, currentStatus?: boolean) => {
     const nextStatus = !currentStatus;
@@ -98,6 +133,7 @@ export function useFeed() {
     const disciplinesResult = await useCases.getCourses.getDisciplines();
     setDisciplines(disciplinesResult.disciplines);
     setUnmatchedCourses(disciplinesResult.unmatchedAprenderCourses);
+    notifyFeedListeners();
   };
 
   return {
@@ -118,6 +154,7 @@ export function useFeed() {
     showHidden,
     setShowHidden,
     sync,
+    clearFeedData,
     refresh: loadFeed,
     toggleTaskCompleted,
     hideFeedItem,

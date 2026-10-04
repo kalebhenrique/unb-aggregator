@@ -8,6 +8,16 @@ import {
   PageHeader,
 } from "@unb-aggregator/ui";
 import { useCredentials } from "../hooks/useCredentials";
+import { useFeed } from "../hooks/useFeed";
+import { useContainer } from "../context/ContainerContext";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "../components/ui/dialog";
 import {
   Settings,
   School,
@@ -21,6 +31,7 @@ import {
   GitBranch,
   Trash2,
   Save,
+  Timer,
 } from "lucide-react";
 
 export interface SettingsScreenProps {
@@ -57,6 +68,8 @@ const FeedbackMessage: React.FC<{ feedback: FeedbackState }> = ({
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   onResetCredentials,
 }) => {
+  const { useCases } = useContainer();
+  const { clearFeedData } = useFeed();
   const {
     allCredentials,
     saveSigaa,
@@ -86,7 +99,31 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   const [teamsFeedback, setTeamsFeedback] = useState<FeedbackState>(null);
 
   const [isWiping, setIsWiping] = useState(false);
-  const [wipeConfirmed, setWipeConfirmed] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [countdown, setCountdown] = useState(5);
+
+  // Efeito de contagem regressiva de 5 segundos para liberação do botão de confirmação
+  useEffect(() => {
+    let intervalId: ReturnType<typeof setInterval> | null = null;
+    if (isConfirmDialogOpen) {
+      setCountdown(5);
+      intervalId = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            if (intervalId) clearInterval(intervalId);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    } else {
+      setCountdown(5);
+    }
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [isConfirmDialogOpen]);
 
   // Senhas salvas ficam apenas em refs — nunca são reexibidas nos inputs
   const sigaaPassRef = useRef("");
@@ -212,18 +249,28 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     }
   };
 
-  const handleWipeAll = async () => {
-    if (!wipeConfirmed) {
-      setWipeConfirmed(true);
-      return;
-    }
+  const handleConfirmWipe = async () => {
     setIsWiping(true);
     try {
+      // 1. Apaga credenciais salvas no cofre seguro (Stronghold)
       await clearAll();
+      // 2. Apaga feed, turmas e associações (SQLite + memória)
+      await clearFeedData();
+      // 3. Apaga rascunhos de grade horária (SQLite + memória)
+      await useCases.manageGrade.clear();
+      // 4. Limpa preferências auxiliares do localStorage
+      try {
+        localStorage.removeItem("unb_grade_deptId");
+        localStorage.removeItem("unb_grade_year");
+        localStorage.removeItem("unb_grade_period");
+      } catch {}
+      // 5. Fecha o diálogo e redireciona
+      setIsConfirmDialogOpen(false);
       onResetCredentials();
+    } catch (err) {
+      console.error("Erro ao apagar todos os dados:", err);
     } finally {
       setIsWiping(false);
-      setWipeConfirmed(false);
     }
   };
 
@@ -245,9 +292,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 <div className="p-1.5 bg-platform-sigaa text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000]">
                   <School className="w-4 h-4 stroke-[2.5]" />
                 </div>
-                <h3 className="font-bold text-base text-black">
-                  SIGAA
-                </h3>
+                <h3 className="font-bold text-base text-black">SIGAA</h3>
               </div>
               <Badge
                 variant={allCredentials.sigaa?.matricula ? "sigaa" : "neutral"}
@@ -304,9 +349,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 <div className="p-1.5 bg-platform-aprender3 text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000]">
                   <BookOpen className="w-4 h-4 stroke-[2.5]" />
                 </div>
-                <h3 className="font-bold text-base text-black">
-                  Aprender 3
-                </h3>
+                <h3 className="font-bold text-base text-black">Aprender 3</h3>
               </div>
               <Badge
                 variant={
@@ -366,9 +409,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 <div className="p-1.5 bg-platform-moodlemat text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000]">
                   <Globe className="w-4 h-4 stroke-[2.5]" />
                 </div>
-                <h3 className="font-bold text-base text-black">
-                  MoodleMat
-                </h3>
+                <h3 className="font-bold text-base text-black">MoodleMat</h3>
               </div>
               <Badge
                 variant={
@@ -430,9 +471,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
                 <div className="p-1.5 bg-platform-teams text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000]">
                   <MessageSquare className="w-4 h-4 stroke-[2.5]" />
                 </div>
-                <h3 className="font-bold text-base text-black">
-                  Teams
-                </h3>
+                <h3 className="font-bold text-base text-black">Teams</h3>
               </div>
               <Badge
                 variant={
@@ -487,9 +526,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         <Card className="bg-white rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1.5">
             <Scale className="w-4 h-4 stroke-[2.5] text-neo-blue" />
-            <h4 className="text-xs font-bold text-black">
-              Licença Apache 2.0
-            </h4>
+            <h4 className="text-xs font-bold text-black">Licença Apache 2.0</h4>
           </div>
           <p className="text-xs text-neutral-600 font-medium leading-relaxed">
             Software livre e transparente para a comunidade acadêmica da
@@ -518,12 +555,13 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             <div className="flex items-center gap-2 text-ink-error mb-1">
               <AlertCircle className="w-5 h-5 stroke-[2.5]" />
               <h4 className="text-sm font-black uppercase tracking-tight">
-                Redefinir Acessos
+                Redefinir Acessos e Dados
               </h4>
             </div>
             <p className="text-xs font-semibold text-neutral-700">
-              Apaga todas as credenciais salvas e retorna o aplicativo para o
-              estado inicial.
+              Apaga permanentemente todas as credenciais salvas, avisos do feed,
+              disciplinas e dados locais, retornando o aplicativo ao estado
+              inicial.
             </p>
           </div>
 
@@ -531,19 +569,67 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             type="button"
             variant="destructive"
             size="md"
-            isLoading={isWiping}
-            onClick={handleWipeAll}
+            onClick={() => setIsConfirmDialogOpen(true)}
             className="shrink-0"
           >
             <Trash2 className="w-4 h-4 stroke-[2.5]" />
-            <span>
-              {wipeConfirmed
-                ? "Confirmar Exclusão"
-                : "Apagar Todas as Credenciais"}
-            </span>
+            <span>Apagar Dados e Credenciais</span>
           </Button>
         </div>
       </Card>
+
+      {/* Diálogo de Confirmação com Contagem Regressiva de 5 segundos */}
+      <Dialog
+        open={isConfirmDialogOpen}
+        onOpenChange={(open) => {
+          if (!open && !isWiping) {
+            setIsConfirmDialogOpen(false);
+          }
+        }}
+      >
+        <DialogContent showCloseButton={!isWiping} className="sm:max-w-md">
+          <DialogHeader>
+            <div className="flex items-center gap-2 mb-1">
+              <div className="w-9 h-9 rounded-lg bg-neo-danger text-white border-2 border-black flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
+                <Trash2 className="w-5 h-5 stroke-[2.5]" />
+              </div>
+              <DialogTitle>Apagar Todos os Dados e Credenciais?</DialogTitle>
+            </div>
+            <DialogDescription>
+              Esta ação é definitiva e irreversível. Todos os dados armazenados
+              do UnB Aggregator neste dispositivo serão permanentemente
+              excluídos
+            </DialogDescription>
+          </DialogHeader>
+
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              size="md"
+              disabled={isWiping}
+              onClick={() => setIsConfirmDialogOpen(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              size="md"
+              disabled={countdown > 0 || isWiping}
+              isLoading={isWiping}
+              onClick={handleConfirmWipe}
+            >
+              <Trash2 className="w-4 h-4 stroke-[2.5]" />
+              <span>
+                {countdown > 0
+                  ? `Confirmar (${countdown}s)`
+                  : "Confirmar Exclusão"}
+              </span>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </PageContainer>
   );
 };

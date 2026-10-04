@@ -25,5 +25,9 @@ export class GetFeedUseCase {
   async hideItem(id: string, isHidden: boolean = true): Promise<void> {
     await this.feedRepo.hideItem(id, isHidden);
   }
+
+  async clear(): Promise<void> {
+    await this.feedRepo.clear();
+  }
 }
 
