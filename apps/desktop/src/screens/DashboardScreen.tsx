@@ -1,7 +1,7 @@
-import React from 'react';
-import { FeedItemCard } from '../components/FeedItemCard';
+import React, { useEffect, useState } from 'react';
+import { FeedList } from '../components/feed/FeedList';
 import { useFeed } from '../hooks/useFeed';
-import { Tabs, PageContainer, PageHeader, Button } from '@unb-aggregator/ui';
+import { Card, Pagination, Tabs, PageContainer, PageHeader, Button } from '@unb-aggregator/ui';
 import { Search, Inbox, Home, EyeOff, Eye } from 'lucide-react';
 import { toast } from '../components/ui/toast';
 import type { PlatformType, FeedItemType } from '@unb-aggregator/core';
@@ -9,6 +9,7 @@ import type { PlatformType, FeedItemType } from '@unb-aggregator/core';
 export const DashboardScreen: React.FC = () => {
   const {
     items,
+    disciplines,
     isLoading,
     selectedPlatform,
     setSelectedPlatform,
@@ -21,6 +22,16 @@ export const DashboardScreen: React.FC = () => {
     toggleTaskCompleted,
     hideFeedItem,
   } = useFeed();
+
+  // Paginação client-side do feed: 25 itens por página, volta à 1ª página quando filtros mudam
+  const PAGE_SIZE = 25;
+  const [page, setPage] = useState(1);
+  useEffect(() => {
+    setPage(1);
+  }, [selectedPlatform, selectedType, searchQuery, showHidden]);
+  const pageCount = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount);
+  const pageItems = items.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const platformTabs = [
     { id: 'all', label: 'Todas' },
@@ -183,17 +194,17 @@ export const DashboardScreen: React.FC = () => {
             <span>Ordenado cronologicamente</span>
           </div>
 
-          <div className="space-y-3">
-            {items.map((item) => (
-              <FeedItemCard
-                key={item.id}
-                item={item}
-                onToggleComplete={toggleTaskCompleted}
-                onHide={handleHide}
-                onRestore={handleRestore}
-              />
-            ))}
-          </div>
+          <Card className="p-0 overflow-hidden">
+            <FeedList
+              items={pageItems}
+              disciplines={disciplines}
+              onToggleComplete={toggleTaskCompleted}
+              onHide={handleHide}
+              onRestore={handleRestore}
+            />
+          </Card>
+
+          <Pagination page={safePage} pageCount={pageCount} onPageChange={setPage} />
         </div>
       )}
     </PageContainer>

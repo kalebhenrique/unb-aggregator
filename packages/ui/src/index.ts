@@ -5,6 +5,7 @@ export * from './components/select';
 export * from './components/badge';
 export * from './components/alert';
 export * from './components/tabs';
+export * from './components/pagination';
 export * from './components/page-header';
 export * from './components/page-container';
 export * from './utils/cn';

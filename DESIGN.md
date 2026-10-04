@@ -317,6 +317,22 @@ A distinção se lê de longe: o que tem sombra 2px e raio 16px afunda quando cl
 ### Alert
 - **Style:** fundo pastel por variante, borda preta 2px, raio 8px, sombra 4px; ícone em bloco branco próprio (borda 2px, raio 8px, sombra micro 2px); título 0.875rem/700, descrição 0.75rem/600.
 
+### Feed List (edição, não planilha)
+- **Formato:** lista de linhas gordas de duas alturas, **sem cabeçalho de coluna** — título bold em cima, meta inline embaixo (badge de plataforma, chip da disciplina, "Enviado em…", "Entrega…"). A clareza vem dos rótulos inline, não de colunas.
+- **Corpo de conteúdo:** vive dentro de um Card `p-0` (borda, raio 8px, sombra 4px); divisor preto de 2px em black/10 entre linhas; ícone do tipo à esquerda (ClipboardList trabalho, FileText aviso) como o ícone de PR do GitHub.
+- **Densidade:** padding vertical 16px; título em 1 linha truncada, conteúdo completo em tooltip (hover e teclado). Ações (abrir na plataforma, concluir, ocultar/restaurar) moram no menu de reticências que fecha a linha.
+- **Direita:** pill curto de prazo (Encerrado / <24h / 2 dias) com a data completa embaixo, alinhado à direita.
+- **Estado na linha:** concluído lê mais forte que oculto — concluído em Cinza Papel presente (neutral-100) com título riscado em neutral-600; oculto no neutral-50 com título esmaecido.
+- **Chip da disciplina:** mostra o **nome oficial da disciplina no SIGAA**, resolvido pela associação de turmas — nunca o nome da turma do Aprender 3 nem o código de turma; no feed de uma disciplina específica (drill-down) o chip não existe — repetiria o contexto da tela.
+
+### Dropdown Menu
+- **Trigger:** micro-ação ghost de reticências (MoreHorizontal), raio 8px, física 2px.
+- **Popup:** fundo **Papel Quadriculado** (`bg-canvas`) — o mesmo papel dos tooltips e do popup do Select na Grade. Raio 8px, borda preta 2px, padding 4px, **sem sombra**: o contorno preto faz o destaque, não a elevação.
+- **Item:** raio 8px, texto preto; hover e teclado acendem **Azul Caneta Ação** com texto branco — mesmo tratamento do SelectItem, um azul só de seleção no app.
+
+### Pagination
+- **Números:** micro-ação 32px, raio 8px, física 2px; página atual vira **Azul Caneta Ação** travada (`aria-current="page"`). Setas são Button outline icon 32px. Janela compacta: primeira, última, vizinhas da atual, reticências no meio.
+
 ### Signature: Grade Horária (ScheduleTimetable)
 O componente mais identitário: tabela de 7 colunas (Seg–Sáb) × 15 linhas de horário (turnos M/T/N), cabeçalhos de dia como mini-adesivos (Cinza Papel, borda preta 1px, sombra 1px), células de aula em uma de 6 cores de disciplina (par fundo-pastel + borda de tinta + texto escuro da mesma família: azul, verde, amarelo, roxo, laranja, céu). Cabeçalho institucional em uppercase font-black **Azul Caneta Ação**. Exporta como PNG.
 

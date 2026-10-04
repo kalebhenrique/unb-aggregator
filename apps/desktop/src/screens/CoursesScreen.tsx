@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useFeed } from '../hooks/useFeed';
-import { Card, Badge, PageContainer, PageHeader, Button, Tabs } from '@unb-aggregator/ui';
+import { Card, Badge, PageContainer, PageHeader, Button, Tabs, Pagination } from '@unb-aggregator/ui';
 import {
   GraduationCap,
   User,
@@ -17,8 +17,8 @@ import {
   Search,
 } from 'lucide-react';
 import { openExternalUrl } from '../lib/utils';
-import { FeedItemCard } from '../components/FeedItemCard';
 import { UnmatchedCourseDialog } from '../components/UnmatchedCourseDialog';
+import { FeedList } from '../components/feed/FeedList';
 import type { Course, Discipline, FeedItemType } from '@unb-aggregator/core';
 
 export const CoursesScreen: React.FC = () => {
@@ -36,6 +36,13 @@ export const CoursesScreen: React.FC = () => {
   const [resolvingCourse, setResolvingCourse] = useState<Course | null>(null);
   const [drillSearchQuery, setDrillSearchQuery] = useState<string>('');
   const [drillCategory, setDrillCategory] = useState<FeedItemType | 'all'>('all');
+
+  // Paginação client-side do feed da disciplina: 25 por página, reset ao trocar de vista/filtro
+  const DRILL_PAGE_SIZE = 25;
+  const [drillPage, setDrillPage] = useState(1);
+  useEffect(() => {
+    setDrillPage(1);
+  }, [selectedDiscipline, drillSearchQuery, drillCategory]);
 
   const typeTabs = [
     { id: 'all', label: 'Tudo' },
@@ -95,6 +102,9 @@ export const CoursesScreen: React.FC = () => {
 
       return true;
     });
+    const drillPageCount = Math.max(1, Math.ceil(disciplineFeedItems.length / DRILL_PAGE_SIZE));
+    const safeDrillPage = Math.min(drillPage, drillPageCount);
+    const drillPageItems = disciplineFeedItems.slice((safeDrillPage - 1) * DRILL_PAGE_SIZE, safeDrillPage * DRILL_PAGE_SIZE);
 
     return (
       <PageContainer>
@@ -256,17 +266,19 @@ export const CoursesScreen: React.FC = () => {
               </p>
             </div>
           ) : (
-            <div className="space-y-3">
-              {disciplineFeedItems.map((item) => (
-                <FeedItemCard
-                  key={item.id}
-                  item={item}
+            <>
+              <Card className="p-0 overflow-hidden">
+                <FeedList
+                  items={drillPageItems}
+                  disciplines={disciplines}
+                  showDiscipline={false}
                   onToggleComplete={toggleTaskCompleted}
                   onHide={(id) => hideFeedItem(id, true)}
                   onRestore={(id) => hideFeedItem(id, false)}
                 />
-              ))}
-            </div>
+              </Card>
+              <Pagination page={safeDrillPage} pageCount={drillPageCount} onPageChange={setDrillPage} />
+            </>
           )}
         </div>
       </PageContainer>

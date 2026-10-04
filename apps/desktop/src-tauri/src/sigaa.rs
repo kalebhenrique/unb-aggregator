@@ -392,11 +392,8 @@ impl SigaaClient {
                 course_full.clone()
             };
 
-            let title = if content.chars().count() > 60 {
-                format!("{}...", content.chars().take(57).collect::<String>())
-            } else {
-                content.clone()
-            };
+            // Título completo — a UI trunca visualmente quando falta espaço
+            let title = content.clone();
 
             let created_at_iso = parse_br_date_to_iso(raw_date, false);
 
@@ -649,22 +646,6 @@ mod tests {
         assert_eq!(ativ.course_name, "FISICA 2");
         assert_eq!(ativ.title, "Avaliação: 1ª Avaliação");
         assert_eq!(ativ.due_date.as_deref(), Some("2026-09-22T23:59:59Z"));
-    }
-
-    #[test]
-    fn test_utf8_truncation_no_panic() {
-        // Texto longo em português com caracteres multibyte (ã, ç, é)
-        let long_content = "Orientação sobre a avaliação de Álgebra Linear e Equações Diferenciais com menção final";
-        assert!(long_content.chars().count() > 60);
-
-        let title = if long_content.chars().count() > 60 {
-            format!("{}...", long_content.chars().take(57).collect::<String>())
-        } else {
-            long_content.to_string()
-        };
-
-        assert!(title.ends_with("..."));
-        assert_eq!(title.chars().count(), 60);
     }
 
     #[test]

@@ -7,6 +7,10 @@ export function cn(...inputs: ClassValue[]): string {
 
 export async function openExternalUrl(url: string): Promise<void> {
   if (!url) return;
+  if (!/^https?:\/\//i.test(url)) {
+    console.warn('Blocked unsafe external URL scheme:', url);
+    return;
+  }
   if (typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window) {
     try {
       const { invoke } = await import('@tauri-apps/api/core');
