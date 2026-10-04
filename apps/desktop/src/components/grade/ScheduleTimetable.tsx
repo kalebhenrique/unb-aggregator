@@ -60,7 +60,7 @@ export const ScheduleTimetable = forwardRef<
     );
 
     return (
-      <Card className="rounded-xl p-4 overflow-x-auto" ref={ref}>
+      <Card className="p-4 overflow-x-auto" ref={ref}>
         <div className="min-w-[620px] space-y-3">
           {/* Cabeçalho institucional (integrante do PNG exportado) */}
           <div className="flex items-center justify-between gap-3 pb-2">
@@ -88,6 +88,11 @@ export const ScheduleTimetable = forwardRef<
               {selectedClasses.length > 0 ? (
                 <Tooltip>
                   <TooltipTrigger
+                    aria-label={
+                      conflicts.length > 0
+                        ? `Conflito de horário (${conflicts.length})`
+                        : "Nenhum conflito de horário"
+                    }
                     className={`flex h-7 w-7 items-center justify-center cursor-help ${
                       conflicts.length > 0
                         ? "text-ink-error"
@@ -140,7 +145,7 @@ export const ScheduleTimetable = forwardRef<
                       ? "Mostra todos os horários do dia"
                       : "Remove os horários sem aula"
                   }
-                  className="h-8 px-3 text-[11px] rounded-lg"
+                  className="h-8 px-3 text-[11px] rounded-xl"
                 >
                   {isCompact ? (
                     <UnfoldVertical className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -159,7 +164,7 @@ export const ScheduleTimetable = forwardRef<
                 isLoading={isExportingPng}
                 title="Baixar grade em PNG"
                 aria-label="Baixar grade em PNG"
-                className="h-8 px-3 text-[11px] rounded-lg"
+                className="h-8 px-3 text-[11px] rounded-xl"
               >
                 {!isExportingPng && (
                   <Download className="w-3.5 h-3.5 stroke-[2.5]" />
@@ -223,7 +228,7 @@ export const ScheduleTimetable = forwardRef<
                       return (
                         <div
                           key={day.id}
-                          className="h-11 rounded-lg border border-dashed border-black/15 bg-neutral-50/50 hover:bg-neutral-100/60 transition-colors"
+                          className="h-11 rounded-lg border border-dashed border-black/15 bg-neutral-50/50"
                         />
                       );
                     }

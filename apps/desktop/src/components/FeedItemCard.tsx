@@ -9,13 +9,18 @@ import {
   Circle,
   User,
   AlertTriangle,
+  EyeOff,
+  Eye,
 } from 'lucide-react';
 import { openExternalUrl } from '../lib/utils';
 
 export interface FeedItemCardProps {
   item: FeedItem;
   onToggleComplete?: (id: string, currentStatus?: boolean) => void;
+  onHide?: (id: string) => void;
+  onRestore?: (id: string) => void;
 }
+
 
 const PLATFORM_BUTTON_LABELS: Record<string, string> = {
   aprender3: 'Abrir no Aprender 3',
@@ -24,7 +29,12 @@ const PLATFORM_BUTTON_LABELS: Record<string, string> = {
   teams: 'Abrir no Teams',
 };
 
-export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComplete }) => {
+export const FeedItemCard: React.FC<FeedItemCardProps> = ({
+  item,
+  onToggleComplete,
+  onHide,
+  onRestore,
+}) => {
   const isAssignment = item.itemType === 'assignment';
 
   const formatCreationDate = (dateStr: string) => {
@@ -85,7 +95,7 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
 
   return (
     <Card
-      className={`border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000] transition-[transform,box-shadow,background-color,border-color] ${
+      className={`${
         item.isCompleted ? 'bg-neutral-100/90 opacity-75' : 'bg-white'
       }`}
     >
@@ -148,12 +158,12 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
         {dueStatus ? (
           <div className="flex items-center gap-1.5">
             {dueStatus.isUrgent ? (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-neo-danger text-white text-xs font-bold rounded-full border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-neo-danger text-white text-xs font-bold rounded-full border-2 border-black shadow-[2px_2px_0px_0px_#000]">
                 <AlertTriangle className="w-3.5 h-3.5 stroke-[2.5]" />
                 {dueStatus.label}
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 px-3 py-1 bg-neo-yellow text-black text-xs font-bold rounded-full border-2 border-black shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="inline-flex items-center gap-1 px-3 py-1 bg-neo-yellow text-black text-xs font-bold rounded-full border-2 border-black shadow-[2px_2px_0px_0px_#000]">
                 <Clock className="w-3.5 h-3.5 stroke-[2.5]" />
                 {dueStatus.label}
               </span>
@@ -168,6 +178,32 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
 
         {/* Botões de Ação */}
         <div className="flex items-center gap-2">
+          {item.isHidden && onRestore ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => onRestore(item.id)}
+              title="Restaurar item no feed"
+              className="cursor-pointer text-xs flex items-center gap-1 text-neutral-600 hover:text-black"
+            >
+              <Eye className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Restaurar</span>
+            </Button>
+          ) : !item.isHidden && onHide ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => onHide(item.id)}
+              title="Ocultar do feed"
+              className="cursor-pointer text-xs flex items-center gap-1 text-neutral-500 hover:text-black"
+            >
+              <EyeOff className="w-3.5 h-3.5 stroke-[2.5]" />
+              <span>Ocultar</span>
+            </Button>
+          ) : null}
+
           {isAssignment && onToggleComplete ? (
             <Button
               type="button"
@@ -190,16 +226,24 @@ export const FeedItemCard: React.FC<FeedItemCardProps> = ({ item, onToggleComple
           ) : null}
 
           {item.externalUrl ? (
-            <button
+            <Button
               type="button"
+              size="sm"
               onClick={() => openExternalUrl(item.externalUrl!)}
-              className="cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 bg-neo-blue hover:bg-neo-blueHover text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-[transform,box-shadow,background-color,border-color]"
+              className={
+                item.platform === 'sigaa'
+                  ? 'bg-platform-sigaa hover:bg-neo-greenHover text-black'
+                  : item.platform === 'aprender3'
+                  ? 'bg-platform-aprender3 hover:bg-orange-400 text-black'
+                  : 'bg-neo-blue hover:bg-neo-blueHover text-white'
+              }
             >
               <span>{PLATFORM_BUTTON_LABELS[item.platform] ?? 'Abrir'}</span>
               <ExternalLink className="w-3.5 h-3.5 stroke-[2.5]" />
-            </button>
+            </Button>
           ) : null}
         </div>
+
       </div>
     </Card>
   );

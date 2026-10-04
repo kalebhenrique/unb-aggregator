@@ -1,13 +1,21 @@
 import type { FeedItem } from '../domain/entities/feed-item';
-import type { Course } from '../domain/entities/course';
+import type { Course, CourseAssociation } from '../domain/entities/course';
 import type { IFeedRepository, FeedFilterOptions } from '../domain/interfaces/feed-repo.interface';
 
 export class InMemoryFeedRepository implements IFeedRepository {
   private items: Map<string, FeedItem> = new Map();
   private courses: Map<string, Course> = new Map();
+  private associations: Map<string, CourseAssociation> = new Map();
 
   async getItems(filters?: FeedFilterOptions): Promise<FeedItem[]> {
     let result = Array.from(this.items.values());
+
+    // Filtragem padrão de itens ocultos
+    if (filters?.onlyHidden) {
+      result = result.filter((item) => Boolean(item.isHidden));
+    } else if (!filters?.includeHidden) {
+      result = result.filter((item) => !item.isHidden);
+    }
 
     if (filters) {
       if (filters.platform && filters.platform !== 'all') {
@@ -20,6 +28,14 @@ export class InMemoryFeedRepository implements IFeedRepository {
 
       if (filters.courseCode) {
         result = result.filter((item) => item.courseCode === filters.courseCode);
+      }
+
+      if (filters.courseCodes && filters.courseCodes.length > 0) {
+        result = result.filter((item) => item.courseCode && filters.courseCodes!.includes(item.courseCode));
+      }
+
+      if (filters.courseNames && filters.courseNames.length > 0) {
+        result = result.filter((item) => filters.courseNames!.includes(item.courseName));
       }
 
       if (filters.searchQuery && filters.searchQuery.trim().length > 0) {
@@ -49,6 +65,13 @@ export class InMemoryFeedRepository implements IFeedRepository {
     }
   }
 
+  async hideItem(id: string, isHidden: boolean): Promise<void> {
+    const existing = this.items.get(id);
+    if (existing) {
+      this.items.set(id, { ...existing, isHidden });
+    }
+  }
+
   async getCourses(): Promise<Course[]> {
     return Array.from(this.courses.values());
   }
@@ -59,8 +82,21 @@ export class InMemoryFeedRepository implements IFeedRepository {
     }
   }
 
+  async getAssociations(): Promise<CourseAssociation[]> {
+    return Array.from(this.associations.values());
+  }
+
+  async saveAssociation(association: CourseAssociation): Promise<void> {
+    this.associations.set(association.aprenderCourseId, {
+      ...association,
+      updatedAt: association.updatedAt || new Date().toISOString(),
+    });
+  }
+
   async clear(): Promise<void> {
     this.items.clear();
     this.courses.clear();
+    this.associations.clear();
   }
 }
+

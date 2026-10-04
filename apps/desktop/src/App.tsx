@@ -31,7 +31,7 @@ const AppShell: React.FC = () => {
   if (isCheckingAuth) {
     return (
       <div className="min-h-screen bg-canvas bg-grid flex flex-col items-center justify-center space-y-4">
-        <div className="w-12 h-12 bg-unb-blue text-white border-2 border-black rounded-2xl flex items-center justify-center font-black text-lg shadow-[4px_4px_0px_0px_#000]">
+        <div className="w-12 h-12 bg-unb-blue text-white border-2 border-black rounded-lg flex items-center justify-center font-black text-lg shadow-[4px_4px_0px_0px_#000]">
           UnB
         </div>
         <div className="inline-block animate-spin border-2 border-black border-t-transparent rounded-full h-6 w-6" />

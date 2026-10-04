@@ -85,7 +85,7 @@ components:
     backgroundColor: "{colors.pen-blue}"
     textColor: "#ffffff"
     typography: "{typography.label}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.lg}"
     height: "40px"
     padding: "0 20px"
   button-primary-hover:
@@ -94,7 +94,7 @@ components:
     backgroundColor: "{colors.chalk-green}"
     textColor: "#000000"
     typography: "{typography.label}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.lg}"
     height: "40px"
     padding: "0 20px"
   button-accent-hover:
@@ -103,7 +103,7 @@ components:
     backgroundColor: "{colors.highlighter-yellow}"
     textColor: "#000000"
     typography: "{typography.label}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.lg}"
     height: "40px"
     padding: "0 20px"
   button-yellow-hover:
@@ -115,7 +115,7 @@ components:
     backgroundColor: "{colors.correction-red-strong}"
     textColor: "#ffffff"
     typography: "{typography.label}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.lg}"
     height: "40px"
     padding: "0 20px"
   button-destructive-hover:
@@ -124,18 +124,18 @@ components:
     backgroundColor: "#ffffff"
     textColor: "#000000"
     typography: "{typography.label}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.lg}"
     height: "40px"
     padding: "0 20px"
   card-default:
     backgroundColor: "#ffffff"
     textColor: "#000000"
-    rounded: "{rounded.lg}"
+    rounded: "{rounded.sm}"
     padding: "24px"
   card-pastel-blue:
     backgroundColor: "{colors.pastel-blue}"
     textColor: "#000000"
-    rounded: "{rounded.lg}"
+    rounded: "{rounded.sm}"
     padding: "24px"
   input-default:
     backgroundColor: "#ffffff"
@@ -170,7 +170,7 @@ O mundo é opaco e de alto contraste. Sombras suaves difusas, vidro fosco, gradi
 - Física de pressionar: hover afunda com snap inteiro, active afunda tudo até a superfície tocar o papel
 - Cores candy de material escolar sobre papel quadriculado (#E8EFF8, grid de 32px)
 - Hierarquia por peso de fonte, não por cinza
-- Raio generoso (12–16px) suavizando a agressividade das bordas
+- Raio como affordance (A Regra dos Dois Adesivos): ação 12–16px, conteúdo 8px — clique se distingue de leitura à primeira vista
 - Tudo em 150ms ease-out
 
 ## Colors
@@ -252,33 +252,40 @@ Densidade: cards com padding interno de 24px, gaps de 8–16px entre controles, 
 Profundidade é **física e estrutural**: sombras são deslocamentos sólidos de tinta preta, sem blur, sem cor ambiente. Um elemento "senta" sobre o papel e sua sombra diz quanto peso ele tem. A interação muda a física: hover afunda com snap inteiro (o elemento translada o maior número inteiro de pixels da direção da sombra e ela encolhe o equivalente — em sombra de 3px, translate 2px e sombra 1px, ficando a 1px do papel), active afunda tudo (translada o offset completo e a sombra some — a superfície toca o papel), disabled desmira (opacity 50%, sem movimento).
 
 ### Shadow Vocabulary
-- **Sticker micro** (`2px 2px 0 0 #000`, token `neo-sm`): badges, chips, logo-bloco, botões pequenos, ícones de collapse.
-- **Adesivo de botão** (`3px 3px 0 0 #000`): botões em repouso, select popup, alerts.
-- **Adesivo de card** (`4px 4px 0 0 #000`, token `neo`): cards.
-- **Ênfase máxima** (`6px 6px 0 0 #000`, token `neo-lg`): reservado, ainda sem uso no app.
-- **Quase-afundado** (`1px 1px 0 0 #000`): estado hover — o elemento translada em snap inteiro o quanto a sombra encolheu (botão 3px: +2px e sombra 1px; tab 2px: +1px e sombra 1px).
+- **Sticker micro / Adesivo de ação** (`2px 2px 0 0 #000`, token `neo-sm`): todo botão, tab/chip e micro-ação em repouso; badges, logo-bloco, ícones de collapse.
+- **Adesivo de card** (`4px 4px 0 0 #000`, token `neo`): cards, alerts, painéis e popups de conteúdo.
+- **Ênfase máxima** (`6px 6px 0 0 #000`, token `neo-lg`): diálogo modal — a única superfície acima de todo o app.
+- **Quase-afundado** (`1px 1px 0 0 #000`): estado hover — o elemento translada em snap inteiro o quanto a sombra encolheu (ação 2px: +1px e sombra 1px; card clicável 4px: +2px e sombra 2px).
 - **Pressionado** (`shadow-none` + translate do offset completo): estado active de qualquer elemento interativo — a superfície toca o papel.
 - **Divisores internos**: bordas de 2px pretas entre seções da sidebar; linhas internas de card em black/10–15%.
 
 ### Named Rules
 **A Regra da Sombra Dura.** Sombra é deslocamento sólido preto, nunca blur, nunca rgba difusa, nunca cor. Se precisar de menos profundidade, diminua o deslocamento — não amacie.
 
-**A Regra do Afundar.** Todo elemento interativo em repouso com sombra dura afunda em dois tempos: no hover, com snap inteiro (botão de sombra 3px: translate +2px na direção da sombra, sombra reduzida a 1px — fica a 1px do papel; tab de sombra 2px: +1px e sombra 1px); no active, tudo (translate +offset completo, shadow-none — a superfície toca o papel). Ghost sem sombra mantém micro-afundar de 1px no active. Elemento que levanta no hover (translate negativo ou sombra crescendo) é bug físico.
+**A Regra do Afundar.** Todo elemento interativo em repouso com sombra dura afunda em dois tempos: no hover, com snap inteiro (ação de sombra 2px: translate +1px na direção da sombra, sombra reduzida a 1px — fica a 1px do papel; card clicável de sombra 4px: +2px e sombra 2px); no active, tudo (translate +offset completo, shadow-none — a superfície toca o papel). Ghost sem sombra mantém micro-afundar de 1px no active. Elemento que levanta no hover (translate negativo ou sombra crescendo) é bug físico.
 
 **A Regra do Snap Inteiro.** Todo translate de press é número inteiro de pixels — nunca meia-pixel (1.5px), que antialiasa a borda preta em telas de escala não-inteira e borra o adesivo. Se a metade do offset não é inteira, afunde para o inteiro imediato (metade de 3px vira 2px) e dê o resto à sombra; meia-pixel é bug de render, não refinamento.
 
 ## Shapes
 
-Forma de adesivo: cantos arredondados generosos sob borda reta de 2px. Botões e inputs em raio médio (rounded-xl, 12px); cards e alerts em raio grande (rounded-2xl, 16px); elementos pequenos (botão sm, ícones de grade, botões de collapse) em raio pequeno (rounded-lg, 8px); badges e pills em círculo completo (9999px). A combinação borda-preta-2px + raio generoso é a assinatura: lê brutalista de longe, amigável de perto.
+**A Regra dos Dois Adesivos.** Raio e sombra dizem o que o adesivo faz — informação nunca se veste de botão, e botão nunca se veste de informação:
+
+- **Adesivo de conteúdo** (cards, alerts, diálogos, painéis, popups, blocos decorativos): raio pequeno **8px (rounded-lg)** + sombra funda de card **4px 4px**. Canto mais reto, peso maior — papel de leitura.
+- **Adesivo de ação** (botões, tabs/chips, micro-ações): raio generoso **16px (rounded-2xl)** em md/lg, **12px (rounded-xl)** em sm e ícones, **8px** em micro-ação (h-7 ou menor) + sombra leve de ação **2px 2px**. Redondo e leve — convite ao clique.
+- **Campos** (inputs, selects, textareas): raio médio **12px (rounded-xl)**, sem sombra em repouso — cavidade no papel, nem conteúdo nem ação.
+- **Diálogo modal**: raio de conteúdo **8px** com **Ênfase máxima 6px** — a única superfície que usa neo-lg.
+- **Badges e pills**: círculo completo (9999px), sombra micro 2px.
+
+A distinção se lê de longe: o que tem sombra 2px e raio 16px afunda quando clica; o que tem sombra 4px e raio 8px fica. Elementos pequenos de conteúdo (células da grade, cabeçalhos de dia, blocos de ícone) seguem o raio de conteúdo 8px. A borda-preta-2px continua universal (A Regra do Risco Preto).
 
 Ícones são Lucide com stroke 2.5 (mais grossos que o padrão) — combinando com a espessura das bordas. O logo é um bloco quadrado de 36px, **Azul Caneta**, texto "UnB" branco font-black, borda e sombra de sticker.
 
 ## Components
 
 ### Buttons
-- **Shape:** raio 12px (md), 8px (sm), 16px (lg); borda preta 2px; altura 40px (md).
+- **Shape:** raio 16px (md e lg), 12px (sm e icon), 8px (micro-ação h-7); borda preta 2px; altura 40px (md).
 - **Primary:** fundo **Azul Caneta Ação**, texto branco, fonte 700; hover **Azul Caneta Pressionado**. Variantes: accent (**Verde Giz**, texto preto; hover **Verde Giz Pressionado** #39D68A), yellow (**Amarelo Marca-Texto**, texto preto; hover #F2DA00), destructive (**Vermelho Correção Forte**, texto branco; hover **Vermelho Erro**), outline (branco, texto preto), ghost (transparente, sem borda visível, sem sombra, hover black/5).
-- **Hover / Focus:** hover afunda com snap inteiro (translate +2px,+2px, sombra 3px→1px — fica a 1px do papel); active afunda tudo (translate +3px,+3px, sombra none — a superfície toca o papel). Ghost, sem sombra, micro-afunda 1px só no active. Transição 150ms ease-out. **Focus via teclado:** ring 2px **Azul Caneta Ação** com offset branco 2px, sem glow — mesmo token do Input. Disabled: opacity 50%, congela a física.
+- **Hover / Focus:** hover afunda com snap inteiro (translate +1px,+1px, sombra 2px→1px — fica a 1px do papel); active afunda tudo (translate +2px,+2px, sombra none — a superfície toca o papel). Ghost, sem sombra, micro-afunda 1px só no active. Transição 150ms ease-out. **Focus via teclado:** ring 2px **Azul Caneta Ação** com offset branco 2px, sem glow — mesmo token do Input. Disabled: opacity 50%, congela a física.
 - **Loading:** spinner circular de borda 2px corrente no lugar do conteúdo.
 
 ### Chips (tabs e filtros)
@@ -286,9 +293,10 @@ Forma de adesivo: cantos arredondados generosos sob borda reta de 2px. Botões e
 - **State:** mesma física de botão na escala 2px, já em snap inteiro (hover +1px,+1px com sombra 2px→1px; active +2px,+2px com sombra none); mesmo ring de foco via teclado.
 
 ### Cards / Containers
-- **Corner Style:** 16px.
+- **Corner Style:** 8px (rounded-lg) — adesivo de conteúdo, distinto do botão de ação (16px).
 - **Background:** branco padrão; variantes pastel (Azul/Verde/Amarelo/Lilás Pastel) para destaque de seção; concluído usa Cinza Papel com opacity 75%.
 - **Shadow Strategy:** Adesivo de card (4px 4px #000).
+- **Card clicável** (ex.: disciplina na lista de Disciplinas): corpo de conteúdo (raio 8px, sombra 4px) com comportamento de ação — cursor, foco visível, física de afundar na escala 4px (hover +2px/sombra 2px, active +4px/shadow-none) e semântica de botão (`role="button"`, `tabIndex`, Enter/Espaço).
 - **Border:** preta, 2px.
 - **Internal Padding:** 24px (p-6); footer de card com borda superior black/10.
 
@@ -303,11 +311,11 @@ Forma de adesivo: cantos arredondados generosos sob borda reta de 2px. Botões e
 - **States:** sem sombra e sem física de pressionar — a navegação é a encadernação, não um adesivo. Colapsável (264px ↔ 80px); recolhida mostra só ícones centralizados; botões de expandir/recolher aparecem no hover do grupo.
 
 ### Badge (sticker de plataforma/tipo)
-- **Style:** pill (9999px), borda preta 2px, sombra micro 1.5px, padding 2px 12px, texto 0.75rem/700; cor por identidade: Sigaa **Verde Giz**, Aprender 3 **Lápis Laranja**, MoodleMat **Lilás Caderno**, tarefa **Amarelo Marca-Texto**, urgente **Vermelho Correção Forte** (texto branco), neutra branca.
+- **Style:** pill (9999px), borda preta 2px, sombra micro 2px, padding 2px 12px, texto 0.75rem/700; cor por identidade: Sigaa **Verde Giz**, Aprender 3 **Lápis Laranja**, MoodleMat **Lilás Caderno**, tarefa **Amarelo Marca-Texto**, urgente **Vermelho Correção Forte** (texto branco), neutra branca.
 - **Icon:** Lucide 14–16px, stroke 2.5, opcional à esquerda.
 
 ### Alert
-- **Style:** fundo pastel por variante, borda preta 2px, raio 16px, sombra 3px; ícone em bloco branco próprio (borda 2px, raio 12px, sombra micro); título 0.875rem/700, descrição 0.75rem/600.
+- **Style:** fundo pastel por variante, borda preta 2px, raio 8px, sombra 4px; ícone em bloco branco próprio (borda 2px, raio 8px, sombra micro 2px); título 0.875rem/700, descrição 0.75rem/600.
 
 ### Signature: Grade Horária (ScheduleTimetable)
 O componente mais identitário: tabela de 7 colunas (Seg–Sáb) × 15 linhas de horário (turnos M/T/N), cabeçalhos de dia como mini-adesivos (Cinza Papel, borda preta 1px, sombra 1px), células de aula em uma de 6 cores de disciplina (par fundo-pastel + borda de tinta + texto escuro da mesma família: azul, verde, amarelo, roxo, laranja, céu). Cabeçalho institucional em uppercase font-black **Azul Caneta Ação**. Exporta como PNG.
@@ -320,6 +328,7 @@ O componente mais identitário: tabela de 7 colunas (Seg–Sáb) × 15 linhas de
 - **Do** construir hierarquia com peso de fonte (800/700/600/500) e usar pastéis como fundo, nunca como cor de ação.
 - **Do** usar Plus Jakarta Sans e ícones Lucide com stroke 2.5; rótulos estruturais em uppercase bold 11–12px (Micro, 11px, para rótulos mínimos).
 - **Do** usar as cores de plataforma como identidade fixa (Sigaa verde, Aprender 3 laranja) em badges e filtros.
+- **Do** usar raio e sombra como affordance (A Regra dos Dois Adesivos): ação 12–16px + sombra 2px; conteúdo 8px + sombra 4px; campo 12px sem sombra.
 - **Do** usar #2563EB/#DC2626 como fundo sob texto branco; #468AFB/#FF6B6B ficam para marca/bordas.
 
 ### Don't:
@@ -331,3 +340,4 @@ O componente mais identitário: tabela de 7 colunas (Seg–Sáb) × 15 linhas de
 - **Don't** enfraquecer texto reduzindo peso abaixo de font-medium; baixe o tom, mantenha o peso (A Regra do Marcador Grosso).
 - **Don't** usar cor de ação cheia como fundo de seção, ou pastel como cor de botão (A Regra do Pastel como Papel).
 - **Don't** colocar texto pequeno branco sobre **Azul Caneta** (#468AFB) ou **Vermelho Correção** (#FF6B6B) — são marca/borda/acento; fundo interativo sob texto branco é **Azul Caneta Ação** (#2563EB) ou **Vermelho Correção Forte** (#DC2626).
+- **Don't** vestir conteúdo de botão (raio grande + sombra leve) ou botão de conteúdo (raio reto + sombra funda) — e hover nunca levanta o adesivo: sombra só cresce se o elemento for card clicável seguindo a escala 4px.

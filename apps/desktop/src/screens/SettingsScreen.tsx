@@ -238,11 +238,11 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
       {/* Grid de Configuração por Plataforma */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Card SIGAA */}
-        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[4px_4px_0px_0px_#000] flex flex-col justify-between">
+        <Card className="bg-white rounded-lg p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-platform-sigaa text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
+                <div className="p-1.5 bg-platform-sigaa text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000]">
                   <School className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <h3 className="font-bold text-base text-black">
@@ -297,11 +297,11 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </Card>
 
         {/* Card Aprender 3 */}
-        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[4px_4px_0px_0px_#000] flex flex-col justify-between">
+        <Card className="bg-white rounded-lg p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-platform-aprender3 text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
+                <div className="p-1.5 bg-platform-aprender3 text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000]">
                   <BookOpen className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <h3 className="font-bold text-base text-black">
@@ -359,11 +359,11 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </Card>
 
         {/* Card MoodleMat */}
-        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[4px_4px_0px_0px_#000] flex flex-col justify-between">
+        <Card className="bg-white rounded-lg p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-platform-moodlemat text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
+                <div className="p-1.5 bg-platform-moodlemat text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000]">
                   <Globe className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <h3 className="font-bold text-base text-black">
@@ -423,11 +423,11 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
         </Card>
 
         {/* Card Microsoft Teams */}
-        <Card className="border-2 border-black bg-white rounded-2xl p-5 shadow-[4px_4px_0px_0px_#000] flex flex-col justify-between">
+        <Card className="bg-white rounded-lg p-5 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-platform-teams text-black border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000]">
+                <div className="p-1.5 bg-platform-teams text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000]">
                   <MessageSquare className="w-4 h-4 stroke-[2.5]" />
                 </div>
                 <h3 className="font-bold text-base text-black">
@@ -484,7 +484,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
 
       {/* Licença e Código Aberto */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t-2 border-black/10">
-        <Card className="border-2 border-black bg-white rounded-2xl p-4 shadow-[4px_4px_0px_0px_#000]">
+        <Card className="bg-white rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1.5">
             <Scale className="w-4 h-4 stroke-[2.5] text-neo-blue" />
             <h4 className="text-xs font-bold text-black">
@@ -497,7 +497,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
           </p>
         </Card>
 
-        <Card className="border-2 border-black bg-white rounded-2xl p-4 shadow-[4px_4px_0px_0px_#000]">
+        <Card className="bg-white rounded-lg p-4">
           <div className="flex items-center gap-2 mb-1.5">
             <GitBranch className="w-4 h-4 stroke-[2.5] text-neo-blue" />
             <h4 className="text-xs font-bold text-black">
@@ -512,7 +512,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
       </div>
 
       {/* Zona de Perigo / Limpeza */}
-      <Card className="border-2 border-neo-danger bg-red-50 rounded-2xl p-5 shadow-[3px_3px_0px_0px_#000]">
+      <Card className="border-2 border-neo-danger bg-red-50 rounded-lg p-5 shadow-[4px_4px_0px_0px_#000]">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 text-ink-error mb-1">

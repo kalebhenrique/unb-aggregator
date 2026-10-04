@@ -37,7 +37,7 @@ export const Alert: React.FC<AlertProps> = ({
   return (
     <div
       className={cn(
-        'flex items-start gap-3.5 p-4 border-2 border-black rounded-2xl shadow-[3px_3px_0px_0px_#000]',
+        'flex items-start gap-3.5 p-4 border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_#000]',
         variantStyles[variant],
         className
       )}
@@ -46,7 +46,7 @@ export const Alert: React.FC<AlertProps> = ({
       {Icon ? (
         <div
           className={cn(
-            'p-2 border-2 border-black rounded-xl shadow-[1.5px_1.5px_0px_0px_#000] shrink-0',
+            'p-2 border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000] shrink-0',
             iconStyles[variant]
           )}
         >

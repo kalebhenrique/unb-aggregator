@@ -48,7 +48,7 @@ export const DepartmentSelect: React.FC<DepartmentSelectProps> = ({
   return (
     <Popover.Root open={open} onOpenChange={(next) => { setOpen(next); if (!next) setQuery(''); }}>
       <Popover.Trigger
-        className="flex h-10 w-full items-center justify-between rounded-lg border-2 border-black bg-white gap-2 px-3 py-2 text-xs font-bold text-black focus:outline-none focus:ring-2 focus:ring-neo-blue transition-[box-shadow,border-color] cursor-pointer select-none"
+        className="flex h-10 w-full items-center justify-between rounded-xl border-2 border-black bg-white gap-2 px-3 py-2 text-xs font-bold text-black focus:outline-none focus:ring-2 focus:ring-neo-blue transition-[box-shadow,border-color] cursor-pointer select-none"
       >
         <span className="truncate text-left">{selectedName ?? 'Selecione o departamento'}</span>
         <ChevronDown className={`w-4 h-4 stroke-[2.5] shrink-0 transition-transform ${open ? 'rotate-180' : ''}`} />
@@ -56,7 +56,7 @@ export const DepartmentSelect: React.FC<DepartmentSelectProps> = ({
 
       <Popover.Portal>
         <Popover.Positioner side="bottom" align="start" sideOffset={6} className="isolate z-50">
-          <Popover.Popup className="relative z-50 w-[var(--anchor-width)] min-w-[240px] rounded-xl border-2 border-black bg-canvas text-black outline-none origin-(--transform-origin)">
+          <Popover.Popup className="relative z-50 w-[var(--anchor-width)] min-w-[240px] rounded-lg border-2 border-black bg-canvas text-black outline-none origin-(--transform-origin)">
             {/* Busca interna */}
             <div className="p-2 border-b-2 border-black/10">
               <div className="relative">
@@ -90,7 +90,7 @@ export const DepartmentSelect: React.FC<DepartmentSelectProps> = ({
                       key={dept.id}
                       type="button"
                       onClick={() => pick(dept.id)}
-                      className={`relative flex w-full cursor-pointer select-none items-center gap-2 rounded-lg py-1.5 pr-8 pl-2.5 text-xs font-bold outline-none hover:bg-neo-blue hover:text-white data-[selected=true]:font-extrabold transition-colors`}
+                      className={`relative flex w-full cursor-pointer select-none items-center gap-2 rounded-lg py-1.5 pr-8 pl-2.5 text-xs font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-1 hover:bg-neo-blue hover:text-white data-[selected=true]:font-extrabold transition-colors`}
                       data-selected={isSelected}
                     >
                       <span className="truncate text-left">{dept.name}</span>

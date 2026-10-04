@@ -34,7 +34,7 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
   isCatalogLoaded,
 }) => {
   return (
-    <Card className="rounded-xl overflow-hidden p-0">
+    <Card className="overflow-hidden p-0">
       {/* Header unificado do Catálogo */}
       <div className="px-4 py-3 border-b-2 border-black flex flex-wrap items-center justify-between gap-3 bg-white">
         <div className="flex items-center gap-2.5 min-w-0">
@@ -136,7 +136,7 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
                           className={`p-3 rounded-lg border-2 transition-[transform,box-shadow,background-color,border-color] ${
                             isClassSelected
                               ? "border-black bg-pastel-green shadow-[2px_2px_0px_0px_#000]"
-                              : "border-black/25 bg-white hover:border-black"
+                              : "border-black/25 bg-white"
                           }`}
                         >
                           <div className="flex items-center justify-between gap-2 mb-1.5">

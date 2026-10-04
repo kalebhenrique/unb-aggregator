@@ -14,5 +14,6 @@ export interface FeedItem {
   createdAt: string; // ISO 8601 string
   dueDate?: string;  // ISO 8601 string (for assignments)
   isCompleted?: boolean;
+  isHidden?: boolean;
   externalUrl?: string;
 }

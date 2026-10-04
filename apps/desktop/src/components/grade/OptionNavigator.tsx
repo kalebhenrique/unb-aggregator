@@ -18,7 +18,7 @@ export const OptionNavigator: React.FC<OptionNavigatorProps> = ({
   onApplyOption,
 }) => {
   return (
-    <div className="bg-pastel-yellow border-2 border-black rounded-2xl shadow-[3px_3px_0px_0px_#000] p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <div className="bg-pastel-yellow border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_#000] p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div className="flex items-center gap-3 min-w-0">
         <div className="p-1.5 bg-white border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000] shrink-0">
           <Sparkles className="w-4 h-4 stroke-[2.5] text-black" />
@@ -42,7 +42,7 @@ export const OptionNavigator: React.FC<OptionNavigatorProps> = ({
           onClick={() => onApplyOption(currentIndex - 1)}
           title="Opção anterior"
           aria-label="Ver opção anterior"
-          className="h-7 w-7 rounded-lg shadow-none hover:shadow-none"
+          className="h-7 w-7 rounded-lg"
         >
           <ChevronLeft className="w-3.5 h-3.5 stroke-[2.5]" />
         </Button>
@@ -59,7 +59,7 @@ export const OptionNavigator: React.FC<OptionNavigatorProps> = ({
           onClick={() => onApplyOption(currentIndex + 1)}
           title="Próxima opção"
           aria-label="Ver próxima opção"
-          className="h-7 w-7 rounded-lg shadow-none hover:shadow-none"
+          className="h-7 w-7 rounded-lg"
         >
           <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
         </Button>

@@ -1,5 +1,5 @@
 import type { FeedItem, PlatformType, FeedItemType } from '../domain/entities/feed-item';
-import type { Course } from '../domain/entities/course';
+import type { Course, CourseAssociation } from '../domain/entities/course';
 import type { IFeedRepository, FeedFilterOptions } from '../domain/interfaces/feed-repo.interface';
 
 function isTauriEnvironment(): boolean {
@@ -18,6 +18,7 @@ interface SqliteFeedItemRow {
   created_at: string;
   due_date: string | null;
   is_completed: number;
+  is_hidden: number;
   external_url: string | null;
 }
 
@@ -35,12 +36,21 @@ interface SqliteCourseRow {
   url: string | null;
 }
 
+interface SqliteCourseAssociationRow {
+  aprender_course_id: string;
+  sigaa_course_id: string | null;
+  is_ignored: number;
+  updated_at: string;
+}
+
 // Cache global de conexão com o banco SQLite
 let cachedDbPromise: Promise<any> | null = null;
 
 // Espelho em memória para ambientes sem Tauri (testes unitários e prévia web)
 const inMemoryItems = new Map<string, FeedItem>();
 const inMemoryCourses = new Map<string, Course>();
+const inMemoryAssociations = new Map<string, CourseAssociation>();
+
 
 async function getDatabase(): Promise<any> {
   if (!isTauriEnvironment()) return null;
@@ -89,7 +99,25 @@ async function getDatabase(): Promise<any> {
             created_at TEXT NOT NULL,
             due_date TEXT,
             is_completed INTEGER NOT NULL DEFAULT 0,
+            is_hidden INTEGER NOT NULL DEFAULT 0,
             external_url TEXT
+          );
+        `);
+
+        // Migração suave para bases pré-existentes sem a coluna is_hidden
+        try {
+          await db.execute('ALTER TABLE feed_items ADD COLUMN is_hidden INTEGER NOT NULL DEFAULT 0;');
+        } catch {
+          // Ignora se a coluna já existir
+        }
+
+        // Cria a tabela de associações de turmas entre Aprender 3 e SIGAA
+        await db.execute(`
+          CREATE TABLE IF NOT EXISTS course_associations (
+            aprender_course_id TEXT PRIMARY KEY,
+            sigaa_course_id TEXT,
+            is_ignored INTEGER NOT NULL DEFAULT 0,
+            updated_at TEXT NOT NULL
           );
         `);
 
@@ -125,6 +153,12 @@ export class SqliteFeedRepository implements IFeedRepository {
         let query = 'SELECT * FROM feed_items WHERE 1=1';
         const params: any[] = [];
 
+        if (filters?.onlyHidden) {
+          query += ' AND is_hidden = 1';
+        } else if (!filters?.includeHidden) {
+          query += ' AND (is_hidden = 0 OR is_hidden IS NULL)';
+        }
+
         if (filters) {
           if (filters.platform && filters.platform !== 'all') {
             params.push(filters.platform);
@@ -139,6 +173,26 @@ export class SqliteFeedRepository implements IFeedRepository {
           if (filters.courseCode) {
             params.push(filters.courseCode);
             query += ` AND course_code = $${params.length}`;
+          }
+
+          if (filters.courseCodes && filters.courseCodes.length > 0) {
+            const placeholders = filters.courseCodes
+              .map((c) => {
+                params.push(c);
+                return `$${params.length}`;
+              })
+              .join(', ');
+            query += ` AND course_code IN (${placeholders})`;
+          }
+
+          if (filters.courseNames && filters.courseNames.length > 0) {
+            const placeholders = filters.courseNames
+              .map((n) => {
+                params.push(n);
+                return `$${params.length}`;
+              })
+              .join(', ');
+            query += ` AND course_name IN (${placeholders})`;
           }
 
           if (filters.searchQuery && filters.searchQuery.trim().length > 0) {
@@ -163,6 +217,7 @@ export class SqliteFeedRepository implements IFeedRepository {
           createdAt: row.created_at,
           dueDate: row.due_date ?? undefined,
           isCompleted: Boolean(row.is_completed),
+          isHidden: Boolean(row.is_hidden),
           externalUrl: row.external_url ?? undefined,
         }));
 
@@ -180,6 +235,12 @@ export class SqliteFeedRepository implements IFeedRepository {
     // Fallback para espelho em memória
     let result = Array.from(inMemoryItems.values());
 
+    if (filters?.onlyHidden) {
+      result = result.filter((item) => Boolean(item.isHidden));
+    } else if (!filters?.includeHidden) {
+      result = result.filter((item) => !item.isHidden);
+    }
+
     if (filters) {
       if (filters.platform && filters.platform !== 'all') {
         result = result.filter((item) => item.platform === filters.platform);
@@ -189,6 +250,12 @@ export class SqliteFeedRepository implements IFeedRepository {
       }
       if (filters.courseCode) {
         result = result.filter((item) => item.courseCode === filters.courseCode);
+      }
+      if (filters.courseCodes && filters.courseCodes.length > 0) {
+        result = result.filter((item) => item.courseCode && filters.courseCodes!.includes(item.courseCode));
+      }
+      if (filters.courseNames && filters.courseNames.length > 0) {
+        result = result.filter((item) => filters.courseNames!.includes(item.courseName));
       }
       if (filters.searchQuery && filters.searchQuery.trim().length > 0) {
         const q = filters.searchQuery.toLowerCase();
@@ -208,7 +275,12 @@ export class SqliteFeedRepository implements IFeedRepository {
 
   async saveItems(newItems: FeedItem[]): Promise<void> {
     for (const item of newItems) {
-      inMemoryItems.set(item.id, { ...item });
+      const existing = inMemoryItems.get(item.id);
+      inMemoryItems.set(item.id, {
+        ...item,
+        isCompleted: existing?.isCompleted ?? item.isCompleted ?? false,
+        isHidden: existing?.isHidden ?? item.isHidden ?? false,
+      });
     }
 
     const db = await getDatabase();
@@ -216,9 +288,19 @@ export class SqliteFeedRepository implements IFeedRepository {
       try {
         for (const item of newItems) {
           await db.execute(
-            `INSERT OR REPLACE INTO feed_items (
-              id, platform, title, content, course_name, course_code, author, item_type, created_at, due_date, is_completed, external_url
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+            `INSERT INTO feed_items (
+              id, platform, title, content, course_name, course_code, author, item_type, created_at, due_date, is_completed, is_hidden, external_url
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+            ON CONFLICT(id) DO UPDATE SET
+              title = excluded.title,
+              content = excluded.content,
+              course_name = excluded.course_name,
+              course_code = excluded.course_code,
+              author = excluded.author,
+              item_type = excluded.item_type,
+              created_at = excluded.created_at,
+              due_date = excluded.due_date,
+              external_url = excluded.external_url;`,
             [
               item.id,
               item.platform,
@@ -231,6 +313,7 @@ export class SqliteFeedRepository implements IFeedRepository {
               item.createdAt,
               item.dueDate ?? null,
               item.isCompleted ? 1 : 0,
+              item.isHidden ? 1 : 0,
               item.externalUrl ?? null,
             ]
           );
@@ -256,6 +339,25 @@ export class SqliteFeedRepository implements IFeedRepository {
         ]);
       } catch (e) {
         console.warn('Erro ao atualizar status de conclusão no SQLite:', e);
+      }
+    }
+  }
+
+  async hideItem(id: string, isHidden: boolean): Promise<void> {
+    const existing = inMemoryItems.get(id);
+    if (existing) {
+      inMemoryItems.set(id, { ...existing, isHidden });
+    }
+
+    const db = await getDatabase();
+    if (db) {
+      try {
+        await db.execute('UPDATE feed_items SET is_hidden = $1 WHERE id = $2', [
+          isHidden ? 1 : 0,
+          id,
+        ]);
+      } catch (e) {
+        console.warn('Erro ao atualizar status de ocultação no SQLite:', e);
       }
     }
   }
@@ -330,18 +432,67 @@ export class SqliteFeedRepository implements IFeedRepository {
     }
   }
 
+  async getAssociations(): Promise<CourseAssociation[]> {
+    const db = await getDatabase();
+    if (db) {
+      try {
+        const rows: SqliteCourseAssociationRow[] = await db.select(
+          'SELECT * FROM course_associations'
+        );
+        const list: CourseAssociation[] = rows.map((r) => ({
+          aprenderCourseId: r.aprender_course_id,
+          sigaaCourseId: r.sigaa_course_id,
+          isIgnored: Boolean(r.is_ignored),
+          updatedAt: r.updated_at,
+        }));
+        for (const a of list) {
+          inMemoryAssociations.set(a.aprenderCourseId, a);
+        }
+        return list;
+      } catch (e) {
+        console.warn('Erro ao carregar associações de turmas no SQLite:', e);
+      }
+    }
+    return Array.from(inMemoryAssociations.values());
+  }
+
+  async saveAssociation(association: CourseAssociation): Promise<void> {
+    inMemoryAssociations.set(association.aprenderCourseId, { ...association });
+    const db = await getDatabase();
+    if (db) {
+      try {
+        await db.execute(
+          `INSERT OR REPLACE INTO course_associations (
+            aprender_course_id, sigaa_course_id, is_ignored, updated_at
+          ) VALUES ($1, $2, $3, $4)`,
+          [
+            association.aprenderCourseId,
+            association.sigaaCourseId ?? null,
+            association.isIgnored ? 1 : 0,
+            association.updatedAt || new Date().toISOString(),
+          ]
+        );
+      } catch (e) {
+        console.warn('Erro ao salvar associação no SQLite:', e);
+      }
+    }
+  }
+
   async clear(): Promise<void> {
     inMemoryItems.clear();
     inMemoryCourses.clear();
+    inMemoryAssociations.clear();
 
     const db = await getDatabase();
     if (db) {
       try {
         await db.execute('DELETE FROM feed_items');
         await db.execute('DELETE FROM courses');
+        await db.execute('DELETE FROM course_associations');
       } catch (e) {
         console.warn('Erro ao limpar banco SQLite:', e);
       }
     }
   }
 }
+

@@ -55,7 +55,7 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
   }, [year, period]);
 
   return (
-    <Card className="rounded-xl p-4 space-y-4">
+    <Card className="p-4 space-y-4">
       {/* Cabeçalho da seção de busca */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5 min-w-0">
@@ -95,7 +95,7 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
                 {semesterOptions.find((o) => o.value === `${year}-${period}`)?.label}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent className="rounded-lg border-2 border-black bg-canvas shadow-none">
+            <SelectContent className="bg-canvas">
               {semesterOptions.map((item) => (
                 <SelectItem key={item.value} value={item.value}>
                   {item.label}
@@ -126,7 +126,7 @@ export const GradeFilters: React.FC<GradeFiltersProps> = ({
             type="button"
             variant="primary"
             size="md"
-            className="w-full rounded-lg mb-[3px]"
+            className="w-full rounded-2xl mb-[2px]"
             isLoading={isScraping}
             onClick={onFetchClasses}
           >

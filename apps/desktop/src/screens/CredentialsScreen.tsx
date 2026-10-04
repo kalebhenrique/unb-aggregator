@@ -167,7 +167,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
           <button
             type="button"
             onClick={onBack}
-            className="cursor-pointer inline-flex items-center gap-1.5 text-xs font-bold text-neutral-700 hover:text-black transition-colors"
+            className="cursor-pointer rounded-sm inline-flex items-center gap-1.5 text-xs font-bold text-neutral-700 hover:text-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2"
           >
             <ChevronLeft className="w-4 h-4 stroke-[3]" />
             Voltar para o Início
@@ -177,7 +177,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
             <button
               type="button"
               onClick={onExplore}
-              className="cursor-pointer text-xs font-bold text-neo-blue hover:underline"
+              className="cursor-pointer rounded-sm text-xs font-bold text-neo-blue hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2"
             >
               Explorar sem Conectar &rarr;
             </button>
@@ -185,7 +185,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
         </div>
 
         {/* Card Principal */}
-        <Card className="border-2 border-black bg-white shadow-[4px_4px_0px_0px_#000] rounded-2xl p-6 md:p-8">
+        <Card className="bg-white rounded-lg p-6 md:p-8">
           <CardHeader className="p-0 mb-6">
             <div className="flex items-center gap-2.5 mb-2">
               <div className="p-2 bg-unb-blue text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000]">
@@ -213,7 +213,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
                     setActiveTab(p.id);
                     setFormError(null);
                   }}
-                  className={`cursor-pointer p-3 border-2 border-black rounded-xl text-left transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none ${
+                  className={`cursor-pointer p-3 border-2 border-black rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none ${
                     isSelected
                       ? 'bg-neo-blue text-white font-bold'
                       : 'bg-white text-neutral-800 hover:bg-neutral-50 font-semibold'
@@ -311,7 +311,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
             )}
 
             {activeTab === 'teams' && (
-              <div className="p-4 bg-canvas border-2 border-black rounded-2xl space-y-3 shadow-[2px_2px_0px_0px_#000]">
+              <div className="p-4 bg-canvas border-2 border-black rounded-lg space-y-3 shadow-[4px_4px_0px_0px_#000]">
                 <h2 className="text-xs font-bold text-neo-blue">
                   Microsoft Teams Institucional (Login Manual)
                 </h2>
@@ -363,7 +363,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
           {formError || error ? (
             <div
               role="alert"
-              className="mt-4 p-3 bg-neo-danger text-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] text-xs font-bold flex items-center gap-2"
+              className="mt-4 p-3 bg-neo-danger text-white border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_#000] text-xs font-bold flex items-center gap-2"
             >
               <AlertCircle className="w-4 h-4 stroke-[3] shrink-0" />
               <span>{formError || error}</span>

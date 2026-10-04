@@ -30,7 +30,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
   isSaving,
 }) => {
   return (
-    <Card className="rounded-xl p-4 space-y-4">
+    <Card className="p-4 space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5 min-w-0">
           <div className="p-1.5 bg-white border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000] shrink-0">
@@ -105,7 +105,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
       </div>
 
       {selectedClasses.length === 0 ? (
-        <div className="py-5 px-4 text-center bg-pastel-blue/60 border-2 border-dashed border-black/25 rounded-xl space-y-1.5">
+        <div className="py-5 px-4 text-center bg-pastel-blue/60 border-2 border-dashed border-black/25 rounded-lg space-y-1.5">
           <BookOpen className="w-5 h-5 stroke-[2.5] text-neo-blue mx-auto" />
           <p className="text-xs font-extrabold text-black">
             Sua grade está vazia
@@ -124,7 +124,7 @@ export const SelectedClassesCard: React.FC<SelectedClassesCardProps> = ({
             return (
               <div
                 key={cls.id}
-                className={`p-2.5 rounded-xl border-2 ${color.border} ${color.bg} flex items-center justify-between gap-2`}
+                className={`p-2.5 rounded-lg border-2 ${color.border} ${color.bg} flex items-center justify-between gap-2`}
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5 flex-wrap">

@@ -4,8 +4,9 @@ import { createContainer } from '../container';
 describe('Clean Architecture Use Cases - UnB Aggregator', () => {
   let container: ReturnType<typeof createContainer>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     container = createContainer();
+    await container.repos.feedRepo.clear();
   });
 
   describe('SaveCredentialsUseCase por Plataforma', () => {
@@ -119,5 +120,113 @@ describe('Clean Architecture Use Cases - UnB Aggregator', () => {
         expect(updatedTask?.isCompleted).toBe(!initialStatus);
       }
     });
+
+    it('deve ocultar (soft-hide) item do feed e permitir recuperação', async () => {
+      await container.useCases.syncPlatforms.execute();
+      const initialItems = await container.useCases.getFeed.execute();
+      expect(initialItems.length).toBeGreaterThan(0);
+
+      const targetItem = initialItems[0];
+      await container.useCases.getFeed.hideItem(targetItem.id, true);
+
+      // O item não deve aparecer no feed padrão
+      const activeItems = await container.useCases.getFeed.execute();
+      expect(activeItems.some((i) => i.id === targetItem.id)).toBe(false);
+
+      // O item deve aparecer quando filtrado apenas por ocultos
+      const hiddenItems = await container.useCases.getFeed.execute({ onlyHidden: true });
+      expect(hiddenItems.some((i) => i.id === targetItem.id)).toBe(true);
+
+      // Desfaz a ocultação
+      await container.useCases.getFeed.hideItem(targetItem.id, false);
+      const restoredItems = await container.useCases.getFeed.execute();
+      expect(restoredItems.some((i) => i.id === targetItem.id)).toBe(true);
+    });
+  });
+
+  describe('GetCoursesUseCase e Disciplines Matching', () => {
+    it('deve associar turmas do Aprender 3 a disciplinas do SIGAA e identificar não associadas', async () => {
+      // Salva disciplinas do SIGAA e turmas do Aprender 3
+      await container.repos.feedRepo.saveCourses([
+        {
+          id: 'sigaa-oac',
+          code: 'CIC0099',
+          name: 'ORGANIZAÇÃO E ARQUITETURA DE COMPUTADORES',
+          semester: '2026.2',
+          platform: 'sigaa',
+        },
+        {
+          id: 'sigaa-fis2-exp',
+          code: 'IFD0177',
+          name: 'FISICA 2 EXPERIMENTAL',
+          semester: '2026.2',
+          platform: 'sigaa',
+        },
+        {
+          id: 'sigaa-fis2',
+          code: 'IFD0171',
+          name: 'FISICA 2',
+          semester: '2026.2',
+          platform: 'sigaa',
+        },
+        {
+          id: 'aprender-oac',
+          code: 'CIC0099',
+          name: 'CIC0099 - ORGANIZAÇÃO E ARQUITETURA DE COMPUTADORES - Turma 02 - 2026/2',
+          semester: '2026.2',
+          platform: 'aprender3',
+        },
+        {
+          id: 'aprender-fis2-exp',
+          code: 'IFD0177',
+          name: 'IFD0177 - FISICA 2 EXPERIMENTAL - Turma 03 - 2026/2',
+          semester: '2026.2',
+          platform: 'aprender3',
+        },
+        {
+          id: 'aprender-forum-geral',
+          code: 'GERAL',
+          name: 'Mural de Avisos da Faculdade de Tecnologia',
+          semester: '2026.2',
+          platform: 'aprender3',
+        },
+      ]);
+
+      const result = await container.useCases.getCourses.getDisciplines();
+
+      // 3 disciplinas do SIGAA
+      expect(result.disciplines.length).toBe(3);
+
+      // OAC deve ter o Aprender 3 associado
+      const oac = result.disciplines.find((d) => d.name === 'ORGANIZAÇÃO E ARQUITETURA DE COMPUTADORES');
+      expect(oac).toBeDefined();
+      expect(oac?.aprenderCourses.length).toBe(1);
+      expect(oac?.aprenderCourses[0].id).toBe('aprender-oac');
+
+      // FISICA 2 EXPERIMENTAL deve casar com o curso experimental e NÃO com FISICA 2
+      const fisExp = result.disciplines.find((d) => d.name === 'FISICA 2 EXPERIMENTAL');
+      expect(fisExp?.aprenderCourses.length).toBe(1);
+      expect(fisExp?.aprenderCourses[0].id).toBe('aprender-fis2-exp');
+
+      // Fórum geral não casa automaticamente
+      expect(result.unmatchedAprenderCourses.length).toBe(1);
+      expect(result.unmatchedAprenderCourses[0].id).toBe('aprender-forum-geral');
+
+      // Usuário decide associar manualmente o fórum geral a FISICA 2
+      await container.useCases.getCourses.associateCourse('aprender-forum-geral', 'sigaa-fis2', false);
+
+      const afterManualAssoc = await container.useCases.getCourses.getDisciplines();
+      expect(afterManualAssoc.unmatchedAprenderCourses.length).toBe(0);
+      const fis2 = afterManualAssoc.disciplines.find((d) => d.name === 'FISICA 2');
+      expect(fis2?.aprenderCourses.some((c) => c.id === 'aprender-forum-geral')).toBe(true);
+
+      // Se o usuário marcar como ignorado
+      await container.useCases.getCourses.associateCourse('aprender-forum-geral', null, true);
+      const afterIgnored = await container.useCases.getCourses.getDisciplines();
+      expect(afterIgnored.unmatchedAprenderCourses.length).toBe(0);
+      const fis2Clean = afterIgnored.disciplines.find((d) => d.name === 'FISICA 2');
+      expect(fis2Clean?.aprenderCourses.some((c) => c.id === 'aprender-forum-geral')).toBe(false);
+    });
   });
 });
+

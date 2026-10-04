@@ -30,8 +30,8 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onContinue, 
         {/* 3 Destaques Obrigatórios */}
         <div className="space-y-4">
           {/* Destaque 1: Zero Telemetria */}
-          <div className="flex items-start gap-4 p-5 bg-pastel-green border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000]">
-            <div className="p-3 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] shrink-0">
+          <div className="flex items-start gap-4 p-5 bg-pastel-green border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_#000]">
+            <div className="p-3 bg-white border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000] shrink-0">
               <ShieldCheck className="w-6 h-6 text-ink-success stroke-[2.5]" />
             </div>
             <div className="space-y-1">
@@ -45,8 +45,8 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onContinue, 
           </div>
 
           {/* Destaque 2: Licença Apache 2.0 */}
-          <div className="flex items-start gap-4 p-5 bg-pastel-yellow border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000]">
-            <div className="p-3 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] shrink-0">
+          <div className="flex items-start gap-4 p-5 bg-pastel-yellow border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_#000]">
+            <div className="p-3 bg-white border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000] shrink-0">
               <Scale className="w-6 h-6 text-black stroke-[2.5]" />
             </div>
             <div className="space-y-1">
@@ -60,8 +60,8 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onContinue, 
           </div>
 
           {/* Destaque 3: Código Aberto no GitHub */}
-          <div className="flex items-start gap-4 p-5 bg-pastel-blue border-2 border-black rounded-2xl shadow-[4px_4px_0px_0px_#000]">
-            <div className="p-3 bg-white border-2 border-black rounded-xl shadow-[2px_2px_0px_0px_#000] shrink-0">
+          <div className="flex items-start gap-4 p-5 bg-pastel-blue border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_#000]">
+            <div className="p-3 bg-white border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000] shrink-0">
               <GitBranch className="w-6 h-6 text-neo-blue stroke-[2.5]" />
             </div>
             <div className="space-y-1">
@@ -76,22 +76,22 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onContinue, 
         </div>
 
         {/* Plataformas integradas */}
-        <Card className="border-2 border-black bg-white rounded-2xl shadow-[4px_4px_0px_0px_#000] p-4 text-center">
+        <Card className="border-2 border-black bg-white rounded-lg shadow-[4px_4px_0px_0px_#000] p-4 text-center">
           <CardContent className="p-0">
             <span className="text-xs font-bold text-neutral-600 block mb-2">
               Plataformas Integradas
             </span>
             <div className="flex flex-wrap justify-center gap-2">
-              <span className="px-3 py-1 bg-platform-sigaa text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="px-3 py-1 bg-platform-sigaa text-black font-bold text-xs border-2 border-black rounded-full shadow-[2px_2px_0px_0px_#000]">
                 Sigaa
               </span>
-              <span className="px-3 py-1 bg-platform-aprender3 text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="px-3 py-1 bg-platform-aprender3 text-black font-bold text-xs border-2 border-black rounded-full shadow-[2px_2px_0px_0px_#000]">
                 Aprender 3
               </span>
-              <span className="px-3 py-1 bg-platform-moodlemat text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="px-3 py-1 bg-platform-moodlemat text-black font-bold text-xs border-2 border-black rounded-full shadow-[2px_2px_0px_0px_#000]">
                 MoodleMat
               </span>
-              <span className="px-3 py-1 bg-platform-teams text-black font-bold text-xs border-2 border-black rounded-full shadow-[1.5px_1.5px_0px_0px_#000]">
+              <span className="px-3 py-1 bg-platform-teams text-black font-bold text-xs border-2 border-black rounded-full shadow-[2px_2px_0px_0px_#000]">
                 Microsoft Teams
               </span>
             </div>
