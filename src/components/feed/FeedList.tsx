@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Badge, Button, Tooltip, TooltipTrigger, TooltipContent, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui';
+import { Badge, Button, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui';
 import type { Discipline, FeedItem } from '@/core';
 import { Archive, ArchiveRestore, Circle, CheckCircle, ClipboardList, ExternalLink, FileText, MoreHorizontal } from 'lucide-react';
 import { openExternalUrl } from '../../lib/utils';
@@ -83,8 +83,12 @@ export const FeedList: React.FC<FeedListProps> = ({
         return (
           <li
             key={item.id}
-            className={`flex items-center gap-3 px-4 md:px-5 py-4 ${
-              item.isCompleted ? 'bg-neutral-100/80' : item.isArchived ? 'bg-neutral-50/70' : ''
+            className={`flex items-center gap-3 px-4 md:px-5 py-4 transition-colors duration-150 ${
+              item.isCompleted
+                ? 'bg-neutral-100/80 hover:bg-neutral-200/70'
+                : item.isArchived
+                ? 'bg-neutral-50/70 hover:bg-neutral-100/70'
+                : 'hover:bg-neutral-50'
             }`}
           >
             {/* Tipo: ícone à esquerda, como o ícone de PR do GitHub */}
@@ -92,19 +96,12 @@ export const FeedList: React.FC<FeedListProps> = ({
 
             {/* Título + meta */}
             <div className="min-w-0 flex-1">
-              <Tooltip>
-                <TooltipTrigger className="block w-full cursor-help text-left">
-                  <span className={`block truncate text-sm font-bold ${titleTone}`}>
-                    {item.title}
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs text-left space-y-1">
-                  <p className="text-xs font-bold text-black">{item.title}</p>
-                  {item.content ? (
-                    <p className="text-xs font-semibold text-neutral-700 leading-relaxed">{item.content}</p>
-                  ) : null}
-                </TooltipContent>
-              </Tooltip>
+              <span
+                title={item.title}
+                className={`block truncate text-sm font-bold ${titleTone}`}
+              >
+                {item.title}
+              </span>
 
               <div className="mt-1 flex items-center gap-2 min-w-0 text-[11px] font-semibold text-neutral-500">
                 <Badge variant={item.platform} size="sm" className="shrink-0">

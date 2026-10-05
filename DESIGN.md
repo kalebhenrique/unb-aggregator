@@ -149,6 +149,9 @@ components:
     typography: "{typography.label}"
     rounded: "{rounded.pill}"
     padding: "2px 12px"
+  skeleton-block:
+    backgroundColor: "#E5E5E5"
+    rounded: "4px"
 ---
 
 # Design System: UnB Aggregator
@@ -320,9 +323,9 @@ A distinção se lê de longe: o que tem sombra 2px e raio 16px afunda quando cl
 ### Feed List (edição, não planilha)
 - **Formato:** lista de linhas gordas de duas alturas, **sem cabeçalho de coluna** — título bold em cima, meta inline embaixo (badge de plataforma, chip da disciplina, "Enviado em…", "Entrega…"). A clareza vem dos rótulos inline, não de colunas.
 - **Corpo de conteúdo:** vive dentro de um Card `p-0` (borda, raio 8px, sombra 4px); divisor preto de 2px em black/10 entre linhas; ícone do tipo à esquerda (ClipboardList trabalho, FileText aviso) como o ícone de PR do GitHub.
-- **Densidade:** padding vertical 16px; título em 1 linha truncada, conteúdo completo em tooltip (hover e teclado). Ações (abrir na plataforma, concluir, arquivar/desarquivar) moram no menu de reticências que fecha a linha.
+- **Densidade:** padding vertical 16px; título em 1 linha truncada com tooltip nativo do browser (`title`) ancorado nele. Ações (abrir na plataforma, concluir, arquivar/desarquivar) moram no menu de reticências que fecha a linha.
 - **Direita:** pill curto de prazo (Encerrado / <24h / 2 dias) com a data completa embaixo, alinhado à direita.
-- **Estado na linha:** concluído lê mais forte que arquivado — concluído em Cinza Papel presente (neutral-100) com título riscado em neutral-600; arquivado no neutral-50 com título esmaecido.
+- **Estado na linha:** concluído lê mais forte que arquivado — concluído em Cinza Papel presente (neutral-100) com título riscado em neutral-600; arquivado no neutral-50 com título esmaecido. No hover a linha afunda um tom a partir do próprio repouso (normal → neutral-50, arquivada → neutral-100/70, concluída → neutral-200/70) em 150ms — localizador de mouse, não adesivo.
 - **Chip da disciplina:** mostra o **nome oficial da disciplina no SIGAA**, resolvido pela associação de turmas — nunca o nome da turma do Aprender 3 nem o código de turma; no feed de uma disciplina específica (drill-down) o chip não existe — repetiria o contexto da tela.
 
 ### Dropdown Menu
@@ -332,6 +335,14 @@ A distinção se lê de longe: o que tem sombra 2px e raio 16px afunda quando cl
 
 ### Pagination
 - **Números:** micro-ação 32px, raio 8px, física 2px; página atual vira **Azul Caneta Ação** travada (`aria-current="page"`). Setas são Button outline icon 32px. Janela compacta: primeira, última, vizinhas da atual, reticências no meio.
+
+### Skeleton (conteúdo sem tinta)
+- **Style:** bloco neutro (#E5E5E5, neutral-200), raio pequeno de conteúdo (4px), pulso lento (`animate-pulse`); desligado com `prefers-reduced-motion`.
+- **Border:** nenhuma — ver A Regra do Bloco Sem Borda.
+- **FeedListSkeleton:** espelha a geometria exata das linhas do feed (ícone à esquerda, duas alturas, meta em pills de 24px, prazo à direita em sm+) dentro do mesmo Card `p-0`, com larguras variadas por linha — a troca skeleton → conteúdo acontece sem salto de layout.
+- **Quando existe:** só na primeira carga do feed (`isLoading` sem carga concluída). Refetch local (SQLite) troca o conteúdo no lugar, sem skeleton, dim ou spinner intermediário — piscar é shift, não feedback.
+
+**A Regra do Bloco Sem Borda.** Skeleton é conteúdo à espera de tinta: bloco neutro pulsante, nunca adesivo — borda e sombra pertencem ao Card que o contém. Bloco de loading com risco preto finge ser conteúdo.
 
 ### Signature: Grade Horária (ScheduleTimetable)
 O componente mais identitário: tabela de 7 colunas (Seg–Sáb) × 15 linhas de horário (turnos M/T/N), cabeçalhos de dia como mini-adesivos (Cinza Papel, borda preta 1px, sombra 1px), células de aula em uma de 6 cores de disciplina (par fundo-pastel + borda de tinta + texto escuro da mesma família: azul, verde, amarelo, roxo, laranja, céu). Cabeçalho institucional em uppercase font-black **Azul Caneta Ação**. Exporta como PNG.
