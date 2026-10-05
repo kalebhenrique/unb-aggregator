@@ -98,7 +98,7 @@ export const DashboardScreen: React.FC = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Buscar por disciplina, título da tarefa, aviso ou professor..."
             aria-label="Buscar no feed"
-            className="w-full bg-white pl-10 pr-4 py-2.5 text-sm font-medium text-black border-2 border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-neo-blue transition-[transform,box-shadow,background-color,border-color] placeholder:text-neutral-400 shadow-none"
+            className="w-full bg-white pl-10 pr-4 py-2.5 text-sm font-medium text-black border-2 border-black rounded-xl focus:outline-hidden focus:ring-2 focus:ring-neo-blue transition-[transform,box-shadow,background-color,border-color] placeholder:text-neutral-400 shadow-none"
           />
         </div>
 

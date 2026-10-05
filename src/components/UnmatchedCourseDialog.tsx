@@ -80,7 +80,7 @@ export const UnmatchedCourseDialog: React.FC<UnmatchedCourseDialogProps> = ({
               id="discipline-select"
               value={selectedDisciplineId}
               onChange={(e) => setSelectedDisciplineId(e.target.value)}
-              className="w-full bg-white border-2 border-black rounded-xl py-2 px-3 text-xs font-bold text-black focus:outline-none focus:ring-2 focus:ring-neo-blue shadow-[2px_2px_0px_0px_#000] cursor-pointer"
+              className="w-full bg-white border-2 border-black rounded-xl py-2 px-3 text-xs font-bold text-black focus:outline-hidden focus:ring-2 focus:ring-neo-blue shadow-[2px_2px_0px_0px_#000] cursor-pointer"
             >
               {disciplines.map((d) => (
                 <option key={d.id} value={d.id}>

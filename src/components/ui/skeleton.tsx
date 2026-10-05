@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
  * Bloco de conteúdo ainda sem tinta: preenchimento neutro com pulso lento.
  * Nunca recebe borda própria — a borda pertence ao adesivo (Card) que o contém.
  */
-export interface SkeletonProps extends React.HTMLAttributes<HTMLDivElement> {}
+export type SkeletonProps = React.HTMLAttributes<HTMLDivElement>;
 
 export const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
   ({ className, ...props }, ref) => (

@@ -237,7 +237,7 @@ export const CoursesScreen: React.FC = () => {
               onChange={(e) => setDrillSearchQuery(e.target.value)}
               placeholder="Buscar por título da tarefa, aviso ou conteúdo..."
               aria-label="Buscar no feed da disciplina"
-              className="w-full bg-white pl-10 pr-4 py-2.5 text-sm font-medium text-black border-2 border-black rounded-xl focus:outline-none focus:ring-2 focus:ring-neo-blue transition-[transform,box-shadow,background-color,border-color] placeholder:text-neutral-400 shadow-none"
+              className="w-full bg-white pl-10 pr-4 py-2.5 text-sm font-medium text-black border-2 border-black rounded-xl focus:outline-hidden focus:ring-2 focus:ring-neo-blue transition-[transform,box-shadow,background-color,border-color] placeholder:text-neutral-400 shadow-none"
             />
           </div>
 
@@ -262,7 +262,7 @@ export const CoursesScreen: React.FC = () => {
                   setDrillSearchQuery('');
                   setDrillCategory('all');
                 }}
-                className="cursor-pointer rounded-sm text-xs font-bold text-neutral-500 hover:text-black underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2"
+                className="cursor-pointer rounded-xs text-xs font-bold text-neutral-500 hover:text-black underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2"
               >
                 Limpar filtros
               </button>

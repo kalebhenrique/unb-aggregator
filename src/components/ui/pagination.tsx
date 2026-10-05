@@ -27,7 +27,7 @@ function buildPageTokens(page: number, pageCount: number): PageToken[] {
 }
 
 const numberBase =
-  'cursor-pointer inline-flex h-8 min-w-8 px-1.5 items-center justify-center text-xs font-bold rounded-lg border-2 select-none transition-[transform,box-shadow,background-color] duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2';
+  'cursor-pointer inline-flex h-8 min-w-8 px-1.5 items-center justify-center text-xs font-bold rounded-lg border-2 select-none transition-[transform,box-shadow,background-color] duration-150 ease-out focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2';
 
 export const Pagination: React.FC<PaginationProps> = ({ page, pageCount, onPageChange, className }) => {
   if (pageCount <= 1) return null;

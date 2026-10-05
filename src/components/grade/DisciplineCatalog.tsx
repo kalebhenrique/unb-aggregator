@@ -57,7 +57,7 @@ export const DisciplineCatalog: React.FC<DisciplineCatalogProps> = ({
             onChange={(e) => onSearchChange(e.target.value)}
             aria-label="Buscar disciplina no catálogo"
             placeholder="Filtrar por código ou nome…"
-            className="w-full bg-white pl-9 pr-3 h-8 text-xs font-semibold text-black border-2 border-black rounded-lg shadow-none focus:outline-none focus:ring-2 focus:ring-neo-blue placeholder:text-neutral-500 transition-[box-shadow,border-color]"
+            className="w-full bg-white pl-9 pr-3 h-8 text-xs font-semibold text-black border-2 border-black rounded-lg shadow-none focus:outline-hidden focus:ring-2 focus:ring-neo-blue placeholder:text-neutral-500 transition-[box-shadow,border-color]"
           />
         </div>
       </div>

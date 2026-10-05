@@ -139,7 +139,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
           <button
             type="button"
             onClick={onBack}
-            className="cursor-pointer rounded-sm inline-flex items-center gap-1.5 text-xs font-bold text-neutral-700 hover:text-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2"
+            className="cursor-pointer rounded-xs inline-flex items-center gap-1.5 text-xs font-bold text-neutral-700 hover:text-black transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2"
           >
             <ChevronLeft className="w-4 h-4 stroke-[3]" />
             Voltar para o Início
@@ -149,7 +149,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
             <button
               type="button"
               onClick={onExplore}
-              className="cursor-pointer rounded-sm text-xs font-bold text-neo-blue hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2"
+              className="cursor-pointer rounded-xs text-xs font-bold text-neo-blue hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2"
             >
               Explorar sem Conectar &rarr;
             </button>
@@ -185,7 +185,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
                     setActiveTab(p.id);
                     setFormError(null);
                   }}
-                  className={`cursor-pointer p-3 border-2 border-black rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none ${
+                  className={`cursor-pointer p-3 border-2 border-black rounded-xl text-left focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-neo-blue focus-visible:ring-offset-2 transition-[transform,box-shadow,background-color,border-color] duration-150 ease-out translate-x-0 translate-y-0 shadow-[2px_2px_0px_0px_#000] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none ${
                     isSelected
                       ? 'bg-neo-blue text-white font-bold'
                       : 'bg-white text-neutral-800 hover:bg-neutral-50 font-semibold'
