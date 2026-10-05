@@ -136,7 +136,7 @@ export class GetCoursesUseCase {
       };
     });
 
-    // Se houver outras plataformas (como MoodleMat ou Teams), inclui no rol
+    // Se houver outras plataformas (como Teams), inclui no rol
     for (const oc of otherCourses) {
       disciplines.push({
         id: oc.id,

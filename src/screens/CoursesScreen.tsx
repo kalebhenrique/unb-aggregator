@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useFeed } from '../hooks/useFeed';
-import { Card, Badge, PageContainer, PageHeader, Button, Tabs, Pagination } from '@/components/ui';
+import { Card, Badge, PageContainer, PageHeader, Button, Tabs, Pagination, toast } from '@/components/ui';
 import {
   GraduationCap,
   User,
@@ -18,6 +18,7 @@ import {
 import { openExternalUrl } from '../lib/utils';
 import { UnmatchedCourseDialog } from '../components/UnmatchedCourseDialog';
 import { FeedList } from '../components/feed/FeedList';
+import { ArchivedToggleButton } from '../components/feed/ArchivedToggleButton';
 import type { Course, Discipline, FeedItemType } from '@/core';
 
 export const CoursesScreen: React.FC = () => {
@@ -27,7 +28,9 @@ export const CoursesScreen: React.FC = () => {
     items,
     isLoading,
     toggleTaskCompleted,
-    hideFeedItem,
+    archiveFeedItem,
+    showArchived,
+    setShowArchived,
     associateCourse,
   } = useFeed();
 
@@ -41,7 +44,27 @@ export const CoursesScreen: React.FC = () => {
   const [drillPage, setDrillPage] = useState(1);
   useEffect(() => {
     setDrillPage(1);
-  }, [selectedDiscipline, drillSearchQuery, drillCategory]);
+  }, [selectedDiscipline, drillSearchQuery, drillCategory, showArchived]);
+
+  const handleArchive = async (id: string) => {
+    await archiveFeedItem(id, true);
+    toast.add({
+      title: 'Item arquivado',
+      description: 'O item foi movido para os Arquivados.',
+      type: 'info',
+      timeout: 5000,
+    });
+  };
+
+  const handleRestore = async (id: string) => {
+    await archiveFeedItem(id, false);
+    toast.add({
+      title: 'Item desarquivado',
+      description: 'O item retornou ao feed ativo da disciplina.',
+      type: 'success',
+      timeout: 4000,
+    });
+  };
 
   const typeTabs = [
     { id: 'all', label: 'Tudo' },
@@ -57,7 +80,7 @@ export const CoursesScreen: React.FC = () => {
     }
   }, [unmatchedCourses, resolvingCourse]);
 
-  if (isLoading) {
+  if (isLoading && !selectedDiscipline) {
     return (
       <PageContainer>
         <div className="p-12 text-center bg-white border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_#000]">
@@ -117,6 +140,7 @@ export const CoursesScreen: React.FC = () => {
               setSelectedDiscipline(null);
               setDrillSearchQuery('');
               setDrillCategory('all');
+              setShowArchived(false);
             }}
             className="cursor-pointer flex items-center gap-1.5 font-bold"
           >
@@ -230,7 +254,8 @@ export const CoursesScreen: React.FC = () => {
               />
             </div>
 
-            {drillSearchQuery || drillCategory !== 'all' ? (
+            <div className="flex flex-wrap items-end gap-3">
+              {drillSearchQuery || drillCategory !== 'all' ? (
               <button
                 type="button"
                 onClick={() => {
@@ -241,14 +266,20 @@ export const CoursesScreen: React.FC = () => {
               >
                 Limpar filtros
               </button>
-            ) : null}
+              ) : null}
+
+              <ArchivedToggleButton
+                showArchived={showArchived}
+                onToggle={() => setShowArchived(!showArchived)}
+              />
+            </div>
           </div>
         </div>
 
         {/* Feed Filtrado desta Disciplina */}
         <div className="space-y-3">
           <div className="flex items-center justify-between text-xs font-bold text-neutral-600 px-1">
-            <span>Feed da Matéria ({disciplineFeedItems.length} {disciplineFeedItems.length === 1 ? 'publicação' : 'publicações'})</span>
+            <span>{showArchived ? 'Arquivados da Matéria' : 'Feed da Matéria'} ({disciplineFeedItems.length} {disciplineFeedItems.length === 1 ? 'publicação' : 'publicações'})</span>
             <span>Avisos e Tarefas</span>
           </div>
 
@@ -257,9 +288,13 @@ export const CoursesScreen: React.FC = () => {
               <div className="w-12 h-12 bg-canvas border-2 border-black rounded-lg flex items-center justify-center mx-auto shadow-[2px_2px_0px_0px_#000]">
                 <Inbox className="w-6 h-6 stroke-[2.5] text-neo-blue" />
               </div>
-              <h3 className="text-base font-bold text-black">Nenhuma publicação encontrada</h3>
+              <h3 className="text-base font-bold text-black">
+                {showArchived ? 'Nenhum item arquivado nesta matéria' : 'Nenhuma publicação encontrada'}
+              </h3>
               <p className="text-xs font-medium text-neutral-600 max-w-sm mx-auto">
-                {drillSearchQuery || drillCategory !== 'all'
+                {showArchived && !drillSearchQuery && drillCategory === 'all'
+                  ? 'Você ainda não arquivou nenhum aviso ou tarefa desta disciplina.'
+                  : drillSearchQuery || drillCategory !== 'all'
                   ? 'Nenhum aviso ou tarefa encontrado para os filtros selecionados nesta matéria.'
                   : 'Não há avisos ou tarefas registradas para esta disciplina até o momento.'}
               </p>
@@ -272,8 +307,8 @@ export const CoursesScreen: React.FC = () => {
                   disciplines={disciplines}
                   showDiscipline={false}
                   onToggleComplete={toggleTaskCompleted}
-                  onHide={(id) => hideFeedItem(id, true)}
-                  onRestore={(id) => hideFeedItem(id, false)}
+                  onArchive={handleArchive}
+                  onRestore={handleRestore}
                 />
               </Card>
               <Pagination page={safeDrillPage} pageCount={drillPageCount} onPageChange={setDrillPage} />

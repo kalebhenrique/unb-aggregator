@@ -34,7 +34,6 @@ export default {
         platform: {
           sigaa: '#46E297',
           aprender3: '#FB923C',
-          moodlemat: '#C084FC',
           teams: '#60A5FA',
         },
         pastel: {

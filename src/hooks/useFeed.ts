@@ -24,7 +24,7 @@ export function useFeed() {
   const [selectedPlatform, setSelectedPlatform] = useState<PlatformType | 'all'>('all');
   const [selectedType, setSelectedType] = useState<FeedItemType | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [showHidden, setShowHidden] = useState<boolean>(false);
+  const [showArchived, setShowArchived] = useState<boolean>(false);
 
   const loadFeed = useCallback(async () => {
     setIsLoading(true);
@@ -33,7 +33,7 @@ export function useFeed() {
         platform: selectedPlatform,
         itemType: selectedType,
         searchQuery,
-        onlyHidden: showHidden ? true : undefined,
+        onlyArchived: showArchived ? true : undefined,
       });
       setItems(feedItems);
 
@@ -48,7 +48,7 @@ export function useFeed() {
     } finally {
       setIsLoading(false);
     }
-  }, [useCases, selectedPlatform, selectedType, searchQuery, showHidden]);
+  }, [useCases, selectedPlatform, selectedType, searchQuery, showArchived]);
 
   useEffect(() => {
     loadFeed();
@@ -115,15 +115,15 @@ export function useFeed() {
     );
   };
 
-  const hideFeedItem = async (id: string, isHidden: boolean = true) => {
-    await useCases.getFeed.hideItem(id, isHidden);
-    if (!showHidden && isHidden) {
+  const archiveFeedItem = async (id: string, isArchived: boolean = true) => {
+    await useCases.getFeed.archiveItem(id, isArchived);
+    if (!showArchived && isArchived) {
       setItems((prev) => prev.filter((item) => item.id !== id));
-    } else if (showHidden && !isHidden) {
+    } else if (showArchived && !isArchived) {
       setItems((prev) => prev.filter((item) => item.id !== id));
     } else {
       setItems((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, isHidden } : item))
+        prev.map((item) => (item.id === id ? { ...item, isArchived } : item))
       );
     }
   };
@@ -151,13 +151,13 @@ export function useFeed() {
     setSelectedType,
     searchQuery,
     setSearchQuery,
-    showHidden,
-    setShowHidden,
+    showArchived,
+    setShowArchived,
     sync,
     clearFeedData,
     refresh: loadFeed,
     toggleTaskCompleted,
-    hideFeedItem,
+    archiveFeedItem,
     associateCourse,
   };
 }

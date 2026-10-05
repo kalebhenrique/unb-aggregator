@@ -10,13 +10,10 @@ export const commands = {
 } | null, aprender3: {
 	cpf: string,
 	senha: string,
-} | null, moodlemat: {
-	matricula: string,
-	senha: string,
 } | null, teams: {
 	isConnected: boolean | null,
 	email: string | null,
-} | null) => typedError<SyncResult, string>(__TAURI_INVOKE("sync_platforms", { platforms, sigaa, aprender3, moodlemat, teams })),
+} | null) => typedError<SyncResult, string>(__TAURI_INVOKE("sync_platforms", { platforms, sigaa, aprender3, teams })),
 	checkVaultStatus: () => __TAURI_INVOKE<VaultStatus>("check_vault_status"),
 	getSigaaDepartments: () => typedError<Department[], string>(__TAURI_INVOKE("get_sigaa_departments")),
 	scrapeSigaaClasses: (departmentId: string, year: string, period: string) => typedError<ScrapedDiscipline[], string>(__TAURI_INVOKE("scrape_sigaa_classes", { departmentId, year, period })),
@@ -67,12 +64,7 @@ export type FeedItem = {
 
 export type FeedItemType = "post" | "assignment";
 
-export type MoodleMatCreds = {
-	matricula: string,
-	senha: string,
-};
-
-export type PlatformType = "sigaa" | "aprender3" | "moodlemat" | "teams";
+export type PlatformType = "sigaa" | "aprender3" | "teams";
 
 export type ScheduleOption = {
 	id: string,

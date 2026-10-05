@@ -20,7 +20,6 @@ import {
   Settings,
   School,
   BookOpen,
-  Globe,
   MessageSquare,
   CheckCircle2,
   AlertCircle,
@@ -71,7 +70,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     allCredentials,
     saveSigaa,
     saveAprender3,
-    saveMoodleMat,
     saveTeams,
     clearPlatform,
     clearAll,
@@ -86,11 +84,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   const [aprenderCpf, setAprenderCpf] = useState("");
   const [aprenderPass, setAprenderPass] = useState("");
   const [aprenderFeedback, setAprenderFeedback] = useState<FeedbackState>(null);
-
-  const [moodleMatMat, setMoodleMatMat] = useState("");
-  const [moodleMatPass, setMoodleMatPass] = useState("");
-  const [moodleMatFeedback, setMoodleMatFeedback] =
-    useState<FeedbackState>(null);
 
   const [teamsEmail, setTeamsEmail] = useState("");
   const [teamsFeedback, setTeamsFeedback] = useState<FeedbackState>(null);
@@ -125,7 +118,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
   // Senhas salvas ficam apenas em refs — nunca são reexibidas nos inputs
   const sigaaPassRef = useRef("");
   const aprenderPassRef = useRef("");
-  const moodleMatPassRef = useRef("");
 
   // Timers de feedback (limpos no unmount para evitar setState após desmontar)
   const feedbackTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
@@ -149,10 +141,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
     if (allCredentials.aprender3) {
       setAprenderCpf(allCredentials.aprender3.cpf || "");
       aprenderPassRef.current = allCredentials.aprender3.senha || "";
-    }
-    if (allCredentials.moodlemat) {
-      setMoodleMatMat(allCredentials.moodlemat.matricula || "");
-      moodleMatPassRef.current = allCredentials.moodlemat.senha || "";
     }
     if (allCredentials.teams) {
       setTeamsEmail(allCredentials.teams.email || "");
@@ -198,25 +186,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             message: "Credenciais do Aprender 3 atualizadas com sucesso!",
           }
         : { type: "error", message: "Falha ao salvar Aprender 3" },
-    );
-  };
-
-  const handleSaveMoodleMat = async () => {
-    setMoodleMatFeedback(null);
-    const senha = moodleMatPass || moodleMatPassRef.current;
-    const ok = await saveMoodleMat({
-      matricula: moodleMatMat,
-      senha,
-    });
-    if (ok) moodleMatPassRef.current = senha;
-    setTimedFeedback(
-      setMoodleMatFeedback,
-      ok
-        ? {
-            type: "success",
-            message: "Credenciais do MoodleMat atualizadas com sucesso!",
-          }
-        : { type: "error", message: "Falha ao salvar MoodleMat" },
     );
   };
 
@@ -394,68 +363,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({
             >
               <Save className="w-3.5 h-3.5 stroke-[2.5]" />
               <span>Salvar Aprender 3</span>
-            </Button>
-          </div>
-        </Card>
-
-        {/* Card MoodleMat */}
-        <Card className="bg-white rounded-lg p-5 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between gap-2 mb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 bg-platform-moodlemat text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_0px_#000]">
-                  <Globe className="w-4 h-4 stroke-[2.5]" />
-                </div>
-                <h3 className="font-bold text-base text-black">MoodleMat</h3>
-              </div>
-              <Badge
-                variant={
-                  allCredentials.moodlemat?.matricula ? "moodlemat" : "neutral"
-                }
-              >
-                {allCredentials.moodlemat?.matricula
-                  ? "Configurado"
-                  : "Pendente"}
-              </Badge>
-            </div>
-
-            <p className="text-xs font-medium text-neutral-600 mb-3">
-              Moodle do Departamento de Matemática (autenticação com Matrícula e
-              Senha).
-            </p>
-
-            <div className="space-y-2">
-              <Input
-                label="Matrícula"
-                placeholder="Ex: 202012345"
-                value={moodleMatMat}
-                onChange={(e) => setMoodleMatMat(e.target.value)}
-              />
-              <Input
-                type="password"
-                label="Senha"
-                placeholder={
-                  allCredentials.moodlemat?.senha
-                    ? "•••••• (senha salva — digite para trocar)"
-                    : "Senha do MoodleMat"
-                }
-                value={moodleMatPass}
-                onChange={(e) => setMoodleMatPass(e.target.value)}
-              />
-            </div>
-
-            <FeedbackMessage feedback={moodleMatFeedback} />
-          </div>
-
-          <div className="pt-4 border-t-2 border-black/10 mt-4 flex justify-end">
-            <Button
-              type="button"
-              variant="primary"
-              size="md"
-              onClick={handleSaveMoodleMat}
-            >
-              <Save className="w-3.5 h-3.5 stroke-[2.5]" />
-              <span>Salvar MoodleMat</span>
             </Button>
           </div>
         </Card>

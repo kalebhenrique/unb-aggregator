@@ -2,7 +2,6 @@ import type {
   Credential,
   SigaaCredentials,
   Aprender3Credentials,
-  MoodleMatCredentials,
   TeamsCredentials,
   AllPlatformCredentials,
 } from '../domain/entities/credential';
@@ -30,10 +29,6 @@ export class GetCredentialsUseCase {
 
   async getAprender3(): Promise<Aprender3Credentials | null> {
     return this.credentialsRepo.getAprender3();
-  }
-
-  async getMoodleMat(): Promise<MoodleMatCredentials | null> {
-    return this.credentialsRepo.getMoodleMat();
   }
 
   async getTeams(): Promise<TeamsCredentials | null> {

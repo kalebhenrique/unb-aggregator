@@ -28,7 +28,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
   onBack,
   onExplore,
 }) => {
-  const { saveSigaa, saveAprender3, saveMoodleMat, saveTeams, isLoading, error } = useCredentials();
+  const { saveSigaa, saveAprender3, saveTeams, isLoading, error } = useCredentials();
 
   // Plataforma ativa no formulário
   const [activeTab, setActiveTab] = useState<PlatformType>('sigaa');
@@ -42,11 +42,6 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
   const [aprenderCpf, setAprenderCpf] = useState('');
   const [aprenderSenha, setAprenderSenha] = useState('');
   const [aprenderSaved, setAprenderSaved] = useState(false);
-
-  // Campos MoodleMat
-  const [moodleMatMatricula, setMoodleMatMatricula] = useState('');
-  const [moodleMatSenha, setMoodleMatSenha] = useState('');
-  const [moodleMatSaved, setMoodleMatSaved] = useState(false);
 
   // Teams
   const [teamsConnected, setTeamsConnected] = useState(false);
@@ -79,17 +74,6 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
       }
       const ok = await saveAprender3({ cpf: aprenderCpf.trim(), senha: aprenderSenha });
       if (ok) setAprenderSaved(true);
-    } else if (activeTab === 'moodlemat') {
-      if (!moodleMatMatricula.trim()) {
-        setFormError('Informe sua matrícula do MoodleMat.');
-        return;
-      }
-      if (!moodleMatSenha) {
-        setFormError('Informe sua senha do MoodleMat.');
-        return;
-      }
-      const ok = await saveMoodleMat({ matricula: moodleMatMatricula.trim(), senha: moodleMatSenha });
-      if (ok) setMoodleMatSaved(true);
     } else if (activeTab === 'teams') {
       const email = teamsEmail.trim() || 'aluno@aluno.unb.br';
       const ok = await saveTeams({ isConnected: true, email });
@@ -134,17 +118,6 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
       }
       const ok = await saveAprender3({ cpf: aprenderCpf.trim(), senha: aprenderSenha });
       if (!ok) return;
-    } else if (activeTab === 'moodlemat' && (moodleMatMatricula || moodleMatSenha)) {
-      if (!moodleMatMatricula.trim()) {
-        setFormError('Informe sua matrícula do MoodleMat.');
-        return;
-      }
-      if (!moodleMatSenha) {
-        setFormError('Informe sua senha do MoodleMat.');
-        return;
-      }
-      const ok = await saveMoodleMat({ matricula: moodleMatMatricula.trim(), senha: moodleMatSenha });
-      if (!ok) return;
     } else if (activeTab === 'teams' && teamsConnected) {
       await saveTeams({ isConnected: true, email: teamsEmail.trim() || 'aluno@aluno.unb.br' });
     }
@@ -155,7 +128,6 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
   const platforms = [
     { id: 'sigaa' as PlatformType, name: 'SIGAA', isSaved: sigaaSaved, hint: 'Matrícula e Senha' },
     { id: 'aprender3' as PlatformType, name: 'Aprender 3', isSaved: aprenderSaved, hint: 'CPF e Senha' },
-    { id: 'moodlemat' as PlatformType, name: 'MoodleMat', isSaved: moodleMatSaved, hint: 'Matrícula e Senha' },
     { id: 'teams' as PlatformType, name: 'Teams', isSaved: teamsConnected, hint: 'Login Manual' },
   ];
 
@@ -201,7 +173,7 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
           </CardHeader>
 
           {/* Abas das plataformas */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-6">
             {platforms.map((p) => {
               const isSelected = activeTab === p.id;
               return (
@@ -282,29 +254,6 @@ export const CredentialsScreen: React.FC<CredentialsScreenProps> = ({
                   placeholder="Senha do Aprender 3"
                   value={aprenderSenha}
                   onChange={(e) => setAprenderSenha(e.target.value)}
-                  disabled={isLoading}
-                />
-              </div>
-            )}
-
-            {activeTab === 'moodlemat' && (
-              <div className="space-y-3">
-                <h2 className="text-xs font-bold text-neo-blue">
-                  Credenciais do MoodleMat (Matrícula e Senha)
-                </h2>
-                <Input
-                  label="Matrícula MoodleMat"
-                  placeholder="Ex: 202012345"
-                  value={moodleMatMatricula}
-                  onChange={(e) => setMoodleMatMatricula(e.target.value)}
-                  disabled={isLoading}
-                />
-                <Input
-                  type="password"
-                  label="Senha do MoodleMat"
-                  placeholder="Senha do MoodleMat"
-                  value={moodleMatSenha}
-                  onChange={(e) => setMoodleMatSenha(e.target.value)}
                   disabled={isLoading}
                 />
               </div>

@@ -8,15 +8,15 @@ export interface FeedFilterOptions {
   courseCode?: string;
   courseCodes?: string[];
   courseNames?: string[];
-  includeHidden?: boolean;
-  onlyHidden?: boolean;
+  includeArchived?: boolean;
+  onlyArchived?: boolean;
 }
 
 export interface IFeedRepository {
   getItems(filters?: FeedFilterOptions): Promise<FeedItem[]>;
   saveItems(items: FeedItem[]): Promise<void>;
   markItemAsCompleted(id: string, isCompleted: boolean): Promise<void>;
-  hideItem(id: string, isHidden: boolean): Promise<void>;
+  archiveItem(id: string, isArchived: boolean): Promise<void>;
   getCourses(): Promise<Course[]>;
   saveCourses(courses: Course[]): Promise<void>;
   getAssociations(): Promise<CourseAssociation[]>;

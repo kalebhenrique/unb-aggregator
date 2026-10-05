@@ -88,9 +88,6 @@ export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ onContinue, 
               <span className="px-3 py-1 bg-platform-aprender3 text-black font-bold text-xs border-2 border-black rounded-full shadow-[2px_2px_0px_0px_#000]">
                 Aprender 3
               </span>
-              <span className="px-3 py-1 bg-platform-moodlemat text-black font-bold text-xs border-2 border-black rounded-full shadow-[2px_2px_0px_0px_#000]">
-                MoodleMat
-              </span>
               <span className="px-3 py-1 bg-platform-teams text-black font-bold text-xs border-2 border-black rounded-full shadow-[2px_2px_0px_0px_#000]">
                 Microsoft Teams
               </span>

@@ -2,7 +2,6 @@ import type {
   Credential,
   SigaaCredentials,
   Aprender3Credentials,
-  MoodleMatCredentials,
   TeamsCredentials,
   AllPlatformCredentials,
 } from '../domain/entities/credential';
@@ -175,46 +174,6 @@ export class StrongholdCredentialsRepository implements ICredentialsRepository {
     return sharedInMemoryStore.aprender3 ? { ...sharedInMemoryStore.aprender3 } : null;
   }
 
-  // --- MOODLEMAT (Matrícula e Senha) ---
-  async saveMoodleMat(credentials: MoodleMatCredentials): Promise<void> {
-    this.cleanLocalStorage();
-    sharedInMemoryStore.moodlemat = { ...credentials };
-
-    const vault = await this.getStore();
-    if (vault) {
-      try {
-        const encoder = new TextEncoder();
-        await vault.store.insert('moodlemat_matricula', Array.from(encoder.encode(credentials.matricula)));
-        await vault.store.insert('moodlemat_senha', Array.from(encoder.encode(credentials.senha)));
-        await vault.saveVault();
-      } catch (e) {
-        console.warn('Erro ao persistir no Stronghold:', e);
-      }
-    }
-  }
-
-  async getMoodleMat(): Promise<MoodleMatCredentials | null> {
-    const vault = await this.getStore();
-    if (vault) {
-      try {
-        const matBytes = await vault.store.get('moodlemat_matricula');
-        const passBytes = await vault.store.get('moodlemat_senha');
-        if (matBytes && passBytes) {
-          const decoder = new TextDecoder();
-          const creds = {
-            matricula: decoder.decode(new Uint8Array(matBytes)),
-            senha: decoder.decode(new Uint8Array(passBytes)),
-          };
-          sharedInMemoryStore.moodlemat = creds;
-          return creds;
-        }
-      } catch {
-        // Fallback
-      }
-    }
-    return sharedInMemoryStore.moodlemat ? { ...sharedInMemoryStore.moodlemat } : null;
-  }
-
   // --- TEAMS (Autenticação Manual / Sessão Conectada) ---
   async saveTeams(credentials: TeamsCredentials): Promise<void> {
     this.cleanLocalStorage();
@@ -260,16 +219,14 @@ export class StrongholdCredentialsRepository implements ICredentialsRepository {
   }
 
   async getAll(): Promise<AllPlatformCredentials> {
-    const [sigaa, aprender3, moodlemat, teams] = await Promise.all([
+    const [sigaa, aprender3, teams] = await Promise.all([
       this.getSigaa(),
       this.getAprender3(),
-      this.getMoodleMat(),
       this.getTeams(),
     ]);
     return {
       sigaa: sigaa ?? undefined,
       aprender3: aprender3 ?? undefined,
-      moodlemat: moodlemat ?? undefined,
       teams: teams ?? undefined,
     };
   }
@@ -279,7 +236,6 @@ export class StrongholdCredentialsRepository implements ICredentialsRepository {
     return Boolean(
       (all.sigaa && all.sigaa.matricula && all.sigaa.senha) ||
       (all.aprender3 && all.aprender3.cpf && all.aprender3.senha) ||
-      (all.moodlemat && all.moodlemat.matricula && all.moodlemat.senha) ||
       (all.teams && all.teams.isConnected)
     );
   }
@@ -293,10 +249,6 @@ export class StrongholdCredentialsRepository implements ICredentialsRepository {
       case 'aprender3': {
         const a = await this.getAprender3();
         return Boolean(a && a.cpf && a.senha);
-      }
-      case 'moodlemat': {
-        const m = await this.getMoodleMat();
-        return Boolean(m && m.matricula && m.senha);
       }
       case 'teams': {
         const t = await this.getTeams();
@@ -319,10 +271,6 @@ export class StrongholdCredentialsRepository implements ICredentialsRepository {
             await vault.store.remove('aprender3_cpf');
             await vault.store.remove('aprender3_senha');
             break;
-          case 'moodlemat':
-            await vault.store.remove('moodlemat_matricula');
-            await vault.store.remove('moodlemat_senha');
-            break;
           case 'teams':
             await vault.store.remove('teams_connected');
             await vault.store.remove('teams_email');
@@ -342,6 +290,7 @@ export class StrongholdCredentialsRepository implements ICredentialsRepository {
         await vault.store.remove('sigaa_senha');
         await vault.store.remove('aprender3_cpf');
         await vault.store.remove('aprender3_senha');
+        // Chaves legadas do MoodleMat (plataforma removida)
         await vault.store.remove('moodlemat_matricula');
         await vault.store.remove('moodlemat_senha');
         await vault.store.remove('teams_connected');

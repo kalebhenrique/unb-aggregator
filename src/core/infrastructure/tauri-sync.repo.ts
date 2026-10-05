@@ -13,7 +13,7 @@ export class TauriSyncRepository implements ISyncRepository {
   async syncAll(platforms?: PlatformType[]): Promise<SyncResult> {
     const selectedPlatforms: PlatformType[] = platforms && platforms.length > 0
       ? platforms
-      : ['sigaa', 'aprender3', 'moodlemat', 'teams'];
+      : ['sigaa', 'aprender3', 'teams'];
 
     try {
       const { commands } = await import('@/core/infrastructure/bindings');
@@ -23,7 +23,6 @@ export class TauriSyncRepository implements ISyncRepository {
         selectedPlatforms,
         allCreds.sigaa ?? null,
         allCreds.aprender3 ?? null,
-        allCreds.moodlemat ?? null,
         allCreds.teams
           ? {
               isConnected: allCreds.teams.isConnected ?? null,

@@ -10,11 +10,11 @@ export class InMemoryFeedRepository implements IFeedRepository {
   async getItems(filters?: FeedFilterOptions): Promise<FeedItem[]> {
     let result = Array.from(this.items.values());
 
-    // Filtragem padrão de itens ocultos
-    if (filters?.onlyHidden) {
-      result = result.filter((item) => Boolean(item.isHidden));
-    } else if (!filters?.includeHidden) {
-      result = result.filter((item) => !item.isHidden);
+    // Filtragem padrão de itens arquivados
+    if (filters?.onlyArchived) {
+      result = result.filter((item) => Boolean(item.isArchived));
+    } else if (!filters?.includeArchived) {
+      result = result.filter((item) => !item.isArchived);
     }
 
     if (filters) {
@@ -65,10 +65,10 @@ export class InMemoryFeedRepository implements IFeedRepository {
     }
   }
 
-  async hideItem(id: string, isHidden: boolean): Promise<void> {
+  async archiveItem(id: string, isArchived: boolean): Promise<void> {
     const existing = this.items.get(id);
     if (existing) {
-      this.items.set(id, { ...existing, isHidden });
+      this.items.set(id, { ...existing, isArchived });
     }
   }
 

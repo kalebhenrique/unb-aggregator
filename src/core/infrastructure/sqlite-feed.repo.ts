@@ -20,7 +20,7 @@ interface SqliteFeedItemRow {
   created_at: string;
   due_date: string | null;
   is_completed: number;
-  is_hidden: number;
+  is_hidden: number; // coluna legada: representa "arquivado"
   external_url: string | null;
 }
 
@@ -135,6 +135,14 @@ async function getDatabase(): Promise<Database | null> {
           // Ignora se não houver registros
         }
 
+        // Remove dados legados do MoodleMat (plataforma descontinuada)
+        try {
+          await db.execute("DELETE FROM courses WHERE platform = 'moodlemat';");
+          await db.execute("DELETE FROM feed_items WHERE platform = 'moodlemat';");
+        } catch (e) {
+          console.warn('Erro ao limpar dados legados do MoodleMat no SQLite:', e);
+        }
+
         return db;
       } catch (err) {
         console.warn('SQLite nativo não inicializado, operando com espelho em memória:', err);
@@ -155,9 +163,9 @@ export class SqliteFeedRepository implements IFeedRepository {
         let query = 'SELECT * FROM feed_items WHERE 1=1';
         const params: (string | number)[] = [];
 
-        if (filters?.onlyHidden) {
+        if (filters?.onlyArchived) {
           query += ' AND is_hidden = 1';
-        } else if (!filters?.includeHidden) {
+        } else if (!filters?.includeArchived) {
           query += ' AND (is_hidden = 0 OR is_hidden IS NULL)';
         }
 
@@ -219,7 +227,7 @@ export class SqliteFeedRepository implements IFeedRepository {
           createdAt: row.created_at,
           dueDate: row.due_date ?? undefined,
           isCompleted: Boolean(row.is_completed),
-          isHidden: Boolean(row.is_hidden),
+          isArchived: Boolean(row.is_hidden),
           externalUrl: row.external_url ?? undefined,
         }));
 
@@ -237,10 +245,10 @@ export class SqliteFeedRepository implements IFeedRepository {
     // Fallback para espelho em memória
     let result = Array.from(inMemoryItems.values());
 
-    if (filters?.onlyHidden) {
-      result = result.filter((item) => Boolean(item.isHidden));
-    } else if (!filters?.includeHidden) {
-      result = result.filter((item) => !item.isHidden);
+    if (filters?.onlyArchived) {
+      result = result.filter((item) => Boolean(item.isArchived));
+    } else if (!filters?.includeArchived) {
+      result = result.filter((item) => !item.isArchived);
     }
 
     if (filters) {
@@ -281,7 +289,7 @@ export class SqliteFeedRepository implements IFeedRepository {
       inMemoryItems.set(item.id, {
         ...item,
         isCompleted: existing?.isCompleted ?? item.isCompleted ?? false,
-        isHidden: existing?.isHidden ?? item.isHidden ?? false,
+        isArchived: existing?.isArchived ?? item.isArchived ?? false,
       });
     }
 
@@ -315,7 +323,7 @@ export class SqliteFeedRepository implements IFeedRepository {
               item.createdAt,
               item.dueDate ?? null,
               item.isCompleted ? 1 : 0,
-              item.isHidden ? 1 : 0,
+              item.isArchived ? 1 : 0,
               item.externalUrl ?? null,
             ]
           );
@@ -345,21 +353,21 @@ export class SqliteFeedRepository implements IFeedRepository {
     }
   }
 
-  async hideItem(id: string, isHidden: boolean): Promise<void> {
+  async archiveItem(id: string, isArchived: boolean): Promise<void> {
     const existing = inMemoryItems.get(id);
     if (existing) {
-      inMemoryItems.set(id, { ...existing, isHidden });
+      inMemoryItems.set(id, { ...existing, isArchived });
     }
 
     const db = await getDatabase();
     if (db) {
       try {
         await db.execute('UPDATE feed_items SET is_hidden = $1 WHERE id = $2', [
-          isHidden ? 1 : 0,
+          isArchived ? 1 : 0,
           id,
         ]);
       } catch (e) {
-        console.warn('Erro ao atualizar status de ocultação no SQLite:', e);
+        console.warn('Erro ao atualizar status de arquivamento no SQLite:', e);
       }
     }
   }

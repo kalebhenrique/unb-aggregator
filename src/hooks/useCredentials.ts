@@ -4,7 +4,6 @@ import type {
   AllPlatformCredentials,
   SigaaCredentials,
   Aprender3Credentials,
-  MoodleMatCredentials,
   TeamsCredentials,
   PlatformType,
 } from '@/core';
@@ -103,30 +102,6 @@ export function useCredentials() {
     }
   };
 
-  const saveMoodleMat = async (creds: MoodleMatCredentials) => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const res = await useCases.saveCredentials.saveMoodleMat(creds);
-      if (res.success) {
-        cachedAllCredentials = { ...cachedAllCredentials, moodlemat: creds };
-        cachedHasCredentials = true;
-        setAllCredentials(cachedAllCredentials);
-        setHasCredentials(true);
-        await loadAll();
-        notifyListeners();
-        return true;
-      }
-      setError(res.error || 'Erro ao salvar credenciais do MoodleMat');
-      return false;
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Erro inesperado');
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const saveTeams = async (creds: TeamsCredentials) => {
     setIsLoading(true);
     setError(null);
@@ -188,7 +163,6 @@ export function useCredentials() {
     error,
     saveSigaa,
     saveAprender3,
-    saveMoodleMat,
     saveTeams,
     clearPlatform,
     clearAll,

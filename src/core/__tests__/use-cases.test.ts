@@ -46,17 +46,6 @@ describe('Clean Architecture Use Cases - UnB Aggregator', () => {
       expect(saved?.cpf).toBe('01234567890');
     });
 
-    it('MoodleMat: deve validar matrícula e salvar com sucesso', async () => {
-      const valid = await container.useCases.saveCredentials.saveMoodleMat({
-        matricula: '202054321',
-        senha: 'senha-matematica',
-      });
-      expect(valid.success).toBe(true);
-
-      const saved = await container.useCases.getCredentials.getMoodleMat();
-      expect(saved?.matricula).toBe('202054321');
-    });
-
     it('Teams: deve registrar login manual interativo com sucesso', async () => {
       const valid = await container.useCases.saveCredentials.saveTeams({
         isConnected: true,
@@ -92,10 +81,11 @@ describe('Clean Architecture Use Cases - UnB Aggregator', () => {
 
     it('deve filtrar itens por plataforma corretamente', async () => {
       await container.useCases.syncPlatforms.execute();
-      const moodleItems = await container.useCases.getFeed.execute({ platform: 'moodlemat' });
+      const aprenderItems = await container.useCases.getFeed.execute({ platform: 'aprender3' });
 
-      for (const item of moodleItems) {
-        expect(item.platform).toBe('moodlemat');
+      expect(aprenderItems.length).toBeGreaterThan(0);
+      for (const item of aprenderItems) {
+        expect(item.platform).toBe('aprender3');
       }
     });
 
@@ -121,24 +111,24 @@ describe('Clean Architecture Use Cases - UnB Aggregator', () => {
       }
     });
 
-    it('deve ocultar (soft-hide) item do feed e permitir recuperação', async () => {
+    it('deve arquivar item do feed e permitir restauração', async () => {
       await container.useCases.syncPlatforms.execute();
       const initialItems = await container.useCases.getFeed.execute();
       expect(initialItems.length).toBeGreaterThan(0);
 
       const targetItem = initialItems[0];
-      await container.useCases.getFeed.hideItem(targetItem.id, true);
+      await container.useCases.getFeed.archiveItem(targetItem.id, true);
 
       // O item não deve aparecer no feed padrão
       const activeItems = await container.useCases.getFeed.execute();
       expect(activeItems.some((i) => i.id === targetItem.id)).toBe(false);
 
-      // O item deve aparecer quando filtrado apenas por ocultos
-      const hiddenItems = await container.useCases.getFeed.execute({ onlyHidden: true });
-      expect(hiddenItems.some((i) => i.id === targetItem.id)).toBe(true);
+      // O item deve aparecer quando filtrado apenas por arquivados
+      const archivedItems = await container.useCases.getFeed.execute({ onlyArchived: true });
+      expect(archivedItems.some((i) => i.id === targetItem.id)).toBe(true);
 
-      // Desfaz a ocultação
-      await container.useCases.getFeed.hideItem(targetItem.id, false);
+      // Desfaz o arquivamento
+      await container.useCases.getFeed.archiveItem(targetItem.id, false);
       const restoredItems = await container.useCases.getFeed.execute();
       expect(restoredItems.some((i) => i.id === targetItem.id)).toBe(true);
     });

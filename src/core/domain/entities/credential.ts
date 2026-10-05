@@ -8,11 +8,6 @@ export interface Aprender3Credentials {
   senha: string;
 }
 
-export interface MoodleMatCredentials {
-  matricula: string;
-  senha: string;
-}
-
 export interface TeamsCredentials {
   isConnected: boolean;
   email?: string;
@@ -22,7 +17,6 @@ export interface TeamsCredentials {
 export interface AllPlatformCredentials {
   sigaa?: SigaaCredentials;
   aprender3?: Aprender3Credentials;
-  moodlemat?: MoodleMatCredentials;
   teams?: TeamsCredentials;
 }
 

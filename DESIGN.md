@@ -191,7 +191,7 @@ Paleta de material escolar: uma cor de ação por intenção, versões pastel da
 
 ### Tertiary
 - **Lápis Laranja** (#FB923C): identidade da plataforma Aprender 3, texto preto.
-- **Lilás Caderno** (#C084FC): identidade da plataforma MoodleMat e variante purple de card, texto preto.
+- **Lilás Caderno** (#C084FC): variante purple de card, texto preto.
 - **Azul Céu** (#60A5FA): identidade da plataforma Teams (reservado — plataforma em revisão no produto).
 - **Verde Institucional** (#006633): verde oficial UnB, definido no tema; uso pontual institucional.
 
@@ -311,7 +311,7 @@ A distinção se lê de longe: o que tem sombra 2px e raio 16px afunda quando cl
 - **States:** sem sombra e sem física de pressionar — a navegação é a encadernação, não um adesivo. Colapsável (264px ↔ 80px); recolhida mostra só ícones centralizados; botões de expandir/recolher aparecem no hover do grupo.
 
 ### Badge (sticker de plataforma/tipo)
-- **Style:** pill (9999px), borda preta 2px, sombra micro 2px, padding 2px 12px, texto 0.75rem/700; cor por identidade: Sigaa **Verde Giz**, Aprender 3 **Lápis Laranja**, MoodleMat **Lilás Caderno**, tarefa **Amarelo Marca-Texto**, urgente **Vermelho Correção Forte** (texto branco), neutra branca.
+- **Style:** pill (9999px), borda preta 2px, sombra micro 2px, padding 2px 12px, texto 0.75rem/700; cor por identidade: Sigaa **Verde Giz**, Aprender 3 **Lápis Laranja**, Teams **Azul Céu**, tarefa **Amarelo Marca-Texto**, urgente **Vermelho Correção Forte** (texto branco), neutra branca.
 - **Icon:** Lucide 14–16px, stroke 2.5, opcional à esquerda.
 
 ### Alert
@@ -320,9 +320,9 @@ A distinção se lê de longe: o que tem sombra 2px e raio 16px afunda quando cl
 ### Feed List (edição, não planilha)
 - **Formato:** lista de linhas gordas de duas alturas, **sem cabeçalho de coluna** — título bold em cima, meta inline embaixo (badge de plataforma, chip da disciplina, "Enviado em…", "Entrega…"). A clareza vem dos rótulos inline, não de colunas.
 - **Corpo de conteúdo:** vive dentro de um Card `p-0` (borda, raio 8px, sombra 4px); divisor preto de 2px em black/10 entre linhas; ícone do tipo à esquerda (ClipboardList trabalho, FileText aviso) como o ícone de PR do GitHub.
-- **Densidade:** padding vertical 16px; título em 1 linha truncada, conteúdo completo em tooltip (hover e teclado). Ações (abrir na plataforma, concluir, ocultar/restaurar) moram no menu de reticências que fecha a linha.
+- **Densidade:** padding vertical 16px; título em 1 linha truncada, conteúdo completo em tooltip (hover e teclado). Ações (abrir na plataforma, concluir, arquivar/desarquivar) moram no menu de reticências que fecha a linha.
 - **Direita:** pill curto de prazo (Encerrado / <24h / 2 dias) com a data completa embaixo, alinhado à direita.
-- **Estado na linha:** concluído lê mais forte que oculto — concluído em Cinza Papel presente (neutral-100) com título riscado em neutral-600; oculto no neutral-50 com título esmaecido.
+- **Estado na linha:** concluído lê mais forte que arquivado — concluído em Cinza Papel presente (neutral-100) com título riscado em neutral-600; arquivado no neutral-50 com título esmaecido.
 - **Chip da disciplina:** mostra o **nome oficial da disciplina no SIGAA**, resolvido pela associação de turmas — nunca o nome da turma do Aprender 3 nem o código de turma; no feed de uma disciplina específica (drill-down) o chip não existe — repetiria o contexto da tela.
 
 ### Dropdown Menu

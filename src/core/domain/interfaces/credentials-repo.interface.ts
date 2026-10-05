@@ -2,7 +2,6 @@ import type {
   Credential,
   SigaaCredentials,
   Aprender3Credentials,
-  MoodleMatCredentials,
   TeamsCredentials,
   AllPlatformCredentials,
 } from '../entities/credential';
@@ -15,9 +14,6 @@ export interface ICredentialsRepository {
 
   saveAprender3(credentials: Aprender3Credentials): Promise<void>;
   getAprender3(): Promise<Aprender3Credentials | null>;
-
-  saveMoodleMat(credentials: MoodleMatCredentials): Promise<void>;
-  getMoodleMat(): Promise<MoodleMatCredentials | null>;
 
   saveTeams(credentials: TeamsCredentials): Promise<void>;
   getTeams(): Promise<TeamsCredentials | null>;

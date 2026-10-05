@@ -6,7 +6,6 @@ use std::collections::HashMap;
 pub enum PlatformType {
     Sigaa,
     Aprender3,
-    MoodleMat,
     Teams,
 }
 
@@ -71,13 +70,6 @@ pub struct SigaaCreds {
 #[serde(rename_all = "camelCase")]
 pub struct Aprender3Creds {
     pub cpf: String,
-    pub senha: String,
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize, specta::Type)]
-#[serde(rename_all = "camelCase")]
-pub struct MoodleMatCreds {
-    pub matricula: String,
     pub senha: String,
 }
 

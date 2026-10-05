@@ -1,6 +1,5 @@
 use crate::models::{
-    Aprender3Creds, Course, FeedItem, MoodleMatCreds, PlatformType, SigaaCreds, SyncResult,
-    TeamsCreds,
+    Aprender3Creds, Course, FeedItem, PlatformType, SigaaCreds, SyncResult, TeamsCreds,
 };
 use crate::moodle::MoodleClient;
 use crate::scraper::HiddenWebviewScraper;
@@ -16,7 +15,6 @@ pub async fn sync_platforms(
     platforms: Vec<PlatformType>,
     sigaa: Option<SigaaCreds>,
     aprender3: Option<Aprender3Creds>,
-    moodlemat: Option<MoodleMatCreds>,
     teams: Option<TeamsCreds>,
 ) -> Result<SyncResult, String> {
     let mut all_items: Vec<FeedItem> = Vec::new();
@@ -40,23 +38,6 @@ pub async fn sync_platforms(
                         }
                         Err(e) => {
                             errors.insert(PlatformType::Aprender3, e);
-                        }
-                    }
-                }
-            }
-            PlatformType::MoodleMat => {
-                let (matricula, senha) = match &moodlemat {
-                    Some(c) => (c.matricula.trim(), c.senha.as_str()),
-                    None => ("", ""),
-                };
-                if !matricula.is_empty() && !senha.is_empty() {
-                    match moodle.sync_moodlemat(matricula, senha).await {
-                        Ok((items, courses)) => {
-                            all_items.extend(items);
-                            all_courses.extend(courses);
-                        }
-                        Err(e) => {
-                            errors.insert(PlatformType::MoodleMat, e);
                         }
                     }
                 }

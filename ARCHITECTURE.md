@@ -77,7 +77,7 @@ com string solta. Tipos novos no lado Rust (derive `specta::Type`) aparecem
 no TS na próxima geração.
 
 **Convenção: Rust é driver.** Faz HTTP, sessão e parsing das plataformas
-(Sigaa, Aprender 3, MoodleMat, Teams) e resolve a grade; não conhece regras
+(Sigaa, Aprender 3, Teams) e resolve a grade; não conhece regras
 de aplicação. O mapeamento para tipos de domínio acontece na fronteira dos
 adapters TS. Os fallbacks locais de solver/conflito em `TauriGradeRepository`
 existem só como degradação elegante quando o comando nativo falha.

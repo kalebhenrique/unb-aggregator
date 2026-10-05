@@ -216,16 +216,6 @@ impl MoodleClient {
 
         Ok((feed_items, courses))
     }
-
-    /// Sincronização direta via requisição HTTP para a API do MoodleMat (Departamento de Matemática da UnB)
-    pub async fn sync_moodlemat(
-        &self,
-        _matricula: &str,
-        _senha: &str,
-    ) -> Result<(Vec<FeedItem>, Vec<Course>), String> {
-        // Sem mocks no ambiente Tauri nativo: apenas dados reais quando implementado
-        Ok((Vec::new(), Vec::new()))
-    }
 }
 
 // =========================================================================

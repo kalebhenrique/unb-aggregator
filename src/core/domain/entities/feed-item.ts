@@ -1,4 +1,4 @@
-export type PlatformType = 'sigaa' | 'aprender3' | 'moodlemat' | 'teams';
+export type PlatformType = 'sigaa' | 'aprender3' | 'teams';
 
 export type FeedItemType = 'post' | 'assignment';
 
@@ -14,6 +14,6 @@ export interface FeedItem {
   createdAt: string; // ISO 8601 string
   dueDate?: string;  // ISO 8601 string (for assignments)
   isCompleted?: boolean;
-  isHidden?: boolean;
+  isArchived?: boolean;
   externalUrl?: string;
 }

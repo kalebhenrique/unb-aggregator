@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { FeedList } from '../components/feed/FeedList';
+import { ArchivedToggleButton } from '../components/feed/ArchivedToggleButton';
 import { useFeed } from '../hooks/useFeed';
-import { Card, Pagination, Tabs, PageContainer, PageHeader, Button, toast } from '@/components/ui';
-import { Search, Inbox, Home, EyeOff, Eye } from 'lucide-react';
+import { Card, Pagination, Tabs, PageContainer, PageHeader, toast } from '@/components/ui';
+import { Search, Inbox, Home } from 'lucide-react';
 import type { PlatformType, FeedItemType } from '@/core';
 
 export const DashboardScreen: React.FC = () => {
@@ -16,10 +17,10 @@ export const DashboardScreen: React.FC = () => {
     setSelectedType,
     searchQuery,
     setSearchQuery,
-    showHidden,
-    setShowHidden,
+    showArchived,
+    setShowArchived,
     toggleTaskCompleted,
-    hideFeedItem,
+    archiveFeedItem,
   } = useFeed();
 
   // Paginação client-side do feed: 25 itens por página, volta à 1ª página quando filtros mudam
@@ -27,7 +28,7 @@ export const DashboardScreen: React.FC = () => {
   const [page, setPage] = useState(1);
   useEffect(() => {
     setPage(1);
-  }, [selectedPlatform, selectedType, searchQuery, showHidden]);
+  }, [selectedPlatform, selectedType, searchQuery, showArchived]);
   const pageCount = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const safePage = Math.min(page, pageCount);
   const pageItems = items.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
@@ -36,7 +37,6 @@ export const DashboardScreen: React.FC = () => {
     { id: 'all', label: 'Todas' },
     { id: 'sigaa', label: 'Sigaa' },
     { id: 'aprender3', label: 'Aprender 3' },
-    { id: 'moodlemat', label: 'MoodleMat' },
     { id: 'teams', label: 'Teams' },
   ];
 
@@ -46,21 +46,21 @@ export const DashboardScreen: React.FC = () => {
     { id: 'post', label: 'Avisos' },
   ];
 
-  const handleHide = async (id: string) => {
-    await hideFeedItem(id, true);
+  const handleArchive = async (id: string) => {
+    await archiveFeedItem(id, true);
     toast.add({
-      title: 'Item ocultado',
-      description: 'O item foi ocultado do seu feed com sucesso.',
+      title: 'Item arquivado',
+      description: 'O item foi movido para os Arquivados.',
       type: 'info',
       timeout: 5000,
     });
   };
 
   const handleRestore = async (id: string) => {
-    await hideFeedItem(id, false);
+    await archiveFeedItem(id, false);
     toast.add({
-      title: 'Item restaurado',
-      description: 'O item retornou ao seu feed visível.',
+      title: 'Item desarquivado',
+      description: 'O item retornou ao seu feed ativo.',
       type: 'success',
       timeout: 4000,
     });
@@ -86,7 +86,7 @@ export const DashboardScreen: React.FC = () => {
           />
         </div>
 
-        {/* Linha de Filtros por Plataforma, Tipo e Ocultos */}
+        {/* Linha de Filtros por Plataforma, Tipo e Arquivados */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pt-1">
           {/* Filtro por Plataforma */}
           <div className="space-y-1.5">
@@ -100,7 +100,7 @@ export const DashboardScreen: React.FC = () => {
             />
           </div>
 
-          {/* Filtro por Tipo e Botão de Ocultos */}
+          {/* Filtro por Tipo e Botão de Arquivados */}
           <div className="flex flex-wrap items-end gap-3">
             <div className="space-y-1.5">
               <span className="text-xs font-bold text-neutral-700 block">
@@ -113,54 +113,13 @@ export const DashboardScreen: React.FC = () => {
               />
             </div>
 
-            <Button
-              type="button"
-              variant={showHidden ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setShowHidden(!showHidden)}
-              title={showHidden ? 'Ver feed regular' : 'Ver itens que você ocultou'}
-              className={`cursor-pointer flex items-center gap-1.5 text-xs font-bold h-[34px] ${
-                showHidden
-                  ? 'bg-neutral-800 text-white hover:bg-black'
-                  : 'bg-white text-neutral-700 hover:text-black'
-              }`}
-            >
-              {showHidden ? (
-                <>
-                  <Eye className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>Ver Feed Ativo</span>
-                </>
-              ) : (
-                <>
-                  <EyeOff className="w-3.5 h-3.5 stroke-[2.5]" />
-                  <span>Itens Ocultos</span>
-                </>
-              )}
-            </Button>
+            <ArchivedToggleButton
+              showArchived={showArchived}
+              onToggle={() => setShowArchived(!showArchived)}
+            />
           </div>
         </div>
       </div>
-
-      {/* Banner se estiver visualizando itens ocultos */}
-      {showHidden ? (
-        <div className="bg-neutral-100 border-2 border-black rounded-lg p-3 flex items-center justify-between gap-2 shadow-[4px_4px_0px_0px_#000]">
-          <div className="flex items-center gap-2">
-            <EyeOff className="w-4 h-4 text-neutral-600 stroke-[2.5]" />
-            <span className="text-xs font-bold text-black">
-              Você está visualizando os itens que ocultou. Clique em "Restaurar" para devolvê-los ao feed ativo.
-            </span>
-          </div>
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={() => setShowHidden(false)}
-            className="cursor-pointer text-xs font-bold"
-          >
-            Sair dos Ocultos
-          </Button>
-        </div>
-      ) : null}
 
       {/* Lista do Feed Cronológico */}
       {isLoading ? (
@@ -176,11 +135,11 @@ export const DashboardScreen: React.FC = () => {
             <Inbox className="w-6 h-6 stroke-[2.5] text-neo-blue" />
           </div>
           <h3 className="text-lg font-bold text-black">
-            {showHidden ? 'Nenhum item oculto encontrado' : 'Nenhum item encontrado'}
+            {showArchived ? 'Nenhum item arquivado encontrado' : 'Nenhum item encontrado'}
           </h3>
           <p className="text-xs font-medium text-neutral-600 max-w-sm mx-auto">
-            {showHidden
-              ? 'Você ainda não ocultou nenhum aviso ou tarefa.'
+            {showArchived
+              ? 'Você ainda não arquivou nenhum aviso ou tarefa.'
               : 'Não há avisos ou tarefas correspondentes aos filtros selecionados. Clique em "Sincronizar" na barra lateral para atualizar os portais.'}
           </p>
         </div>
@@ -188,7 +147,7 @@ export const DashboardScreen: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs font-bold text-neutral-600 px-1">
             <span>
-              {showHidden ? 'Itens Ocultados' : 'Feed Unificado'} ({items.length} {items.length === 1 ? 'item' : 'itens'})
+              {showArchived ? 'Arquivados' : 'Feed Unificado'} ({items.length} {items.length === 1 ? 'item' : 'itens'})
             </span>
             <span>Ordenado cronologicamente</span>
           </div>
@@ -198,7 +157,7 @@ export const DashboardScreen: React.FC = () => {
               items={pageItems}
               disciplines={disciplines}
               onToggleComplete={toggleTaskCompleted}
-              onHide={handleHide}
+              onArchive={handleArchive}
               onRestore={handleRestore}
             />
           </Card>

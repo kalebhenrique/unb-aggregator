@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Badge, Button, Tooltip, TooltipTrigger, TooltipContent, DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui';
 import type { Discipline, FeedItem } from '@/core';
-import { Circle, CheckCircle, ClipboardList, ExternalLink, Eye, EyeOff, FileText, MoreHorizontal } from 'lucide-react';
+import { Archive, ArchiveRestore, Circle, CheckCircle, ClipboardList, ExternalLink, FileText, MoreHorizontal } from 'lucide-react';
 import { openExternalUrl } from '../../lib/utils';
 
 export interface FeedListProps {
@@ -9,14 +9,13 @@ export interface FeedListProps {
   disciplines?: Discipline[];
   showDiscipline?: boolean;
   onToggleComplete?: (id: string, currentStatus?: boolean) => void;
-  onHide?: (id: string) => void;
+  onArchive?: (id: string) => void;
   onRestore?: (id: string) => void;
 }
 
 const PLATFORM_LABELS: Record<string, string> = {
   aprender3: 'Aprender 3',
   sigaa: 'Sigaa',
-  moodlemat: 'MoodleMat',
   teams: 'Teams',
 };
 
@@ -53,7 +52,7 @@ export const FeedList: React.FC<FeedListProps> = ({
   showDiscipline = true,
   disciplines = [],
   onToggleComplete,
-  onHide,
+  onArchive,
   onRestore,
 }) => {
   // Nome oficial da disciplina (SIGAA) por nome de turma associada (SIGAA ou Aprender 3)
@@ -72,10 +71,10 @@ export const FeedList: React.FC<FeedListProps> = ({
       {items.map((item) => {
         const isAssignment = item.itemType === 'assignment';
         const dueStatus = isAssignment ? getDueStatus(item.dueDate) : null;
-        const platformLabel = PLATFORM_LABELS[item.platform] ?? 'Teams';
+        const platformLabel = PLATFORM_LABELS[item.platform] ?? item.platform;
         const titleTone = item.isCompleted
           ? 'text-neutral-600 line-through'
-          : item.isHidden
+          : item.isArchived
           ? 'text-neutral-500'
           : 'text-black';
         const TypeIcon = isAssignment ? ClipboardList : FileText;
@@ -85,7 +84,7 @@ export const FeedList: React.FC<FeedListProps> = ({
           <li
             key={item.id}
             className={`flex items-center gap-3 px-4 md:px-5 py-4 ${
-              item.isCompleted ? 'bg-neutral-100/80' : item.isHidden ? 'bg-neutral-50/70' : ''
+              item.isCompleted ? 'bg-neutral-100/80' : item.isArchived ? 'bg-neutral-50/70' : ''
             }`}
           >
             {/* Tipo: ícone à esquerda, como o ícone de PR do GitHub */}
@@ -182,17 +181,17 @@ export const FeedList: React.FC<FeedListProps> = ({
                   </DropdownMenuItem>
                 ) : null}
                 {item.externalUrl || (isAssignment && onToggleComplete) ? <DropdownMenuSeparator /> : null}
-                {item.isHidden ? (
+                {item.isArchived ? (
                   onRestore ? (
                     <DropdownMenuItem onClick={() => onRestore(item.id)}>
-                      <Eye className="w-3.5 h-3.5" />
-                      <span>Restaurar no feed</span>
+                      <ArchiveRestore className="w-3.5 h-3.5" />
+                      <span>Desarquivar</span>
                     </DropdownMenuItem>
                   ) : null
-                ) : onHide ? (
-                  <DropdownMenuItem onClick={() => onHide(item.id)}>
-                    <EyeOff className="w-3.5 h-3.5" />
-                    <span>Ocultar do feed</span>
+                ) : onArchive ? (
+                  <DropdownMenuItem onClick={() => onArchive(item.id)}>
+                    <Archive className="w-3.5 h-3.5" />
+                    <span>Arquivar</span>
                   </DropdownMenuItem>
                 ) : null}
               </DropdownMenuContent>

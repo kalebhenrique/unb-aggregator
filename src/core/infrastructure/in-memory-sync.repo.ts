@@ -12,7 +12,7 @@ const DEMO_COURSES: Course[] = [
     code: 'MAT0025',
     name: 'Cálculo 1',
     semester: '2026.1',
-    platform: 'moodlemat',
+    platform: 'aprender3',
     professor: 'Prof. Marcelo Silva',
     classroom: 'PAT AT 02/10',
     schedule: 'Seg/Qua 10:00 - 11:50',
@@ -60,7 +60,7 @@ const DEMO_COURSES: Course[] = [
 const DEMO_FEED_ITEMS: FeedItem[] = [
   {
     id: 'feed-1',
-    platform: 'moodlemat',
+    platform: 'aprender3',
     title: 'Lista 3 de Exercícios: Derivadas e Regra da Cadeia',
     content: 'A Lista 3 já está disponível para envio. Certifiquem-se de submeter a resolução em PDF até o horário limite indicado.',
     courseName: 'Cálculo 1',
@@ -70,7 +70,7 @@ const DEMO_FEED_ITEMS: FeedItem[] = [
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 horas atrás
     dueDate: new Date(Date.now() + 1000 * 60 * 60 * 48).toISOString(),  // em 2 dias
     isCompleted: false,
-    externalUrl: 'https://moodle.mat.unb.br/mod/assign/view.php?id=1042',
+    externalUrl: 'https://aprender3.unb.br/mod/assign/view.php?id=1042',
   },
   {
     id: 'feed-2',
@@ -133,7 +133,7 @@ export class InMemorySyncRepository implements ISyncRepository {
   async syncAll(platforms?: PlatformType[]): Promise<SyncResult> {
     const selectedPlatforms: PlatformType[] = platforms && platforms.length > 0
       ? platforms
-      : ['sigaa', 'aprender3', 'moodlemat', 'teams'];
+      : ['sigaa', 'aprender3', 'teams'];
 
     // Simula latência de rede para a prévia no navegador parecer real.
     await new Promise((resolve) => setTimeout(resolve, 800));

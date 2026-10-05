@@ -22,8 +22,8 @@ export class GetFeedUseCase {
     await this.feedRepo.markItemAsCompleted(id, isCompleted);
   }
 
-  async hideItem(id: string, isHidden: boolean = true): Promise<void> {
-    await this.feedRepo.hideItem(id, isHidden);
+  async archiveItem(id: string, isArchived: boolean = true): Promise<void> {
+    await this.feedRepo.archiveItem(id, isArchived);
   }
 
   async clear(): Promise<void> {

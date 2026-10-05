@@ -2,7 +2,6 @@ import type {
   Credential,
   SigaaCredentials,
   Aprender3Credentials,
-  MoodleMatCredentials,
   TeamsCredentials,
 } from '../domain/entities/credential';
 import {
@@ -54,24 +53,6 @@ export class SaveCredentialsUseCase {
       return { success: true };
     } catch (e: unknown) {
       return { success: false, error: e instanceof Error ? e.message : 'Erro ao salvar credenciais do Aprender 3' };
-    }
-  }
-
-  async saveMoodleMat(credentials: MoodleMatCredentials): Promise<SaveResult> {
-    if (!credentials.matricula || !validateMatricula(credentials.matricula)) {
-      return { success: false, error: 'Matrícula do MoodleMat inválida (informe 6 a 12 dígitos).' };
-    }
-    if (!credentials.senha || !validateSenha(credentials.senha)) {
-      return { success: false, error: 'Senha do MoodleMat deve ter ao menos 4 caracteres.' };
-    }
-    try {
-      await this.credentialsRepo.saveMoodleMat({
-        matricula: credentials.matricula.trim(),
-        senha: credentials.senha,
-      });
-      return { success: true };
-    } catch (e: unknown) {
-      return { success: false, error: e instanceof Error ? e.message : 'Erro ao salvar credenciais do MoodleMat' };
     }
   }
 
