@@ -9,6 +9,7 @@ export * from './page-container';
 export * from './page-header';
 export * from './pagination';
 export * from './select';
+export * from './skeleton';
 export * from './tabs';
 export * from './toast';
 export * from './tooltip';

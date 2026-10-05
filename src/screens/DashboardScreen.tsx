@@ -1,16 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { FeedList } from '../components/feed/FeedList';
-import { ArchivedToggleButton } from '../components/feed/ArchivedToggleButton';
-import { useFeed } from '../hooks/useFeed';
-import { Card, Pagination, Tabs, PageContainer, PageHeader, toast } from '@/components/ui';
-import { Search, Inbox, Home } from 'lucide-react';
-import type { PlatformType, FeedItemType } from '@/core';
+import React, { useState } from "react";
+import { FeedList } from "../components/feed/FeedList";
+import { FeedListSkeleton } from "../components/feed/FeedListSkeleton";
+import { ArchivedToggleButton } from "../components/feed/ArchivedToggleButton";
+import { useFeed } from "../hooks/useFeed";
+import {
+  Card,
+  Pagination,
+  Tabs,
+  PageContainer,
+  PageHeader,
+  toast,
+} from "@/components/ui";
+import { Search, Inbox, Home } from "lucide-react";
+import type { PlatformType, FeedItemType } from "@/core";
 
 export const DashboardScreen: React.FC = () => {
   const {
     items,
     disciplines,
     isLoading,
+    hasLoadedOnce,
     selectedPlatform,
     setSelectedPlatform,
     selectedType,
@@ -23,35 +32,42 @@ export const DashboardScreen: React.FC = () => {
     archiveFeedItem,
   } = useFeed();
 
-  // Paginação client-side do feed: 25 itens por página, volta à 1ª página quando filtros mudam
   const PAGE_SIZE = 25;
+  const filterKey = `${selectedPlatform}|${selectedType}|${searchQuery}|${showArchived}`;
   const [page, setPage] = useState(1);
-  useEffect(() => {
+  const [lastFilterKey, setLastFilterKey] = useState(filterKey);
+  if (filterKey !== lastFilterKey) {
+    setLastFilterKey(filterKey);
     setPage(1);
-  }, [selectedPlatform, selectedType, searchQuery, showArchived]);
+  }
   const pageCount = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const safePage = Math.min(page, pageCount);
-  const pageItems = items.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
+  const pageItems = items.slice(
+    (safePage - 1) * PAGE_SIZE,
+    safePage * PAGE_SIZE,
+  );
+
+  const isInitialLoad = isLoading && !hasLoadedOnce;
 
   const platformTabs = [
-    { id: 'all', label: 'Todas' },
-    { id: 'sigaa', label: 'Sigaa' },
-    { id: 'aprender3', label: 'Aprender 3' },
-    { id: 'teams', label: 'Teams' },
+    { id: "all", label: "Todas" },
+    { id: "sigaa", label: "Sigaa" },
+    { id: "aprender3", label: "Aprender 3" },
+    { id: "teams", label: "Teams" },
   ];
 
   const typeTabs = [
-    { id: 'all', label: 'Tudo' },
-    { id: 'assignment', label: 'Tarefas' },
-    { id: 'post', label: 'Avisos' },
+    { id: "all", label: "Tudo" },
+    { id: "assignment", label: "Tarefas" },
+    { id: "post", label: "Avisos" },
   ];
 
   const handleArchive = async (id: string) => {
     await archiveFeedItem(id, true);
     toast.add({
-      title: 'Item arquivado',
-      description: 'O item foi movido para os Arquivados.',
-      type: 'info',
+      title: "Item arquivado",
+      description: "O item foi movido para os Arquivados.",
+      type: "info",
       timeout: 5000,
     });
   };
@@ -59,9 +75,9 @@ export const DashboardScreen: React.FC = () => {
   const handleRestore = async (id: string) => {
     await archiveFeedItem(id, false);
     toast.add({
-      title: 'Item desarquivado',
-      description: 'O item retornou ao seu feed ativo.',
-      type: 'success',
+      title: "Item desarquivado",
+      description: "O item retornou ao seu feed ativo.",
+      type: "success",
       timeout: 4000,
     });
   };
@@ -96,7 +112,7 @@ export const DashboardScreen: React.FC = () => {
             <Tabs
               items={platformTabs}
               activeId={selectedPlatform}
-              onChange={(id) => setSelectedPlatform(id as PlatformType | 'all')}
+              onChange={(id) => setSelectedPlatform(id as PlatformType | "all")}
             />
           </div>
 
@@ -109,7 +125,7 @@ export const DashboardScreen: React.FC = () => {
               <Tabs
                 items={typeTabs}
                 activeId={selectedType}
-                onChange={(id) => setSelectedType(id as FeedItemType | 'all')}
+                onChange={(id) => setSelectedType(id as FeedItemType | "all")}
               />
             </div>
 
@@ -122,24 +138,29 @@ export const DashboardScreen: React.FC = () => {
       </div>
 
       {/* Lista do Feed Cronológico */}
-      {isLoading ? (
-        <div className="p-12 text-center bg-white border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_#000]">
-          <div className="inline-block animate-spin border-2 border-black border-t-transparent rounded-full h-8 w-8 mb-3" />
-          <p className="text-sm font-bold text-black">
-            Atualizando Feed Acadêmico...
-          </p>
-        </div>
+      {isInitialLoad ? (
+        <Card
+          className="p-0 overflow-hidden"
+          role="status"
+          aria-busy="true"
+          aria-live="polite"
+        >
+          <span className="sr-only">Carregando feed acadêmico...</span>
+          <FeedListSkeleton />
+        </Card>
       ) : items.length === 0 ? (
         <div className="p-12 text-center bg-white border-2 border-black rounded-lg shadow-[4px_4px_0px_0px_#000] space-y-3">
           <div className="w-12 h-12 bg-canvas border-2 border-black rounded-lg flex items-center justify-center mx-auto shadow-[2px_2px_0px_0px_#000]">
             <Inbox className="w-6 h-6 stroke-[2.5] text-neo-blue" />
           </div>
           <h3 className="text-lg font-bold text-black">
-            {showArchived ? 'Nenhum item arquivado encontrado' : 'Nenhum item encontrado'}
+            {showArchived
+              ? "Nenhum item arquivado encontrado"
+              : "Nenhum item encontrado"}
           </h3>
           <p className="text-xs font-medium text-neutral-600 max-w-sm mx-auto">
             {showArchived
-              ? 'Você ainda não arquivou nenhum aviso ou tarefa.'
+              ? "Você ainda não arquivou nenhum aviso ou tarefa."
               : 'Não há avisos ou tarefas correspondentes aos filtros selecionados. Clique em "Sincronizar" na barra lateral para atualizar os portais.'}
           </p>
         </div>
@@ -147,7 +168,8 @@ export const DashboardScreen: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs font-bold text-neutral-600 px-1">
             <span>
-              {showArchived ? 'Arquivados' : 'Feed Unificado'} ({items.length} {items.length === 1 ? 'item' : 'itens'})
+              {showArchived ? "Arquivados" : "Feed Unificado"} ({items.length}{" "}
+              {items.length === 1 ? "item" : "itens"})
             </span>
             <span>Ordenado cronologicamente</span>
           </div>
@@ -162,7 +184,11 @@ export const DashboardScreen: React.FC = () => {
             />
           </Card>
 
-          <Pagination page={safePage} pageCount={pageCount} onPageChange={setPage} />
+          <Pagination
+            page={safePage}
+            pageCount={pageCount}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </PageContainer>

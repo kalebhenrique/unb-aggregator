@@ -16,6 +16,7 @@ export function useFeed() {
   const [disciplines, setDisciplines] = useState<Discipline[]>([]);
   const [unmatchedCourses, setUnmatchedCourses] = useState<Course[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [hasLoadedOnce, setHasLoadedOnce] = useState<boolean>(false);
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [lastSyncedAt, setLastSyncedAt] = useState<string | null>(null);
   const [syncErrors, setSyncErrors] = useState<Partial<Record<PlatformType, string>> | null>(null);
@@ -36,6 +37,7 @@ export function useFeed() {
         onlyArchived: showArchived ? true : undefined,
       });
       setItems(feedItems);
+      setHasLoadedOnce(true);
 
       const courseList = await useCases.getCourses.execute();
       setCourses(courseList);
@@ -69,6 +71,7 @@ export function useFeed() {
     try {
       const result = await useCases.syncPlatforms.execute(platforms);
       setItems(result.items);
+      setHasLoadedOnce(true);
       setCourses(result.courses);
       setLastSyncedAt(result.syncedAt);
 
@@ -142,6 +145,7 @@ export function useFeed() {
     disciplines,
     unmatchedCourses,
     isLoading,
+    hasLoadedOnce,
     isSyncing,
     lastSyncedAt,
     syncErrors,
