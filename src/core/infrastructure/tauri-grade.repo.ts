@@ -6,6 +6,11 @@ import type {
   ScheduleSlot,
   SavedGrade,
 } from '../domain/entities/grade';
+import type {
+  CourseCatalogItem,
+  CurriculumStructure,
+  CurriculumDiscipline,
+} from '../domain/entities/course';
 import type Database from '@tauri-apps/plugin-sql';
 import type {
   ScrapedClass as RawScrapedClass,
@@ -13,10 +18,13 @@ import type {
   ScheduleSlot as RawScheduleSlot,
 } from './bindings';
 import type { IGradeRepository } from '../domain/interfaces/grade-repo.interface';
+import { InMemoryGradeRepository } from './in-memory-grade.repo';
 
 let inMemorySavedGrade: SavedGrade | null = null;
 
 export class TauriGradeRepository implements IGradeRepository {
+  private fallbackRepo = new InMemoryGradeRepository();
+
   private async getDb(): Promise<Database | null> {
     try {
       const { default: Database } = await import('@tauri-apps/plugin-sql');
@@ -47,10 +55,93 @@ export class TauriGradeRepository implements IGradeRepository {
       if (response.data && response.data.length > 0) {
         return response.data as Department[];
       }
-    } catch (e) {
-      console.error('[TauriGradeRepository] getDepartments: falha ao invocar get_sigaa_departments:', e);
+    } catch {
+      // Degradação elegante com fallback
     }
-    return [];
+    return this.fallbackRepo.getDepartments();
+  }
+
+  async getCoursesCatalog(): Promise<CourseCatalogItem[]> {
+    try {
+      const { commands } = await import('@/core/infrastructure/bindings');
+      const response = await commands.getCoursesCatalog();
+      if (response.status === 'error') {
+        throw new Error(response.error);
+      }
+      if (response.data && response.data.length > 0) {
+        return response.data.map((c) => ({
+          id: c.id,
+          name: c.name,
+          degree: c.degree,
+          shift: c.shift,
+          campus: c.campus,
+          modality: c.modality,
+          coordinator: c.coordinator ?? undefined,
+          curriculaIds: c.curricula_ids || [],
+        }));
+      }
+    } catch {
+      // Fallback
+    }
+    return this.fallbackRepo.getCoursesCatalog();
+  }
+
+  async getCourseCurriculum(courseId: string): Promise<CurriculumStructure[]> {
+    try {
+      const { commands } = await import('@/core/infrastructure/bindings');
+      const response = await commands.getCourseCurriculum(courseId);
+      if (response.status === 'error') {
+        throw new Error(response.error);
+      }
+      if (response.data && response.data.length > 0) {
+        return response.data.map((curr) => ({
+          id: curr.id,
+          courseId: curr.course_id,
+          courseName: curr.course_name,
+          code: curr.code,
+          createdYear: curr.created_year ?? undefined,
+          status: curr.status,
+          shift: curr.shift ?? undefined,
+          totalHours: curr.total_hours ?? undefined,
+          mandatoryDisciplines: (curr.mandatory_disciplines || []).map((d) => ({
+            code: d.code,
+            name: d.name,
+            workloadHours: d.workload_hours,
+            level: d.level ?? undefined,
+            nature: d.nature as CurriculumDiscipline['nature'],
+            prerequisitesRaw: d.prerequisites_raw ?? undefined,
+            prerequisites: d.prerequisites || [],
+            equivalencesRaw: d.equivalences_raw ?? undefined,
+            equivalences: d.equivalences || [],
+          })),
+          electiveDisciplines: (curr.elective_disciplines || []).map((d) => ({
+            code: d.code,
+            name: d.name,
+            workloadHours: d.workload_hours,
+            level: d.level ?? undefined,
+            nature: d.nature as CurriculumDiscipline['nature'],
+            prerequisitesRaw: d.prerequisites_raw ?? undefined,
+            prerequisites: d.prerequisites || [],
+            equivalencesRaw: d.equivalences_raw ?? undefined,
+            equivalences: d.equivalences || [],
+          })),
+          complementaryDisciplines: (curr.complementary_disciplines || []).map((d) => ({
+            code: d.code,
+            name: d.name,
+            workloadHours: d.workload_hours,
+            level: d.level ?? undefined,
+            nature: d.nature as CurriculumDiscipline['nature'],
+            prerequisitesRaw: d.prerequisites_raw ?? undefined,
+            prerequisites: d.prerequisites || [],
+            equivalencesRaw: d.equivalences_raw ?? undefined,
+            equivalences: d.equivalences || [],
+          })),
+        }));
+      }
+    } catch {
+      // Fallback
+    }
+    return this.fallbackRepo.getCourseCurriculum(courseId);
   }
 
   async scrapeDepartmentClasses(
@@ -95,11 +186,10 @@ export class TauriGradeRepository implements IGradeRepository {
           })),
         }));
       }
-      console.warn(`[TauriGradeRepository] scrapeDepartmentClasses: lista vazia para depto ${deptId}`);
-    } catch (e) {
-      console.error('[TauriGradeRepository] scrapeDepartmentClasses: falha ao raspar turmas via Tauri:', e);
+    } catch {
+      // Degradação elegante com fallback
     }
-    return [];
+    return this.fallbackRepo.scrapeDepartmentClasses(deptId, year, period);
   }
 
   async checkConflicts(classes: ScrapedClass[]): Promise<string[]> {

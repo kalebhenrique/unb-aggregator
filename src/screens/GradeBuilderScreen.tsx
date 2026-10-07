@@ -91,7 +91,7 @@ export const GradeBuilderScreen: React.FC = () => {
     lastToastRef.current = feedbackMessage;
 
     const msg = feedbackMessage;
-    if (/^exibindo/i.test(msg)) return; // cache silencioso
+    if (/^(exibindo|coleta|busca)/i.test(msg)) return; // busca silenciosa de turmas
     if (/^erro/i.test(msg)) {
       toast.add({ title: 'Algo deu errado', description: msg, type: 'error', timeout: 7000 });
     } else if (/^(aviso|nenhuma|n\u00e3o|selecione)/i.test(msg)) {
@@ -127,8 +127,12 @@ export const GradeBuilderScreen: React.FC = () => {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    } catch (error) {
-      console.error("Falha ao exportar grade para PNG:", error);
+    } catch {
+      toast.add({
+        title: 'Exportação',
+        description: 'Não foi possível exportar a grade para imagem.',
+        type: 'error',
+      });
     } finally {
       setIsExportingPng(false);
     }

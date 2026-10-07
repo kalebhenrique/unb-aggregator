@@ -1,0 +1,64 @@
+name: Scrape SIGAA Grade (Turmas e Horários)
+
+on:
+  schedule:
+    # Executa diariamente às 05:00 UTC (02:00 BRT)
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+    inputs:
+      year:
+        description: 'Ano letivo a ser extraído'
+        required: false
+        default: '2026'
+      period:
+        description: 'Período letivo a ser extraído (1 ou 2)'
+        required: false
+        default: '2'
+
+concurrency:
+  group: scrape-sigaa-data
+  cancel-in-progress: false
+
+jobs:
+  scrape-and-publish:
+    name: Scrape Turmas e Publicar em gh-pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
+
+      - name: Configurar Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Executar scraping de turmas e departamentos
+        run: |
+          pnpm run scrape:grade \
+            --year "${{ inputs.year || '2026' }}" \
+            --period "${{ inputs.period || '2' }}" \
+            --out-dir ./dist-data
+
+      - name: Publicar dados estáticos na branch órfã gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist-data
+          destination_dir: data
+          keep_files: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'chore(data): atualizar grade de turmas SIGAA [skip ci]'

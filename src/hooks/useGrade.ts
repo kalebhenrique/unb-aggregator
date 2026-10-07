@@ -99,23 +99,20 @@ export function useGrade() {
     let isMounted = true;
 
     async function init() {
-      console.log('[useGrade] Inicializando tela de montar grade...');
       try {
         const depts = await container.useCases.getDepartments.execute();
-        console.log('[useGrade] Departamentos carregados:', depts?.length);
         if (isMounted) {
           setDepartments(depts);
         }
 
         // Tenta carregar grade salva do SQLite (inclusive grade vazia salva de propósito)
         const saved = await container.useCases.manageGrade.get();
-        console.log('[useGrade] Grade salva recuperada do SQLite:', saved);
         savedGradeCache = saved;
         if (isMounted && saved) {
           setSelectedClasses(saved.selectedClasses ?? []);
         }
-      } catch (e) {
-        console.warn('[useGrade] Erro ao inicializar grade:', e);
+      } catch {
+        // Inicialização com degradação elegante
       }
     }
 
@@ -135,21 +132,15 @@ export function useGrade() {
       if (!force && disciplinesCache.has(key)) {
         const cached = disciplinesCache.get(key)!;
         setDisciplines(cached);
-        setFeedbackMessage(`Exibindo ${cached.length} disciplinas carregadas.`);
         return;
       }
 
-      console.log(`[useGrade] fetchClasses: iniciando coleta para depto=${deptId}, ano=${y}, período=${p}`);
       setIsScraping(true);
-      setFeedbackMessage(null);
       try {
         const result = await container.useCases.scrapeClasses.execute(deptId, y, p);
-        console.log(`[useGrade] fetchClasses: sucesso com ${result.length} disciplinas recebidas`);
         disciplinesCache.set(key, result);
         setDisciplines(result);
-        setFeedbackMessage(`Coleta realizada: ${result.length} disciplinas disponíveis.`);
       } catch (err) {
-        console.error('[useGrade] fetchClasses: erro capturado:', err);
         setFeedbackMessage(`Aviso: ${errMsg(err)}`);
       } finally {
         setIsScraping(false);
@@ -158,22 +149,16 @@ export function useGrade() {
     [container, selectedDeptId, year, period]
   );
 
-  // Restaura disciplinas do cache se já disponíveis ao alterar os seletores
+  // Atualiza ou carrega disciplinas ao alterar departamento ou semestre
   useEffect(() => {
     const key = `${selectedDeptId}-${year}-${period}`;
     if (disciplinesCache.has(key)) {
       setDisciplines(disciplinesCache.get(key)!);
       setFeedbackMessage(null);
-    }
-  }, [selectedDeptId, year, period]);
-
-  // Carrega turmas apenas na primeira visita se o cache ainda estiver vazio
-  useEffect(() => {
-    const key = `${selectedDeptId}-${year}-${period}`;
-    if (!disciplinesCache.has(key) && disciplines.length === 0) {
+    } else {
       fetchClasses(selectedDeptId, year, period, false);
     }
-  }, [selectedDeptId, year, period, disciplines.length, fetchClasses]);
+  }, [selectedDeptId, year, period, fetchClasses]);
 
   // Recalcula conflitos sempre que as turmas selecionadas mudarem
   useEffect(() => {

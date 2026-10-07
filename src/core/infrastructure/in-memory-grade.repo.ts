@@ -6,6 +6,10 @@ import type {
   ScheduleSlot,
   SavedGrade,
 } from '../domain/entities/grade';
+import type {
+  CourseCatalogItem,
+  CurriculumStructure,
+} from '../domain/entities/course';
 import type { IGradeRepository } from '../domain/interfaces/grade-repo.interface';
 
 // Dados de demonstração para prévia no navegador (sem Tauri) e testes,
@@ -311,7 +315,29 @@ const DEMO_DISCIPLINES: Record<string, ScrapedDiscipline[]> = {
 let inMemorySavedGrade: SavedGrade | null = null;
 
 export class InMemoryGradeRepository implements IGradeRepository {
+  private departmentsCache: Department[] | null = null;
+  private classesCache: ScrapedDiscipline[] | null = null;
+  private coursesCache: CourseCatalogItem[] | null = null;
+  private curriculaCache: CurriculumStructure[] | null = null;
+
   async getDepartments(): Promise<Department[]> {
+    if (this.departmentsCache && this.departmentsCache.length > 0) {
+      return this.departmentsCache;
+    }
+
+    if (typeof fetch !== 'undefined') {
+      try {
+        const res = await fetch('/data/departments.json');
+        if (res.ok) {
+          const data = (await res.json()) as Department[];
+          if (Array.isArray(data) && data.length > 0) {
+            this.departmentsCache = data;
+            return data;
+          }
+        }
+      } catch {}
+    }
+
     return DEMO_DEPARTMENTS;
   }
 
@@ -320,6 +346,82 @@ export class InMemoryGradeRepository implements IGradeRepository {
     _year: string,
     _period: string
   ): Promise<ScrapedDiscipline[]> {
+    if (!this.classesCache && typeof fetch !== 'undefined') {
+      try {
+        const res = await fetch('/data/classes.json');
+        if (res.ok) {
+          const raw = (await res.json()) as Array<{
+            code: string;
+            name: string;
+            department_id: string;
+            classes: Array<{
+              id: string;
+              discipline_code: string;
+              discipline_name: string;
+              class_code: string;
+              teachers?: string[];
+              classroom?: string;
+              schedule_code: string;
+              schedule_description?: string;
+              date_range?: string;
+              schedule_slots?: Array<{
+                day: number;
+                day_name?: string;
+                dayName?: string;
+                shift: ScheduleSlot['shift'];
+                period: number;
+                time_range?: string;
+                timeRange?: string;
+                global_slot_index?: number;
+                globalSlotIndex?: number;
+              }>;
+              vacancies?: number;
+              occupied?: number;
+            }>;
+          }>;
+
+          if (Array.isArray(raw)) {
+            this.classesCache = raw.map((d) => ({
+              code: d.code,
+              name: d.name,
+              departmentId: d.department_id || deptId,
+              classes: (d.classes || []).map((c) => ({
+                id: c.id,
+                disciplineCode: c.discipline_code,
+                disciplineName: c.discipline_name,
+                classCode: c.class_code,
+                teachers: c.teachers || [],
+                classroom: c.classroom || 'A definir',
+                scheduleCode: c.schedule_code,
+                scheduleDescription: c.schedule_description,
+                dateRange: c.date_range,
+                scheduleSlots: (c.schedule_slots || []).map((s) => ({
+                  day: s.day,
+                  dayName: s.dayName || s.day_name || '',
+                  shift: s.shift,
+                  period: s.period,
+                  timeRange: s.timeRange || s.time_range || '',
+                  globalSlotIndex:
+                    s.globalSlotIndex !== undefined
+                      ? s.globalSlotIndex
+                      : s.global_slot_index || 0,
+                })),
+                vacancies: c.vacancies,
+                occupied: c.occupied,
+              })),
+            }));
+          }
+        }
+      } catch {}
+    }
+
+    if (this.classesCache) {
+      const filtered = this.classesCache.filter((d) => d.departmentId === deptId);
+      if (filtered.length > 0) {
+        return filtered;
+      }
+    }
+
     return (
       DEMO_DISCIPLINES[deptId] || [
         {
@@ -417,6 +519,173 @@ export class InMemoryGradeRepository implements IGradeRepository {
 
     validOptions.sort((a, b) => b.score - a.score);
     return validOptions;
+  }
+
+  async getCoursesCatalog(): Promise<CourseCatalogItem[]> {
+    if (this.coursesCache && this.coursesCache.length > 0) {
+      return this.coursesCache;
+    }
+
+    if (typeof fetch !== 'undefined') {
+      try {
+        const res = await fetch('/data/courses.json');
+        if (res.ok) {
+          const raw = (await res.json()) as Array<{
+            id: string;
+            name: string;
+            degree: string;
+            shift: string;
+            campus: string;
+            modality: string;
+            coordinator?: string | null;
+            curricula_ids?: string[];
+          }>;
+          if (Array.isArray(raw)) {
+            const mapped: CourseCatalogItem[] = raw.map((c) => ({
+              id: c.id,
+              name: c.name,
+              degree: c.degree,
+              shift: c.shift,
+              campus: c.campus,
+              modality: c.modality,
+              coordinator: c.coordinator ?? undefined,
+              curriculaIds: c.curricula_ids || [],
+            }));
+            this.coursesCache = mapped;
+            return mapped;
+          }
+        }
+      } catch {}
+    }
+
+    return [
+      {
+        id: '414112',
+        name: 'ADMINISTRAÇÃO',
+        degree: 'Bacharelado',
+        shift: 'DIURNO',
+        campus: 'BRASÍLIA',
+        modality: 'Presencial',
+        coordinator: 'CARLA PEIXOTO BORGES',
+        curriculaIds: ['456'],
+      },
+      {
+        id: '414002',
+        name: 'CIÊNCIA DA COMPUTAÇÃO',
+        degree: 'Bacharelado',
+        shift: 'DIURNO',
+        campus: 'BRASÍLIA',
+        modality: 'Presencial',
+        coordinator: 'Coordenação CIC',
+        curriculaIds: ['508'],
+      },
+    ];
+  }
+
+  async getCourseCurriculum(courseId: string): Promise<CurriculumStructure[]> {
+    if (!this.curriculaCache && typeof fetch !== 'undefined') {
+      try {
+        const res = await fetch('/data/curricula.json');
+        if (res.ok) {
+          interface RawCurriculumDiscipline {
+            code: string;
+            name: string;
+            workload_hours: number;
+            level?: number | null;
+            nature: 'Obrigatória' | 'Optativa' | 'Complementar';
+            prerequisites_raw?: string | null;
+            prerequisites?: string[];
+            equivalences_raw?: string | null;
+            equivalences?: string[];
+          }
+
+          interface RawCurriculumStructure {
+            id: string;
+            course_id: string;
+            course_name: string;
+            code: string;
+            created_year?: string | null;
+            status: string;
+            shift?: string | null;
+            total_hours?: number | null;
+            mandatory_disciplines?: RawCurriculumDiscipline[];
+            elective_disciplines?: RawCurriculumDiscipline[];
+            complementary_disciplines?: RawCurriculumDiscipline[];
+          }
+
+          const raw = (await res.json()) as RawCurriculumStructure[];
+          if (Array.isArray(raw)) {
+            const mapDisc = (d: RawCurriculumDiscipline) => ({
+              code: d.code,
+              name: d.name,
+              workloadHours: d.workload_hours,
+              level: d.level ?? undefined,
+              nature: d.nature,
+              prerequisitesRaw: d.prerequisites_raw ?? undefined,
+              prerequisites: d.prerequisites || [],
+              equivalencesRaw: d.equivalences_raw ?? undefined,
+              equivalences: d.equivalences || [],
+            });
+
+            this.curriculaCache = raw.map((curr) => ({
+              id: curr.id,
+              courseId: curr.course_id,
+              courseName: curr.course_name,
+              code: curr.code,
+              createdYear: curr.created_year ?? undefined,
+              status: curr.status,
+              shift: curr.shift ?? undefined,
+              totalHours: curr.total_hours ?? undefined,
+              mandatoryDisciplines: (curr.mandatory_disciplines || []).map(mapDisc),
+              electiveDisciplines: (curr.elective_disciplines || []).map(mapDisc),
+              complementaryDisciplines: (curr.complementary_disciplines || []).map(mapDisc),
+            }));
+          }
+        }
+      } catch {}
+    }
+
+    if (this.curriculaCache) {
+      const filtered = this.curriculaCache.filter((c) => c.courseId === courseId);
+      if (filtered.length > 0) {
+        return filtered;
+      }
+    }
+
+    return [
+      {
+        id: `${courseId}-demo`,
+        courseId,
+        courseName: 'Curso UnB Demo',
+        code: '1/2026',
+        createdYear: '2026',
+        status: 'Ativa',
+        shift: 'Diurno',
+        totalHours: 3000,
+        mandatoryDisciplines: [
+          {
+            code: 'CIC0004',
+            name: 'ALGORITMOS E PROGRAMAÇÃO DE COMPUTADORES',
+            workloadHours: 60,
+            level: 1,
+            nature: 'Obrigatória',
+            prerequisites: [],
+            equivalences: [],
+          },
+          {
+            code: 'MAT0025',
+            name: 'CÁLCULO 1',
+            workloadHours: 90,
+            level: 1,
+            nature: 'Obrigatória',
+            prerequisites: [],
+            equivalences: [],
+          },
+        ],
+        electiveDisciplines: [],
+        complementaryDisciplines: [],
+      },
+    ];
   }
 
   async saveGrade(grade: SavedGrade): Promise<void> {

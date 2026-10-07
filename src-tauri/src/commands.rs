@@ -117,6 +117,20 @@ pub async fn scrape_sigaa_classes(
 
 #[command]
 #[specta::specta]
+pub async fn get_courses_catalog() -> Result<Vec<crate::grade_scraper::CourseCatalogItem>, String> {
+    crate::grade_scraper::SigaaGradeScraper::fetch_courses_catalog().await
+}
+
+#[command]
+#[specta::specta]
+pub async fn get_course_curriculum(
+    course_id: String,
+) -> Result<Vec<crate::grade_scraper::CurriculumStructure>, String> {
+    crate::grade_scraper::SigaaGradeScraper::fetch_course_curriculum(&course_id).await
+}
+
+#[command]
+#[specta::specta]
 pub fn solve_schedules(
     candidate_classes: Vec<crate::grade_scraper::ScrapedClass>,
     preference_shift: Option<char>,

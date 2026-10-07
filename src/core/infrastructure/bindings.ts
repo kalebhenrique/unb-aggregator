@@ -17,6 +17,8 @@ export const commands = {
 	checkVaultStatus: () => __TAURI_INVOKE<VaultStatus>("check_vault_status"),
 	getSigaaDepartments: () => typedError<Department[], string>(__TAURI_INVOKE("get_sigaa_departments")),
 	scrapeSigaaClasses: (departmentId: string, year: string, period: string) => typedError<ScrapedDiscipline[], string>(__TAURI_INVOKE("scrape_sigaa_classes", { departmentId, year, period })),
+	getCoursesCatalog: () => typedError<CourseCatalogItem[], string>(__TAURI_INVOKE("get_courses_catalog")),
+	getCourseCurriculum: (courseId: string) => typedError<CurriculumStructure[], string>(__TAURI_INVOKE("get_course_curriculum", { courseId })),
 	solveSchedules: (candidateClasses: ScrapedClass[], preferenceShift: string | null) => typedError<ScheduleOption[], string>(__TAURI_INVOKE("solve_schedules", { candidateClasses, preferenceShift })),
 	checkScheduleConflicts: (classes: ScrapedClass[]) => typedError<string[], string>(__TAURI_INVOKE("check_schedule_conflicts", { classes })),
 	openExternalUrl: (url: string) => typedError<null, string>(__TAURI_INVOKE("open_external_url", { url })),
@@ -40,6 +42,43 @@ export type Course = {
 	unreadCount: number | null,
 	pendingAssignmentsCount: number | null,
 	url: string | null,
+};
+
+export type CourseCatalogItem = {
+	id: string,
+	name: string,
+	degree: string,
+	shift: string,
+	campus: string,
+	modality: string,
+	coordinator?: string | null,
+	curricula_ids?: string[],
+};
+
+export type CurriculumDiscipline = {
+	code: string,
+	name: string,
+	workload_hours: number,
+	level?: number | null,
+	nature: string,
+	prerequisites_raw?: string | null,
+	prerequisites?: string[],
+	equivalences_raw?: string | null,
+	equivalences?: string[],
+};
+
+export type CurriculumStructure = {
+	id: string,
+	course_id: string,
+	course_name: string,
+	code: string,
+	created_year?: string | null,
+	status: string,
+	shift?: string | null,
+	total_hours?: number | null,
+	mandatory_disciplines?: CurriculumDiscipline[],
+	elective_disciplines?: CurriculumDiscipline[],
+	complementary_disciplines?: CurriculumDiscipline[],
 };
 
 export type Department = {
@@ -88,14 +127,14 @@ export type ScrapedClass = {
 	discipline_code: string,
 	discipline_name: string,
 	class_code: string,
-	teachers: string[],
-	classroom: string,
+	teachers?: string[],
+	classroom?: string,
 	schedule_code: string,
 	schedule_description?: string | null,
 	date_range?: string | null,
-	schedule_slots: ScheduleSlot[],
-	vacancies: number | null,
-	occupied: number | null,
+	schedule_slots?: ScheduleSlot[],
+	vacancies?: number | null,
+	occupied?: number | null,
 };
 
 export type ScrapedDiscipline = {

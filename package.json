@@ -11,7 +11,10 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src",
     "test": "vitest run",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "scrape:grade": "node --experimental-strip-types src/scrapers/grade-scraper.ts",
+    "scrape:courses": "node --experimental-strip-types src/scrapers/courses-scraper.ts",
+    "scrape:all": "pnpm run scrape:grade && pnpm run scrape:courses"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",

@@ -1,0 +1,59 @@
+name: Scrape SIGAA Cursos e Estruturas Curriculares
+
+on:
+  schedule:
+    # Executa mensalmente no dia 1 às 04:00 UTC (01:00 BRT)
+    - cron: '0 4 1 * *'
+  workflow_dispatch:
+    inputs:
+      enrich_limit:
+        description: 'Limite de componentes com pré-requisitos/equivalências enriquecidos por estrutura'
+        required: false
+        default: '25'
+
+concurrency:
+  group: scrape-sigaa-data
+  cancel-in-progress: false
+
+jobs:
+  scrape-and-publish:
+    name: Scrape Cursos/Currículos e Publicar em gh-pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.14.0
+
+      - name: Configurar Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Executar scraping de cursos e estruturas curriculares
+        run: |
+          pnpm run scrape:courses \
+            --enrich-limit "${{ inputs.enrich_limit || '25' }}" \
+            --out-dir ./dist-data
+
+      - name: Publicar dados estáticos na branch órfã gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./dist-data
+          destination_dir: data
+          keep_files: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'chore(data): atualizar catálogo de cursos e matrizes curriculares [skip ci]'

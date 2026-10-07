@@ -17,6 +17,8 @@ pub fn builder() -> Builder<tauri::Wry> {
         commands::check_vault_status,
         commands::get_sigaa_departments,
         commands::scrape_sigaa_classes,
+        commands::get_courses_catalog,
+        commands::get_course_curriculum,
         commands::solve_schedules,
         commands::check_schedule_conflicts,
         commands::open_external_url,

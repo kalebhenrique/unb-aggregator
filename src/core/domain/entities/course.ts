@@ -35,3 +35,41 @@ export interface Discipline {
   unreadCount?: number;
   pendingAssignmentsCount?: number;
 }
+
+export interface CourseCatalogItem {
+  id: string;
+  name: string;
+  degree: string;
+  shift: string;
+  campus: string;
+  modality: string;
+  coordinator?: string;
+  curriculaIds: string[];
+}
+
+export interface CurriculumDiscipline {
+  code: string;
+  name: string;
+  workloadHours: number;
+  level?: number;
+  nature: 'Obrigatória' | 'Optativa' | 'Complementar';
+  prerequisitesRaw?: string;
+  prerequisites: string[];
+  equivalencesRaw?: string;
+  equivalences: string[];
+}
+
+export interface CurriculumStructure {
+  id: string;
+  courseId: string;
+  courseName: string;
+  code: string;
+  createdYear?: string;
+  status: string;
+  shift?: string;
+  totalHours?: number;
+  mandatoryDisciplines: CurriculumDiscipline[];
+  electiveDisciplines: CurriculumDiscipline[];
+  complementaryDisciplines: CurriculumDiscipline[];
+}
+
